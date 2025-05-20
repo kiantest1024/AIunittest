@@ -1,0 +1,1029 @@
+2025-05-19 14:07:39,690 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 14:35:43,235 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 14:35:44,330 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 14:40:43,015 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 14:40:43,519 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 14:40:43,520 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 14:46:02,162 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 14:46:04,184 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 14:46:21,813 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 14:46:22,338 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 14:46:22,339 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 14:50:58,182 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 14:53:59,517 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 14:54:17,158 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 14:54:17,677 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 14:54:17,678 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 15:01:34,634 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:01:42,025 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 15:01:42,484 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 15:01:42,485 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 15:01:53,871 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 15:01:54,978 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 15:01:54,978 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 15:02:00,810 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 15:02:02,006 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 15:02:02,006 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 15:02:21,338 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: frontend
+2025-05-19 15:02:22,506 - ai_test_generator - INFO - Found 8 items in GE-Kian/K6_WEBTOOLS/frontend
+2025-05-19 15:02:22,506 - ai_test_generator - INFO - Found 8 directories/files
+2025-05-19 15:02:24,198 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 15:02:25,298 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 15:02:25,299 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 15:02:54,338 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 15:02:55,432 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 15:02:55,432 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 15:02:57,434 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 15:02:58,495 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 15:02:58,496 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 15:04:22,374 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: docker-compose.yml
+2025-05-19 15:04:23,516 - ai_test_generator - INFO - File content retrieved successfully: docker-compose.yml
+2025-05-19 15:04:27,683 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 15:04:28,761 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 15:04:28,761 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 15:04:30,871 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: frontend
+2025-05-19 15:04:31,987 - ai_test_generator - INFO - Found 8 items in GE-Kian/K6_WEBTOOLS/frontend
+2025-05-19 15:04:31,987 - ai_test_generator - INFO - Found 8 directories/files
+2025-05-19 15:04:35,169 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: requirements.txt
+2025-05-19 15:04:36,279 - ai_test_generator - INFO - File content retrieved successfully: requirements.txt
+2025-05-19 15:05:15,825 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 15:05:16,925 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 15:05:16,925 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 15:05:16,927 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 15:05:18,027 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 15:05:18,027 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 15:07:30,659 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:07:33,673 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:07:44,171 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 15:07:44,650 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 15:07:44,651 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 15:07:51,760 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 15:07:52,860 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 15:07:52,860 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 15:07:54,883 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 15:07:55,991 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 15:07:55,991 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 15:07:55,996 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 15:07:57,104 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 15:07:57,104 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 15:08:00,232 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/app.py
+2025-05-19 15:08:01,364 - ai_test_generator - INFO - File content retrieved successfully: backend/app.py
+2025-05-19 15:08:08,059 - ai_test_generator - INFO - Generating tests for language: python, model: deepseek
+2025-05-19 15:08:08,333 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:08,333 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:08,990 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:08,991 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:09,199 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:09,200 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:09,406 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:09,407 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:09,694 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:09,695 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:10,143 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:10,143 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:10,347 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:10,347 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:10,791 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:10,791 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:11,001 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:11,004 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:11,250 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:11,250 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:11,448 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:11,449 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:11,662 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:11,662 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:11,878 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:11,879 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:12,089 - ai_test_generator - ERROR - Error calling DeepSeek API: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:12,091 - ai_test_generator - ERROR - Error generating test with AI: API call failed with status code 401: Authentication Fails (auth header format should be Bearer sk-...)
+2025-05-19 15:08:12,091 - ai_test_generator - INFO - Generated 14 tests
+2025-05-19 15:11:39,192 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:11:40,204 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:11:57,295 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:11:58,251 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:14:53,593 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:15:06,346 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 15:15:06,897 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 15:15:06,898 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 15:15:09,090 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 15:15:10,173 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 15:15:10,174 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 15:15:12,453 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 15:15:13,572 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 15:15:13,572 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 15:15:13,573 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 15:15:14,689 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 15:15:14,690 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 15:15:15,028 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/app.py
+2025-05-19 15:15:16,137 - ai_test_generator - INFO - File content retrieved successfully: backend/app.py
+2025-05-19 15:15:19,766 - ai_test_generator - INFO - Generating tests for language: python, model: deepseek
+2025-05-19 15:15:19,787 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,788 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,790 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,790 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,791 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,791 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,791 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,791 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,792 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,792 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,792 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,792 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,793 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,793 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,793 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,793 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,793 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,794 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,794 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,794 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,794 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,795 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,795 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,795 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,795 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,795 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,796 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,796 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:19,797 - ai_test_generator - INFO - Generated 14 tests
+2025-05-19 15:15:45,450 - ai_test_generator - INFO - Generating tests for language: python, model: deepseek
+2025-05-19 15:15:45,479 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,480 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,480 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,480 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,480 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,481 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,481 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,481 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,481 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,482 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,482 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,482 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,482 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,482 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,483 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,483 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,483 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,483 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,483 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,483 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,484 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,484 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,484 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,484 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,484 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,486 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,487 - ai_test_generator - ERROR - Error calling DeepSeek API: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,488 - ai_test_generator - ERROR - Error generating test with AI: Invalid API key. Please set a valid API key in the .env file or environment variables. See the .env.example file for the required format.
+2025-05-19 15:15:45,488 - ai_test_generator - INFO - Generated 14 tests
+2025-05-19 15:18:32,465 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:18:33,475 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:18:55,139 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:18:56,049 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:19:11,753 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:19:12,621 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:23:30,487 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:23:31,493 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:24:07,751 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:24:08,792 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:24:20,013 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:24:20,935 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:28:28,132 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:28:29,154 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:28:59,960 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:30:04,408 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:30:47,965 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:30:48,914 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:30:58,448 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:30:59,489 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:31:43,781 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:31:44,787 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:31:47,457 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:31:48,446 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:32:54,700 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:32:55,641 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:34:24,064 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:34:25,018 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:36:18,412 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:36:25,741 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:36:32,999 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:36:34,021 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:36:37,429 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:36:38,462 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:36:39,026 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:36:39,949 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:37:50,512 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 15:57:03,628 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 15:57:31,827 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 15:57:32,278 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 15:57:32,278 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 15:57:34,816 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 15:57:35,917 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 15:57:35,918 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 15:57:37,502 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 15:57:38,658 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 15:57:38,659 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 15:57:38,661 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 15:57:40,247 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 15:57:40,247 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 15:57:40,248 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/app.py
+2025-05-19 15:57:41,344 - ai_test_generator - INFO - File content retrieved successfully: backend/app.py
+2025-05-19 15:57:47,698 - ai_test_generator - INFO - Generating tests for language: python, model: deepseek-V3
+2025-05-19 16:03:17,079 - ai_test_generator - ERROR - Error calling DeepSeek API: DeepSeek API error: API request error: HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
+2025-05-19 16:03:17,080 - ai_test_generator - ERROR - Error generating test with AI: DeepSeek API error: API request error: HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
+2025-05-19 16:06:21,609 - ai_test_generator - INFO - Generated 14 tests
+2025-05-19 16:06:21,620 - ai_test_generator - INFO - Generating tests for language: python, model: deepseek-R1
+2025-05-19 16:07:21,889 - ai_test_generator - ERROR - Error calling DeepSeek API: DeepSeek API error: API request error: HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
+2025-05-19 16:07:21,890 - ai_test_generator - ERROR - Error generating test with AI: DeepSeek API error: API request error: HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
+2025-05-19 16:10:58,906 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 16:11:12,164 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 16:11:12,644 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 16:11:12,645 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 16:11:15,706 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 16:11:16,873 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 16:11:16,873 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 16:11:18,672 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 16:11:19,795 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 16:11:19,796 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 16:11:19,798 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 16:11:20,900 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 16:11:20,901 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 16:11:22,922 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-19 16:11:24,121 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-19 16:11:32,357 - ai_test_generator - INFO - Streaming tests for language: python, model: deepseek-R1
+2025-05-19 16:17:04,667 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 16:17:05,739 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 16:18:57,162 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 16:18:59,822 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 16:19:15,836 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 16:19:16,408 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 16:19:16,409 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 16:19:18,700 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 16:19:19,808 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 16:19:19,808 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 16:19:21,489 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 16:19:22,570 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 16:19:22,571 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 16:19:22,574 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 16:19:23,629 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 16:19:23,630 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 16:19:31,539 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend/auth
+2025-05-19 16:19:32,703 - ai_test_generator - INFO - Found 2 items in GE-Kian/K6_WEBTOOLS/backend/auth
+2025-05-19 16:19:32,705 - ai_test_generator - INFO - Found 2 directories/files
+2025-05-19 16:19:32,710 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend/auth
+2025-05-19 16:19:33,804 - ai_test_generator - INFO - Found 2 items in GE-Kian/K6_WEBTOOLS/backend/auth
+2025-05-19 16:19:33,805 - ai_test_generator - INFO - Found 2 directories/files
+2025-05-19 16:19:36,469 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/auth/models.py
+2025-05-19 16:19:37,580 - ai_test_generator - INFO - File content retrieved successfully: backend/auth/models.py
+2025-05-19 16:19:42,505 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-19 16:19:43,621 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-19 16:19:53,318 - ai_test_generator - INFO - Streaming tests for language: python, model: deepseek-V3
+2025-05-19 16:19:53,318 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-19 16:20:19,876 - ai_test_generator - INFO - Generated test 1: init_socketio
+2025-05-19 16:21:05,725 - ai_test_generator - INFO - Generated test 2: broadcast_metrics
+2025-05-19 16:21:55,475 - ai_test_generator - INFO - Generated test 3: broadcast_test_status
+2025-05-19 16:23:59,879 - ai_test_generator - INFO - Streaming tests for language: python, model: deepseek-V3
+2025-05-19 16:23:59,880 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-19 16:24:26,571 - ai_test_generator - INFO - Generated test 1: init_socketio
+2025-05-19 16:25:36,270 - ai_test_generator - INFO - Generated test 2: broadcast_metrics
+2025-05-19 16:26:22,747 - ai_test_generator - INFO - Generated test 3: broadcast_test_status
+2025-05-19 16:31:54,673 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 16:31:55,666 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 16:32:36,497 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 16:32:37,464 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 16:37:18,158 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 16:37:21,229 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 16:37:39,993 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 16:37:40,480 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 16:37:40,480 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 16:37:45,652 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 16:37:46,737 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 16:37:46,738 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 16:37:48,403 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 16:37:49,480 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 16:37:49,480 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 16:37:49,482 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 16:37:50,590 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 16:37:50,590 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 16:37:51,604 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-19 16:37:52,745 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-19 16:37:56,964 - ai_test_generator - INFO - Streaming tests for language: python, model: deepseek-V3
+2025-05-19 16:37:56,965 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-19 16:37:56,965 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-19 16:37:56,971 - ai_test_generator - ERROR - Error in stream generator: No module named 'app.services.parsers.parser_factory'
+Traceback (most recent call last):
+  File "D:\Personal\Script\GE\AIuintCode\backend\app\api\endpoints.py", line 106, in stream_generator
+    from app.services.parsers.parser_factory import ParserFactory
+ModuleNotFoundError: No module named 'app.services.parsers.parser_factory'
+2025-05-19 16:39:18,869 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 16:39:19,801 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 16:40:32,559 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 16:40:33,581 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 16:41:26,662 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 16:41:29,071 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 16:41:45,487 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 16:41:45,960 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 16:41:45,960 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 16:41:47,429 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 16:41:48,530 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 16:41:48,531 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 16:41:50,177 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 16:41:51,286 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 16:41:51,287 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 16:41:51,289 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 16:41:52,407 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 16:41:52,408 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 16:41:53,208 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-19 16:41:54,279 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-19 16:41:56,959 - ai_test_generator - INFO - Streaming tests for language: python, model: deepseek-V3
+2025-05-19 16:41:56,960 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-19 16:41:56,960 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-19 16:41:56,965 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-19 16:41:56,966 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-19 16:41:56,966 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-19 16:41:56,967 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-19 16:41:56,967 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-19 16:41:56,967 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-19 16:41:56,967 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-19 16:41:56,968 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-19 16:41:56,968 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-19 16:41:56,968 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-19 16:41:56,969 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-19 16:41:56,969 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-19 16:41:56,969 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-19 16:41:56,969 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-19 16:42:16,630 - ai_test_generator - INFO - 成功生成测试 1: init_socketio
+2025-05-19 16:42:16,738 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-19 16:42:16,740 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-19 16:43:00,228 - ai_test_generator - INFO - 成功生成测试 2: broadcast_metrics
+2025-05-19 16:43:00,338 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-19 16:43:00,338 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-19 16:43:40,767 - ai_test_generator - INFO - 成功生成测试 3: broadcast_test_status
+2025-05-19 17:00:18,491 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 17:00:23,636 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 17:01:33,653 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:01:34,143 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:01:34,144 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:01:36,129 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:01:37,229 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:01:37,229 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:01:39,137 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 17:01:40,201 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 17:01:40,202 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 17:01:40,205 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 17:01:41,265 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 17:01:41,266 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 17:01:42,014 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-19 17:01:43,147 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-19 17:01:45,926 - ai_test_generator - INFO - Streaming tests for language: python, model: deepseek-V3
+2025-05-19 17:01:45,926 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-19 17:01:45,926 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-19 17:01:45,932 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-19 17:01:45,933 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-19 17:01:45,934 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-19 17:01:45,934 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-19 17:01:45,935 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-19 17:01:45,935 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-19 17:01:45,936 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-19 17:01:45,936 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-19 17:01:45,937 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-19 17:01:45,937 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-19 17:01:45,937 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-19 17:01:45,938 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-19 17:01:45,938 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-19 17:01:45,938 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-19 17:02:10,981 - ai_test_generator - INFO - 成功生成测试 1: init_socketio
+2025-05-19 17:02:11,084 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-19 17:02:11,085 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-19 17:03:21,462 - ai_test_generator - INFO - 成功生成测试 2: broadcast_metrics
+2025-05-19 17:03:21,566 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-19 17:03:21,567 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-19 17:04:12,398 - ai_test_generator - INFO - 成功生成测试 3: broadcast_test_status
+2025-05-19 17:07:55,699 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 17:08:22,499 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:08:22,981 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:08:22,982 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:08:25,368 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:08:26,539 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:08:26,540 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:08:28,201 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 17:08:29,285 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 17:08:29,286 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 17:08:29,289 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 17:08:30,388 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 17:08:30,389 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 17:08:31,533 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-19 17:08:32,623 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-19 17:08:35,959 - ai_test_generator - INFO - Streaming tests for language: python, model: deepseek-V3
+2025-05-19 17:08:35,960 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-19 17:08:35,960 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-19 17:08:35,965 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-19 17:08:35,965 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-19 17:08:35,966 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-19 17:08:35,966 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-19 17:08:35,966 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-19 17:08:35,967 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-19 17:08:35,967 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-19 17:08:35,968 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-19 17:08:35,968 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-19 17:08:35,968 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-19 17:08:35,969 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-19 17:08:35,969 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-19 17:08:35,969 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-19 17:08:35,969 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-19 17:08:56,407 - ai_test_generator - INFO - 成功生成测试 1: init_socketio
+2025-05-19 17:08:56,518 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-19 17:08:56,521 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-19 17:09:44,531 - ai_test_generator - INFO - 成功生成测试 2: broadcast_metrics
+2025-05-19 17:09:44,637 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-19 17:09:44,638 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-19 17:10:28,470 - ai_test_generator - INFO - 成功生成测试 3: broadcast_test_status
+2025-05-19 17:11:55,621 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 17:11:56,551 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 17:12:08,478 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 17:12:09,381 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 17:15:10,204 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 17:15:24,197 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:15:24,746 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:15:24,746 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:15:26,661 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:15:27,803 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:15:27,804 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:15:34,429 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 17:15:35,534 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 17:15:35,535 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 17:15:35,538 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 17:15:36,658 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 17:15:36,659 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 17:15:36,836 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-19 17:15:37,942 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-19 17:15:39,826 - ai_test_generator - INFO - Streaming tests for language: python, model: deepseek-V3
+2025-05-19 17:15:39,826 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-19 17:15:39,826 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-19 17:15:39,831 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-19 17:15:39,832 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-19 17:15:39,832 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-19 17:15:39,832 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-19 17:15:39,832 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-19 17:15:39,832 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-19 17:15:39,833 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-19 17:15:39,833 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-19 17:15:39,833 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-19 17:15:39,834 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-19 17:15:39,834 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-19 17:15:39,834 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-19 17:15:39,834 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-19 17:15:39,835 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-19 17:16:03,871 - ai_test_generator - INFO - 成功生成测试 1: init_socketio
+2025-05-19 17:16:03,977 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-19 17:16:03,977 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-19 17:16:54,181 - ai_test_generator - INFO - 成功生成测试 2: broadcast_metrics
+2025-05-19 17:16:54,287 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-19 17:16:54,287 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-19 17:17:36,369 - ai_test_generator - INFO - 成功生成测试 3: broadcast_test_status
+2025-05-19 17:19:53,418 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 17:19:54,344 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 17:22:03,224 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 17:22:16,827 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:22:17,349 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:22:17,350 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:22:19,402 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:22:20,560 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:22:20,561 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:22:22,209 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 17:22:23,341 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 17:22:23,341 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 17:22:23,343 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 17:22:24,471 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 17:22:24,471 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 17:22:25,051 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-19 17:22:26,152 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-19 17:22:30,299 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-19 17:22:30,299 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-19 17:22:30,300 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-19 17:22:30,300 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-19 17:22:30,301 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-19 17:22:30,301 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-19 17:22:30,302 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-19 17:22:30,302 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-19 17:22:30,304 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-19 17:22:30,304 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-19 17:22:30,305 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-19 17:22:30,311 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-19 17:22:30,312 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-19 17:22:30,312 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-19 17:22:30,313 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-19 17:22:30,313 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-19 17:22:30,313 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-19 17:22:53,321 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-19 17:22:53,321 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-19 17:22:53,322 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-19 17:23:39,093 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-19 17:23:39,094 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-19 17:23:39,094 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-19 17:24:23,293 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-19 17:28:29,408 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:28:29,859 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:28:29,860 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:28:31,046 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_performance, path: 
+2025-05-19 17:28:32,172 - ai_test_generator - INFO - Found 1 items in GE-Kian/K6_performance/
+2025-05-19 17:28:32,173 - ai_test_generator - INFO - Found 1 directories/files
+2025-05-19 17:28:35,297 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:28:36,403 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:28:36,404 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:28:37,868 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 17:28:38,935 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 17:28:38,935 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 17:28:38,937 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 17:28:40,047 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 17:28:40,048 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 17:28:40,356 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-19 17:28:41,512 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-19 17:28:45,199 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-19 17:28:45,200 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-19 17:28:45,200 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-19 17:28:45,200 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-19 17:28:45,202 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-19 17:28:45,202 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-19 17:28:45,202 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-19 17:28:45,202 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-19 17:28:45,202 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-19 17:28:45,203 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-19 17:28:45,203 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-19 17:28:45,203 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-19 17:28:45,203 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-19 17:28:45,203 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-19 17:28:45,204 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-19 17:28:45,204 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-19 17:28:45,204 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-19 17:29:09,255 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-19 17:29:09,255 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-19 17:29:09,256 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-19 17:29:49,800 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-19 17:29:49,801 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-19 17:29:49,801 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-19 17:30:41,530 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-19 17:31:23,937 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-19 17:31:26,225 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-19 17:31:38,291 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:31:38,853 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:31:38,854 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:31:40,372 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_performance, path: 
+2025-05-19 17:31:41,508 - ai_test_generator - INFO - Found 1 items in GE-Kian/K6_performance/
+2025-05-19 17:31:41,509 - ai_test_generator - INFO - Found 1 directories/files
+2025-05-19 17:31:43,106 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:31:44,187 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:31:44,188 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:31:45,848 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 17:31:46,921 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 17:31:46,921 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 17:31:46,924 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-19 17:31:48,023 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-19 17:31:48,024 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-19 17:31:48,475 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-19 17:31:49,518 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-19 17:31:52,645 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-19 17:31:52,645 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-19 17:31:52,645 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-19 17:31:52,646 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-19 17:31:52,647 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-19 17:31:52,647 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-19 17:31:52,648 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-19 17:31:52,648 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-19 17:31:52,648 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-19 17:31:52,649 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-19 17:31:52,655 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-19 17:31:52,656 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-19 17:31:52,656 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-19 17:31:52,657 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-19 17:31:52,657 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-19 17:31:52,658 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-19 17:31:52,658 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-19 17:32:19,535 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-19 17:32:19,535 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-19 17:32:19,536 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-19 17:33:08,335 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-19 17:33:08,336 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-19 17:33:08,337 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-19 17:33:52,432 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-19 17:35:24,860 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:25,368 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:25,369 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:25,370 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:25,817 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:25,817 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:25,818 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:26,956 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:26,957 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:26,958 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:27,380 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:27,380 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:27,381 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:28,481 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:28,481 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:28,483 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:28,897 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:28,897 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:28,898 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:29,974 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:29,974 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:29,975 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:30,406 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:30,406 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:30,407 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:31,495 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:31,496 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:31,496 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:31,928 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:31,929 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:31,930 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:33,000 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:33,001 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:33,002 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:33,401 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:33,401 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:33,402 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:34,513 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:34,513 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:34,514 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:34,943 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:34,944 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:34,945 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:36,032 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:36,033 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:36,034 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:36,462 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:36,462 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:36,463 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:37,541 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:37,541 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:37,542 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:37,939 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:37,940 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:37,941 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:39,028 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:39,029 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:39,030 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:39,451 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:39,451 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:39,452 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:40,545 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:40,546 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:40,547 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:40,984 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:40,984 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:40,985 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:42,074 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:42,074 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:42,075 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:42,495 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:42,495 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:42,496 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:43,610 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:43,610 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:43,611 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:44,023 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:44,024 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:44,025 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:45,178 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:45,178 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:45,179 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:45,583 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:45,584 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:45,584 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:45,988 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:45,989 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:45,990 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:46,412 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:46,412 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:46,413 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:46,902 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:46,903 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:46,904 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:47,335 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:47,335 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:47,336 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:47,724 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:47,725 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:47,726 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:48,168 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:48,168 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:48,169 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:48,591 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:48,592 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:48,593 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:48,985 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:48,986 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:48,988 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:49,446 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:49,446 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:49,447 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:49,860 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:49,860 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:49,862 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:50,262 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:50,262 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:50,263 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-19 17:35:51,351 - ai_test_generator - INFO - Found 6 items in GE-Kian/K6_WEBTOOLS/
+2025-05-19 17:35:51,351 - ai_test_generator - INFO - Found 6 directories/files
+2025-05-19 17:35:51,352 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:51,754 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:51,755 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:51,756 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:52,170 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:52,171 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:52,172 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:52,579 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:52,579 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:52,580 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:53,041 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:53,041 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:53,042 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:53,466 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:53,476 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:53,478 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:53,897 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:53,898 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:53,899 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:54,313 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:54,313 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:54,314 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:54,741 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:54,741 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:54,742 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:55,171 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:55,172 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:55,173 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:55,596 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:55,597 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:55,597 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:56,022 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:56,023 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:56,024 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:56,441 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:56,442 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:56,443 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:56,835 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:56,835 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:56,836 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:57,245 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:57,246 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:57,247 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:57,662 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:57,663 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:57,663 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:58,083 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:58,083 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:58,084 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:58,488 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:58,488 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:58,489 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:58,911 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:58,912 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:58,913 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:59,334 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:59,334 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:59,335 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:35:59,737 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:59,738 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:35:59,738 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:00,150 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:00,150 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:00,151 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:00,587 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:00,587 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:00,587 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:00,999 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:00,999 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:01,000 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:01,416 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:01,416 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:01,417 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:01,828 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:01,829 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:01,830 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:02,260 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:02,260 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:02,261 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:02,737 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:02,738 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:02,738 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:03,198 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:03,199 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:03,201 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:03,623 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:03,624 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:03,625 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:04,058 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:04,058 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:04,059 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:04,481 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:04,482 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:04,485 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:04,970 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:04,970 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:04,971 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:05,431 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:05,431 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:05,433 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:05,834 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:05,835 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:05,835 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:06,255 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:06,256 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:06,258 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:06,667 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:06,668 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:06,669 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:07,082 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:07,083 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:07,084 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:07,487 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:07,487 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:07,489 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:07,931 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:07,932 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:07,933 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:08,348 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:08,349 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:08,351 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:08,787 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:08,787 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:08,790 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:09,198 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:09,199 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:09,200 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:09,616 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:09,617 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:09,620 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:10,029 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:10,029 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:10,030 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:10,437 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:10,438 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:10,439 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:10,834 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:10,835 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:10,837 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:11,234 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:11,235 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:11,235 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:11,668 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:11,669 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:11,673 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:12,119 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:12,119 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:12,121 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:12,577 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:12,578 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:12,580 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:13,033 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:13,034 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:13,035 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:13,426 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:13,427 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:13,428 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:13,836 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:13,836 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:13,838 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:14,251 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:14,252 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:14,253 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:14,644 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:14,644 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:14,645 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:15,054 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:15,054 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:15,055 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:15,481 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:15,482 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:15,484 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:15,877 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:15,877 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:15,879 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:16,308 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:16,309 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:16,310 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:16,761 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:16,762 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:16,763 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:17,210 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:17,212 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:17,214 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:17,639 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:17,640 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:17,643 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-19 17:36:18,072 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:18,073 - ai_test_generator - INFO - Found 4 repositories
+2025-05-19 17:36:18,074 - ai_test_generator - INFO - Listing GitHub repositories

@@ -1,0 +1,349 @@
+import axios from 'axios';
+
+// 创建一个取消令牌源
+const CancelToken = axios.CancelToken;
+let source = CancelToken.source();
+
+// 重置取消令牌
+export const resetCancelToken = () => {
+  source = CancelToken.source();
+};
+
+// 取消所有请求
+export const cancelAllRequests = (message = 'Operation canceled by the user') => {
+  source.cancel(message);
+  resetCancelToken();
+};
+
+// 创建axios实例
+const api = axios.create({
+  baseURL: process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:8888/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  timeout: 600000, // 10分钟超时
+});
+
+// 请求拦截器
+api.interceptors.request.use(
+  (config) => {
+    // 添加取消令牌到每个请求
+    config.cancelToken = source.token;
+
+    // 添加请求时间戳
+    config.metadata = { startTime: new Date() };
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// 响应拦截器
+api.interceptors.response.use(
+  (response) => {
+    // 计算请求耗时
+    const endTime = new Date();
+    const startTime = response.config.metadata.startTime;
+    const duration = endTime - startTime;
+
+    // 记录请求耗时（可用于性能监控）
+    console.debug(`Request to ${response.config.url} took ${duration}ms`);
+
+    return response.data;
+  },
+  (error) => {
+    // 如果是取消请求，不显示错误
+    if (axios.isCancel(error)) {
+      console.log('Request canceled:', error.message);
+      return Promise.reject(error);
+    }
+
+    // 处理错误响应
+    if (error.response) {
+      // 服务器返回了错误状态码
+      console.error('API Error:', error.response.status, error.response.statusText);
+      console.error('Error Data:', error.response.data);
+      console.error('Request URL:', error.config.url);
+      console.error('Request Method:', error.config.method);
+      console.error('Request Headers:', error.config.headers);
+
+      // 如果是代理错误，可能是CORS或网络问题
+      if (error.response.status === 500) {
+        console.error('Possible proxy error. Check if backend server is running and accessible.');
+      }
+    } else if (error.request) {
+      // 请求已发送但没有收到响应
+      console.error('No response received:', error.request);
+      console.error('Request URL:', error.config.url);
+      console.error('Request Method:', error.config.method);
+    } else {
+      // 请求配置出错
+      console.error('Request error:', error.message);
+      console.error('Request Config:', error.config);
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+// 生成测试
+export const generateTests = async (code, language, model) => {
+  console.log(`Generating tests for ${language} code using model ${model}`);
+  console.log(`Code length: ${code.length} characters`);
+
+  // 为大型代码文件设置更长的超时时间
+  const timeout = code.length > 10000 ? 600000 : 300000; // 10分钟或5分钟
+
+  return api.post('/generate-test', {
+    code,
+    language,
+    model,
+  }, {
+    timeout: timeout // 覆盖默认超时设置
+  });
+};
+
+// 直接生成测试（非流式）
+export const generateTestsDirect = async (code, language, model) => {
+  console.log(`Directly generating tests for ${language} code using model ${model}`);
+  console.log(`Code length: ${code.length} characters`);
+
+  // 为大型代码文件设置更长的超时时间
+  const timeout = code.length > 10000 ? 600000 : 300000; // 10分钟或5分钟
+
+  try {
+    const response = await api.post('/generate-test-direct', {
+      code,
+      language,
+      model,
+    }, {
+      timeout: timeout // 覆盖默认超时设置
+    });
+
+    console.log('Direct test generation response:', response);
+    // 由于响应拦截器已经返回了 response.data，这里直接返回 response
+    return response;
+  } catch (error) {
+    console.error('Error generating tests directly:', error);
+    throw error;
+  }
+};
+
+// 流式生成测试
+export const generateTestsStream = async (code, language, model, onProgress) => {
+  console.log(`Streaming tests for ${language} code using model ${model}`);
+  console.log(`Code length: ${code.length} characters`);
+
+  // 为大型代码文件设置更长的超时时间
+  const timeout = code.length > 10000 ? 600000 : 300000; // 10分钟或5分钟
+
+  try {
+    // 创建一个变量来存储累积的响应文本
+    let accumulatedText = '';
+    let processedLines = new Set();
+
+    const response = await api.post('/generate-test-stream', {
+      code,
+      language,
+      model,
+    }, {
+      timeout: timeout, // 覆盖默认超时设置
+      responseType: 'text', // 设置响应类型为文本
+      onDownloadProgress: (progressEvent) => {
+        try {
+          // 安全地获取响应文本
+          let text = '';
+
+          // 检查不同的属性路径，以适应不同浏览器
+          if (progressEvent && progressEvent.currentTarget && progressEvent.currentTarget.response) {
+            text = progressEvent.currentTarget.response;
+          } else if (progressEvent && progressEvent.target && progressEvent.target.response) {
+            text = progressEvent.target.response;
+          } else if (progressEvent && progressEvent.response) {
+            text = progressEvent.response;
+          } else {
+            console.log('Progress event received but no response text available:', progressEvent);
+            return; // 如果没有响应文本，则退出
+          }
+
+          // 确保文本是字符串
+          if (typeof text !== 'string') {
+            console.log('Response is not a string:', text);
+            return;
+          }
+
+          // 更新累积的文本
+          accumulatedText = text;
+
+          // 按行分割
+          const lines = text.split('\n').filter(line => line.trim());
+
+          console.log(`Received ${lines.length} lines of text`);
+
+          // 处理每一行，但只处理新行
+          lines.forEach(line => {
+            try {
+              // 如果已经处理过这一行，则跳过
+              if (processedLines.has(line)) {
+                return;
+              }
+
+              // 标记为已处理
+              processedLines.add(line);
+
+              console.log('Processing new line:', line);
+
+              const result = JSON.parse(line);
+
+              // 记录接收到的结果
+              console.log('Parsed result:', result);
+
+              if (onProgress && typeof onProgress === 'function') {
+                // 调用回调函数
+                onProgress(result);
+                console.log('Called onProgress with result');
+              }
+            } catch (e) {
+              // 只有当行不为空时才记录错误
+              if (line.trim()) {
+                console.error('Error parsing JSON:', e, line);
+              }
+            }
+          });
+        } catch (e) {
+          console.error('Error in download progress handler:', e);
+        }
+      }
+    });
+
+    // 请求完成后，再次处理累积的文本，确保所有行都被处理
+    console.log('Request completed, processing accumulated text');
+    const finalLines = accumulatedText.split('\n').filter(line => line.trim());
+
+    finalLines.forEach(line => {
+      try {
+        // 如果已经处理过这一行，则跳过
+        if (processedLines.has(line)) {
+          return;
+        }
+
+        // 标记为已处理
+        processedLines.add(line);
+
+        console.log('Processing final line:', line);
+
+        const result = JSON.parse(line);
+
+        if (onProgress && typeof onProgress === 'function') {
+          onProgress(result);
+          console.log('Called onProgress with final result');
+        }
+      } catch (e) {
+        // 只有当行不为空时才记录错误
+        if (line.trim()) {
+          console.error('Error parsing final JSON:', e, line);
+        }
+      }
+    });
+
+    return response;
+  } catch (error) {
+    console.error('Error streaming tests:', error);
+    throw error;
+  }
+};
+
+// 上传文件
+export const uploadFile = async (formData) => {
+  return api.post('/upload-file', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+// 获取GitHub仓库列表
+export const getRepositories = async (token) => {
+  try {
+    console.log('Fetching repositories with token:', token ? 'token provided' : 'no token');
+    const response = await api.get('/git/repositories', {
+      params: { token },
+    });
+    console.log('Repositories response:', response);
+
+    // 确保返回的是仓库数组
+    if (response && response.repositories && Array.isArray(response.repositories)) {
+      return response.repositories;
+    } else {
+      console.error('Invalid repositories response format:', response);
+      throw new Error('Invalid response format: missing repositories array');
+    }
+  } catch (error) {
+    console.error('Error fetching repositories:', error);
+    throw error;
+  }
+};
+
+// 获取GitHub目录列表
+export const getDirectories = async (repo, token, path = '') => {
+  try {
+    console.log(`Fetching directories: repo=${repo}, path=${path}`);
+    const response = await api.get('/git/directories', {
+      params: { repo, token, path },
+    });
+    console.log('Directories response:', response);
+
+    // 确保返回的是目录数组
+    if (response && response.directories && Array.isArray(response.directories)) {
+      return response.directories;
+    } else {
+      console.error('Invalid directories response format:', response);
+      throw new Error('Invalid response format: missing directories array');
+    }
+  } catch (error) {
+    console.error('Error fetching directories:', error);
+    throw error;
+  }
+};
+
+// 保存测试到GitHub
+export const saveToGit = async (tests, language, repo, path, token) => {
+  return api.post('/git/save', {
+    tests,
+    language,
+    repo,
+    path,
+    token,
+  });
+};
+
+// 获取支持的语言列表
+export const getLanguages = async () => {
+  const response = await api.get('/languages');
+  return response.languages;
+};
+
+// 获取支持的模型列表
+export const getModels = async () => {
+  const response = await api.get('/models');
+  return response.models;
+};
+
+// 获取GitHub文件内容
+export const getFileContent = async (repo, path, token) => {
+  try {
+    console.log(`Fetching file content: repo=${repo}, path=${path}`);
+    const response = await api.get('/git/file-content', {
+      params: { repo, path, token },
+    });
+    console.log('File content response:', response);
+    return response;
+  } catch (error) {
+    console.error('Error fetching file content:', error);
+    throw error;
+  }
+};
+
+export default api;
