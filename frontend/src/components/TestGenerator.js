@@ -40,6 +40,12 @@ const TestGenerator = () => {
   const [streamingTests, setStreamingTests] = useState([]);
   const [streamProgress, setStreamProgress] = useState(0);
   const [isStreaming, setIsStreaming] = useState(false);
+  // 添加生成进度状态
+  const [generationProgress, setGenerationProgress] = useState(0);
+  const [totalSnippets, setTotalSnippets] = useState(0);
+  const [currentSnippet, setCurrentSnippet] = useState('');
+  const [generationStartTime, setGenerationStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
   const [gitInfo, setGitInfo] = useState({
     token: '',
     repo: '',
@@ -65,6 +71,25 @@ const TestGenerator = () => {
 
     fetchData();
   }, []);
+
+  // 计时器效果
+  useEffect(() => {
+    let timer;
+    if (generationStartTime && loading) {
+      timer = setInterval(() => {
+        const now = new Date();
+        const elapsed = Math.floor((now - generationStartTime) / 1000);
+        setElapsedTime(elapsed);
+      }, 1000);
+    } else if (!loading) {
+      setGenerationStartTime(null);
+      setElapsedTime(0);
+    }
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [generationStartTime, loading]);
 
   // 处理语言变更
   const handleLanguageChange = useCallback((value) => {
@@ -426,6 +451,12 @@ const TestGenerator = () => {
       return;
     }
 
+    // 重置进度状态
+    setGenerationProgress(0);
+    setTotalSnippets(0);
+    setCurrentSnippet('');
+    setGenerationStartTime(new Date());
+
     dispatch({ type: ActionTypes.SET_LOADING, payload: true });
 
     try {
@@ -434,36 +465,109 @@ const TestGenerator = () => {
         duration: 3
       });
 
+      // 使用正则表达式粗略估计代码中的函数/方法数量
+      const functionMatches = code.match(/\b(function|def|class|method|func)\b/g);
+      const estimatedSnippets = functionMatches ? functionMatches.length : 1;
+      setTotalSnippets(estimatedSnippets);
+
+      // 设置初始进度
+      setGenerationProgress(5); // 开始时设置为5%表示已经开始处理
+
+      // 模拟解析代码的进度
+      setTimeout(() => {
+        setGenerationProgress(10);
+        setCurrentSnippet('正在解析代码...');
+      }, 500);
+
+      // 模拟进度更新 - 由于后端不提供实时进度，我们在前端模拟进度
+      const progressInterval = setInterval(() => {
+        setGenerationProgress(prev => {
+          // 进度最多到95%，剩下的5%留给最终完成
+          if (prev < 95) {
+            const increment = Math.random() * 5 + 1; // 每次增加1-6%
+            const newProgress = Math.min(95, prev + increment);
+
+            // 根据进度更新当前状态消息
+            if (newProgress > 10 && newProgress <= 30) {
+              setCurrentSnippet('正在分析代码结构...');
+            } else if (newProgress > 30 && newProgress <= 60) {
+              setCurrentSnippet('正在生成测试用例...');
+            } else if (newProgress > 60 && newProgress < 95) {
+              setCurrentSnippet('正在优化测试代码...');
+            }
+
+            return newProgress;
+          }
+          return prev;
+        });
+      }, 1000); // 每秒更新一次进度
+
       // 调用直接 API
       console.log('Calling generateTestsDirect...');
       const result = await generateTestsDirect(code, language, model);
+
+      // 清除进度更新定时器
+      clearInterval(progressInterval);
+
       console.log('Direct API result:', result);
       console.log('Result type:', typeof result);
       console.log('Result success:', result.success);
       console.log('Result tests:', result.tests);
       console.log('Result tests length:', result.tests ? result.tests.length : 0);
 
-      // 检查 result 是否有效
-      if (result && result.tests && Array.isArray(result.tests) && result.tests.length > 0) {
+      // 检查 result 是否有效，并处理不同的响应格式
+      if (result && ((result.tests && Array.isArray(result.tests) && result.tests.length > 0) ||
+                     (Array.isArray(result) && result.length > 0))) {
+        // 确定要使用的测试数据
+        const testsData = Array.isArray(result) ? result : result.tests;
+
+        // 设置进度为100%
+        setGenerationProgress(100);
+        setCurrentSnippet('生成完成');
+
         // 更新全局状态
-        dispatch({ type: ActionTypes.SET_GENERATED_TESTS, payload: result.tests });
+        console.log('Dispatching tests data:', testsData);
+        dispatch({ type: ActionTypes.SET_GENERATED_TESTS, payload: testsData });
 
         // 显示成功消息
-        message.success(result.message || `成功生成 ${result.tests.length} 个测试用例`);
+        const testCount = testsData.length;
+        message.success(result.message || `成功生成 ${testCount} 个测试用例`);
 
         // 切换到第一个测试标签
         setActiveTabKey('test-0');
         console.log('Switched to first test tab');
       } else {
+        // 设置进度为100%，但显示警告
+        setGenerationProgress(100);
+        setCurrentSnippet('未找到可测试的代码');
+
         // 显示警告消息
         message.warning(result.message || '没有找到可以生成测试的函数或方法');
       }
     } catch (error) {
       console.error('生成测试时出错:', error);
       dispatch({ type: ActionTypes.SET_ERROR, payload: error.message });
-      const errorMsg = error.response?.data?.detail || error.message;
-      message.error('生成测试失败: ' + errorMsg);
+
+      // 设置进度为100%，但显示错误
+      setGenerationProgress(100);
+      setCurrentSnippet('生成失败');
+
+      // 检查是否是超时错误
+      if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+        message.error('生成测试超时，DeepSeek-R1 模型可能需要更长时间。请尝试使用其他模型或稍后再试。');
+      } else if (error.response) {
+        // 服务器返回了错误状态码
+        const errorMsg = error.response.data?.detail || error.response.data?.message || error.message;
+        message.error('生成测试失败: ' + errorMsg);
+      } else if (error.request) {
+        // 请求已发送但没有收到响应
+        message.error('服务器没有响应，请检查网络连接或稍后再试。');
+      } else {
+        // 其他错误
+        message.error('生成测试失败: ' + error.message);
+      }
     } finally {
+      // 保持进度状态，但停止加载动画
       dispatch({ type: ActionTypes.SET_LOADING, payload: false });
     }
   }, [code, language, model, dispatch, setActiveTabKey]);
@@ -557,6 +661,7 @@ const TestGenerator = () => {
             />
 
             <Spin spinning={loading} tip={isStreaming ? "正在生成测试用例，请耐心等待..." : "加载中..."}>
+              {/* 流式生成进度显示 */}
               {isStreaming && streamProgress > 0 && (
                 <Alert
                   message="测试生成进行中"
@@ -565,6 +670,29 @@ const TestGenerator = () => {
                   showIcon
                   style={{ marginBottom: 16 }}
                 />
+              )}
+
+              {/* 直接生成进度条 */}
+              {loading && !isStreaming && generationProgress > 0 && (
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ marginBottom: 8 }}>
+                    <span style={{ fontWeight: 'bold' }}>测试生成进度：</span>
+                    <span>{currentSnippet}</span>
+                    {elapsedTime > 0 && (
+                      <span style={{ float: 'right' }}>
+                        已用时间: {Math.floor(elapsedTime / 60)}分{elapsedTime % 60}秒
+                      </span>
+                    )}
+                  </div>
+                  <Progress
+                    percent={Math.round(generationProgress)}
+                    status={generationProgress >= 100 ? (currentSnippet === '生成失败' ? 'exception' : 'success') : 'active'}
+                    strokeColor={{
+                      '0%': '#108ee9',
+                      '100%': '#87d068',
+                    }}
+                  />
+                </div>
               )}
 
               <Tabs activeKey={activeTabKey} onChange={setActiveTabKey}>

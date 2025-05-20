@@ -110,7 +110,7 @@ AI_MODELS = {
         "model": "deepseek-reasoner",  # 使用 deepseek-reasoner 模型
         "temperature": 0.7,
         "max_tokens": 8000,  # 增加最大token数
-        "timeout": 600,  # 增加超时时间到10分钟
+        "timeout": 1200,  # 增加超时时间到20分钟
     }
 }
 

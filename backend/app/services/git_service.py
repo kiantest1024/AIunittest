@@ -89,49 +89,89 @@ def save_to_git(tests: List[TestResult], language: str, repo_full_name: str, bas
         Exception: 如果保存失败
     """
     try:
+        logger.info(f"Starting save_to_git with parameters:")
+        logger.info(f"  - language: {language}")
+        logger.info(f"  - repo_full_name: {repo_full_name}")
+        logger.info(f"  - base_path: {base_path}")
+        logger.info(f"  - branch: {branch}")
+        logger.info(f"  - tests count: {len(tests)}")
+
+        # 初始化 GitHub 客户端
         g = Github(token)
         repo = g.get_repo(repo_full_name)
         urls = []
 
         # 获取语言配置
         lang_config = LANGUAGE_CONFIG.get(language, {})
-        test_file_prefix = lang_config.get("test_file_prefix", "test_")
-        test_file_suffix = lang_config.get("test_file_suffix", "")
         file_extension = lang_config.get("file_extensions", [".py"])[0]
+        logger.info(f"Using file extension: {file_extension} for language: {language}")
+
+        # 规范化基础路径
+        normalized_base_path = base_path.replace('\\', '/') if base_path else ""
+        logger.info(f"Normalized base path: '{normalized_base_path}'")
+
+        # 记录上传目录
+        logger.info(f"Saving tests directly to path: '{normalized_base_path}'")
 
         for test in tests:
-            # 构建测试文件名
+            # 构建测试文件名 - 不使用前缀或后缀，直接使用函数/方法名
             if test.original_snippet.class_name:
-                file_name = f"{test_file_prefix}{test.original_snippet.class_name}{test_file_suffix}{file_extension}"
+                # 对于类方法，使用 ClassName_methodName 格式
+                file_name = f"{test.original_snippet.class_name}_{test.original_snippet.name}{file_extension}"
             else:
-                file_name = f"{test_file_prefix}{test.original_snippet.name}{test_file_suffix}{file_extension}"
+                # 对于函数，直接使用函数名
+                file_name = f"{test.original_snippet.name}{file_extension}"
 
-            # 构建文件路径
-            file_path = os.path.join(base_path, file_name)
+            # 构建文件路径 - 直接放在选择的文件夹中，使用正斜杠作为路径分隔符
+            # 确保路径末尾有斜杠
+            if normalized_base_path:
+                if not normalized_base_path.endswith('/'):
+                    normalized_base_path += '/'
+                file_path = normalized_base_path + file_name
+            else:
+                file_path = file_name
+
+            logger.info(f"Constructed file path: '{file_path}'")
 
             # 检查文件是否已存在
             try:
-                existing_content = repo.get_contents(file_path, ref=branch)
-                # 如果文件存在，更新它
-                logger.info(f"Updating existing file: {file_path}")
-                response = repo.update_file(
-                    path=file_path,
-                    message=f"Update {file_name} with AI generated tests",
-                    content=test.test_code,
-                    sha=existing_content.sha,
-                    branch=branch
-                )
-                urls.append(response["content"].html_url)
+                try:
+                    # 尝试获取文件内容，检查文件是否存在
+                    existing_content = repo.get_contents(file_path, ref=branch)
+                    # 如果文件存在，更新它
+                    logger.info(f"File exists, updating: '{file_path}'")
+                    response = repo.update_file(
+                        path=file_path,
+                        message=f"Update {file_name} with AI generated tests",
+                        content=test.test_code,
+                        sha=existing_content.sha,
+                        branch=branch
+                    )
+                    file_url = response["content"].html_url
+                    logger.info(f"Successfully updated file: '{file_path}', URL: {file_url}")
+                    urls.append(file_url)
+                except Exception as not_found_error:
+                    # 检查是否是文件不存在的错误
+                    if "404" in str(not_found_error) or "not found" in str(not_found_error).lower():
+                        # 如果文件不存在，创建它
+                        logger.info(f"File does not exist, creating new file: '{file_path}'")
+                        response = repo.create_file(
+                            path=file_path,
+                            message=f"Add {file_name} with AI generated tests",
+                            content=test.test_code,
+                            branch=branch
+                        )
+                        file_url = response["content"].html_url
+                        logger.info(f"Successfully created file: '{file_path}', URL: {file_url}")
+                        urls.append(file_url)
+                    else:
+                        # 如果是其他错误，重新抛出
+                        logger.error(f"Error checking if file exists: {not_found_error}")
+                        raise not_found_error
             except Exception as e:
-                # 如果文件不存在，创建它
-                logger.info(f"Creating new file: {file_path}")
-                response = repo.create_file(
-                    path=file_path,
-                    message=f"Add {file_name} with AI generated tests",
-                    content=test.test_code,
-                    branch=branch
-                )
-                urls.append(response["content"].html_url)
+                # 捕获所有其他错误
+                logger.error(f"Error saving file '{file_path}': {e}")
+                raise
 
         logger.info(f"Saved {len(urls)} files to {repo_full_name}/{base_path}")
         return urls

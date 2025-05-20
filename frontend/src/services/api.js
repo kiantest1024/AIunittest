@@ -20,8 +20,14 @@ const api = axios.create({
   baseURL: process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:8888/api',
   headers: {
     'Content-Type': 'application/json',
+    // 添加CORS相关头
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization, X-Request-With'
   },
   timeout: 600000, // 10分钟超时
+  // 不携带凭证，避免CORS预检请求
+  withCredentials: false,
 });
 
 // 请求拦截器
@@ -33,9 +39,16 @@ api.interceptors.request.use(
     // 添加请求时间戳
     config.metadata = { startTime: new Date() };
 
+    // 记录请求详情
+    console.log(`Request: ${config.method.toUpperCase()} ${config.url}`);
+    console.log('Request params:', config.params);
+    console.log('Request data:', config.data);
+    console.log('Request headers:', config.headers);
+
     return config;
   },
   (error) => {
+    console.error('Request error:', error);
     return Promise.reject(error);
   }
 );
@@ -110,8 +123,14 @@ export const generateTestsDirect = async (code, language, model) => {
   console.log(`Directly generating tests for ${language} code using model ${model}`);
   console.log(`Code length: ${code.length} characters`);
 
-  // 为大型代码文件设置更长的超时时间
-  const timeout = code.length > 10000 ? 600000 : 300000; // 10分钟或5分钟
+  // 为大型代码文件和特定模型设置更长的超时时间
+  let timeout = code.length > 10000 ? 600000 : 300000; // 10分钟或5分钟
+
+  // 为 DeepSeek-R1 模型设置更长的超时时间
+  if (model === 'deepseek-R1') {
+    console.log('Using extended timeout for DeepSeek-R1 model');
+    timeout = 1200000; // 20分钟
+  }
 
   try {
     const response = await api.post('/generate-test-direct', {
@@ -290,10 +309,25 @@ export const getRepositories = async (token) => {
 export const getDirectories = async (repo, token, path = '') => {
   try {
     console.log(`Fetching directories: repo=${repo}, path=${path}`);
+
+    // 确保参数有效
+    if (!repo) {
+      throw new Error('Repository name is required');
+    }
+
+    if (!token) {
+      throw new Error('GitHub token is required');
+    }
+
+    // 发送请求
     const response = await api.get('/git/directories', {
       params: { repo, token, path },
+      timeout: 30000, // 30秒超时
     });
+
     console.log('Directories response:', response);
+    console.log('Response data type:', typeof response);
+    console.log('Response data:', JSON.stringify(response, null, 2));
 
     // 确保返回的是目录数组
     if (response && response.directories && Array.isArray(response.directories)) {
@@ -304,19 +338,50 @@ export const getDirectories = async (repo, token, path = '') => {
     }
   } catch (error) {
     console.error('Error fetching directories:', error);
+    console.error('Error details:', error.response?.data || error.message);
     throw error;
   }
 };
 
 // 保存测试到GitHub
 export const saveToGit = async (tests, language, repo, path, token) => {
-  return api.post('/git/save', {
-    tests,
-    language,
-    repo,
-    path,
-    token,
-  });
+  try {
+    console.log(`Saving to Git: repo=${repo}, path=${path}, language=${language}, tests=${tests.length}`);
+
+    // 确保参数有效
+    if (!repo) {
+      throw new Error('Repository name is required');
+    }
+
+    if (!token) {
+      throw new Error('GitHub token is required');
+    }
+
+    if (!tests || tests.length === 0) {
+      throw new Error('No tests to save');
+    }
+
+    // 发送请求
+    const response = await api.post('/git/save', {
+      tests,
+      language,
+      repo,
+      path,
+      token,
+    }, {
+      timeout: 60000, // 60秒超时
+    });
+
+    console.log('Save to Git response:', response);
+    console.log('Response data type:', typeof response);
+    console.log('Response data:', JSON.stringify(response, null, 2));
+
+    return response;
+  } catch (error) {
+    console.error('Error saving to Git:', error);
+    console.error('Error details:', error.response?.data || error.message);
+    throw error;
+  }
 };
 
 // 获取支持的语言列表

@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Input, Button, Select, Spin, Tree, message, Tooltip } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import {
+  QuestionCircleOutlined,
+  FolderOpenOutlined,
+  FolderOutlined,
+  FileOutlined,
+  LoadingOutlined
+} from '@ant-design/icons';
 import { getRepositories, getDirectories, saveToGit } from '../services/api';
 
 const { Option } = Select;
@@ -28,60 +34,30 @@ const GitHubModal = ({ visible, onCancel, onSave, tests, language, loading, setL
   const [selectedPath, setSelectedPath] = useState('');
   const [tokenError, setTokenError] = useState('');
   const [useSourceGitInfo, setUseSourceGitInfo] = useState(true);
+  const [treeLoading, setTreeLoading] = useState(false); // 目录树加载状态
+  const [loadingPaths, setLoadingPaths] = useState([]); // 正在加载的路径
+  const [expandedKeys, setExpandedKeys] = useState([]); // 展开的节点
 
-  // 从gitInfo或localStorage加载token和仓库信息
+  // 从gitInfo或localStorage加载token信息，但不自动发起请求
   useEffect(() => {
-    // 只在模态框首次显示时加载数据
-    if (visible && repositories.length === 0) {
-      console.log('Modal became visible, loading repositories...');
+    // 只在模态框首次显示时设置token
+    if (visible) {
+      console.log('Modal became visible');
 
       if (useSourceGitInfo && gitInfo && gitInfo.token) {
         // 使用源代码的Git信息
+        console.log('Using source Git info token');
         setGitToken(gitInfo.token);
 
-        // 自动加载仓库
-        const loadRepos = async () => {
-          setLoading(true);
-          try {
-            console.log('Loading repositories with token:', gitInfo.token ? 'token provided' : 'no token');
-            const repos = await getRepositories(gitInfo.token);
-            console.log('Loaded repositories:', repos.length);
-            setRepositories(repos);
+        // 如果有仓库信息，设置为待选状态，但不自动加载
+        if (gitInfo.repo) {
+          console.log('Source has repo info:', gitInfo.repo);
+        }
 
-            // 查找匹配的仓库
-            const matchingRepo = repos.find(r => r.full_name === gitInfo.repo);
-            if (matchingRepo) {
-              console.log('Found matching repository:', matchingRepo.full_name);
-              // 自动选择仓库
-              setSelectedRepo(matchingRepo);
-
-              // 加载目录
-              console.log('Loading directories for repository:', matchingRepo.full_name);
-              const dirs = await getDirectories(matchingRepo.full_name, gitInfo.token, '');
-              const treeData = dirs.map(item => ({
-                title: item.name,
-                key: item.path,
-                isLeaf: item.type === 'file',
-                selectable: item.type === 'dir'
-              }));
-
-              setDirectories(treeData);
-
-              // 自动选择路径
-              if (gitInfo.path) {
-                console.log('Setting selected path:', gitInfo.path);
-                setSelectedPath(gitInfo.path);
-              }
-            }
-          } catch (error) {
-            console.error('Error loading repositories:', error);
-            message.error('加载仓库失败，请手动选择');
-          } finally {
-            setLoading(false);
-          }
-        };
-
-        loadRepos();
+        // 如果有路径信息，记录下来，但不自动设置
+        if (gitInfo.path) {
+          console.log('Source has path info:', gitInfo.path);
+        }
       } else {
         // 使用localStorage中保存的token
         const savedToken = localStorage.getItem('github_token');
@@ -99,6 +75,9 @@ const GitHubModal = ({ visible, onCancel, onSave, tests, language, loading, setL
       setSelectedRepo(null);
       setDirectories([]);
       setSelectedPath('');
+      setExpandedKeys([]);
+      setLoadingPaths([]);
+      setTreeLoading(false);
     }
   }, [visible, gitInfo, useSourceGitInfo, setLoading, repositories.length]);
 
@@ -163,7 +142,14 @@ const GitHubModal = ({ visible, onCancel, onSave, tests, language, loading, setL
         title: item.name,
         key: item.path,
         isLeaf: item.type === 'file',
-        selectable: item.type === 'dir'
+        // 只有目录可以被选择，文件不可选择
+        selectable: item.type === 'dir',
+        // 如果是目录，添加空的子节点数组，以便显示展开图标
+        children: item.type === 'dir' ? [] : null,
+        // 添加自定义图标
+        icon: item.type === 'file'
+          ? <FileOutlined />
+          : <FolderOutlined />
       }));
 
       setDirectories(treeData);
@@ -179,61 +165,262 @@ const GitHubModal = ({ visible, onCancel, onSave, tests, language, loading, setL
     const { key } = treeNode;
     console.log(`Loading directory: ${key}`);
 
-    // 不设置全局loading状态，避免重新渲染
-    // 使用局部变量跟踪加载状态
-    let isLoading = true;
+    // 设置加载状态
+    setTreeLoading(true);
+    setLoadingPaths(prev => [...prev, key]);
 
     try {
       // 添加时间戳，避免缓存
       const timestamp = Date.now();
       console.log(`Directory request timestamp: ${timestamp}`);
 
-      const dirs = await getDirectories(selectedRepo.full_name, gitToken, key);
+      // 显示加载提示
+      message.loading({ content: `正在加载 ${key} 的内容...`, key: `loading-${key}`, duration: 0 });
+
+      // 构建请求参数
+      const repoName = selectedRepo.full_name;
+      const path = key;
+      console.log(`Fetching directories for repo=${repoName}, token=${gitToken ? 'provided' : 'missing'}, path=${path}`);
+
+      // 发送请求
+      const dirs = await getDirectories(repoName, gitToken, path);
+      console.log(`API Response:`, dirs);
       console.log(`Loaded ${dirs.length} items in directory: ${key}`);
 
+      // 关闭加载提示
+      message.success({ content: `已加载 ${dirs.length} 个项目`, key: `loading-${key}`, duration: 1 });
+
       // 转换为Tree组件所需的格式
-      return dirs.map(item => ({
+      const treeNodes = dirs.map(item => ({
         title: item.name,
         key: item.path,
         isLeaf: item.type === 'file',
-        selectable: item.type === 'dir'
+        // 只有目录可以被选择，文件不可选择
+        selectable: item.type === 'dir',
+        // 如果是目录，添加空的子节点数组，以便显示展开图标
+        children: item.type === 'dir' ? [] : null,
+        // 添加自定义图标
+        icon: item.type === 'file'
+          ? <FileOutlined />
+          : (loadingPaths.includes(item.path)
+              ? <LoadingOutlined />
+              : <FolderOutlined />),
+        // 保存原始数据
+        rawData: item
       }));
+
+      // 记录已加载的目录
+      console.log(`Directory ${key} loaded with ${treeNodes.length} children`);
+      console.log(`Converted tree nodes:`, treeNodes);
+
+      return treeNodes;
     } catch (error) {
       console.error('Error loading directory:', error);
-      message.error('Failed to load directory: ' + (error.response?.data?.detail || error.message));
+      console.error('Error details:', error.response?.data || error.message);
+      message.error({ content: '加载目录失败: ' + (error.response?.data?.detail || error.message), key: `loading-${key}` });
       return [];
     } finally {
-      isLoading = false;
+      // 清除加载状态
+      setTreeLoading(false);
+      setLoadingPaths(prev => prev.filter(path => path !== key));
     }
   };
 
   const handleSelectDirectory = (selectedKeys) => {
     if (selectedKeys.length > 0) {
-      setSelectedPath(selectedKeys[0]);
+      const path = selectedKeys[0];
+      console.log(`Setting selected path to: ${path}`);
+      setSelectedPath(path);
+
+      // 显示成功消息
+      message.success(`已选择目录: ${path}`);
+    } else {
+      console.log('No directory selected');
+    }
+  };
+
+  // 递归渲染目录树
+  const renderDirectoryTree = (items, level = 0) => {
+    return (
+      <ul style={{ listStyle: 'none', padding: level === 0 ? 0 : '0 0 0 20px', margin: 0 }}>
+        {items.map(item => {
+          const isDirectory = !item.isLeaf;
+          const isLoading = loadingPaths.includes(item.key);
+          const isExpanded = expandedKeys.includes(item.key);
+
+          return (
+            <li key={item.key} style={{ margin: '8px 0' }}>
+              <div
+                className={`directory-item ${isDirectory ? 'directory' : 'file'} ${selectedPath === item.key ? 'selected' : ''}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  cursor: isDirectory ? 'pointer' : 'not-allowed',
+                  backgroundColor: selectedPath === item.key ? '#e6f7ff' : 'transparent',
+                  border: selectedPath === item.key ? '1px solid #1890ff' : '1px solid transparent',
+                  transition: 'all 0.3s'
+                }}
+                onClick={() => {
+                  if (isDirectory) {
+                    // 选择目录
+                    handleSelectDirectory([item.key]);
+                  } else {
+                    // 文件不可选
+                    message.info('请选择一个文件夹作为保存位置');
+                  }
+                }}
+                title={isDirectory ? `点击选择 ${item.title} 作为保存位置` : '文件不可选择'}
+              >
+                {/* 展开/折叠图标 */}
+                {isDirectory && (
+                  <span
+                    style={{
+                      marginRight: '5px',
+                      width: '16px',
+                      display: 'inline-block',
+                      textAlign: 'center',
+                      cursor: 'pointer'
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation(); // 阻止冒泡，避免触发选择
+
+                      // 先设置展开状态，再加载子节点
+                      if (isExpanded) {
+                        // 折叠
+                        console.log(`Collapsing directory: ${item.key}`);
+                        setExpandedKeys(prev => prev.filter(key => key !== item.key));
+                      } else {
+                        // 先设置为展开状态
+                        console.log(`Expanding directory: ${item.key}`);
+                        setExpandedKeys(prev => [...prev, item.key]);
+
+                        // 如果没有子节点或子节点为空，则加载子节点
+                        if (!item.children || item.children.length === 0) {
+                          console.log(`Loading children for directory: ${item.key}`);
+                          // 使用setTimeout确保展开状态先被设置
+                          setTimeout(() => {
+                            handleLoadDirectoryAndExpand(item);
+                          }, 0);
+                        }
+                      }
+                    }}
+                  >
+                    {isLoading ? <LoadingOutlined /> : isExpanded ? '▼' : '►'}
+                  </span>
+                )}
+
+                {/* 文件/文件夹图标 */}
+                <span style={{ marginRight: '5px' }}>
+                  {isDirectory ? <FolderOutlined style={{ color: '#1890ff' }} /> : <FileOutlined />}
+                </span>
+
+                {/* 名称 */}
+                <span>{item.title}</span>
+              </div>
+
+              {/* 递归渲染子节点 */}
+              {isDirectory && isExpanded && item.children && item.children.length > 0 && (
+                renderDirectoryTree(item.children, level + 1)
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  };
+
+  // 加载目录并展开
+  const handleLoadDirectoryAndExpand = async (node) => {
+    try {
+      console.log(`Loading and expanding directory: ${node.key}`);
+
+      // 确保节点已经在展开状态
+      if (!expandedKeys.includes(node.key)) {
+        console.log(`Ensuring directory ${node.key} is in expanded state`);
+        setExpandedKeys(prev => [...prev, node.key]);
+      }
+
+      // 添加到加载路径
+      setLoadingPaths(prev => [...prev, node.key]);
+
+      // 加载子节点
+      const children = await handleLoadDirectory(node);
+      console.log(`Loaded ${children.length} children for directory: ${node.key}`);
+
+      // 更新目录树 - 使用函数式更新确保使用最新状态
+      setDirectories(prevDirectories => {
+        // 更新目录树的辅助函数
+        const updateTreeData = (list, key, children) => {
+          return list.map(item => {
+            if (item.key === key) {
+              return { ...item, children };
+            }
+            if (item.children) {
+              return { ...item, children: updateTreeData(item.children, key, children) };
+            }
+            return item;
+          });
+        };
+
+        // 更新目录树
+        const newDirectories = updateTreeData(prevDirectories, node.key, children);
+        console.log(`Updated directory tree for ${node.key}`);
+        return newDirectories;
+      });
+
+      // 再次确保节点保持展开状态
+      setTimeout(() => {
+        setExpandedKeys(prev => {
+          if (!prev.includes(node.key)) {
+            console.log(`Re-ensuring directory ${node.key} is expanded`);
+            return [...prev, node.key];
+          }
+          return prev;
+        });
+      }, 100);
+    } catch (error) {
+      console.error('Failed to load and expand directory:', error);
+      message.error('加载目录失败，请重试');
+
+      // 如果加载失败，从展开状态中移除
+      setExpandedKeys(prev => prev.filter(key => key !== node.key));
+    } finally {
+      // 移除加载状态
+      setLoadingPaths(prev => prev.filter(path => path !== node.key));
     }
   };
 
   const handleSaveToGit = async () => {
+    console.log('Save to Git button clicked');
+    console.log('Selected repo:', selectedRepo);
+    console.log('Selected path:', selectedPath);
+    console.log('Tests to save:', tests);
+
     if (!selectedRepo || !selectedPath) {
-      message.error('Please select a repository and directory!');
+      message.error('请选择仓库和目录！');
       return;
     }
 
     if (tests.length === 0) {
-      message.error('No tests to save!');
+      message.error('没有测试可以保存！');
       return;
     }
 
     setLoading(true);
+    message.loading({ content: '正在保存测试到 GitHub...', key: 'saveGit', duration: 0 });
 
     try {
-      await saveToGit(tests, language, selectedRepo.full_name, selectedPath, gitToken);
+      console.log(`Saving tests to ${selectedRepo.full_name} at path ${selectedPath}`);
+      const result = await saveToGit(tests, language, selectedRepo.full_name, selectedPath, gitToken);
+      console.log('Save to Git result:', result);
 
-      message.success('Tests saved to GitHub successfully!');
+      message.success({ content: `测试已成功保存到 GitHub！保存了 ${result.urls.length} 个文件`, key: 'saveGit' });
       onSave();
     } catch (error) {
       console.error('Error saving to Git:', error);
-      message.error('Failed to save to Git: ' + (error.response?.data?.detail || error.message));
+      message.error({ content: '保存到 Git 失败: ' + (error.response?.data?.detail || error.message), key: 'saveGit' });
     } finally {
       setLoading(false);
     }
@@ -255,7 +442,7 @@ const GitHubModal = ({ visible, onCancel, onSave, tests, language, loading, setL
           loading={loading}
           disabled={!selectedRepo || !selectedPath}
         >
-          保存
+          保存到选中目录
         </Button>
       ]}
       width={800}
@@ -274,9 +461,16 @@ const GitHubModal = ({ visible, onCancel, onSave, tests, language, loading, setL
                 type={useSourceGitInfo ? "primary" : "default"}
                 onClick={() => {
                   console.log('Switching to use source Git info');
-                  // 清空仓库列表，触发重新加载
+                  // 清空仓库列表，避免自动加载
                   setRepositories([]);
+                  setSelectedRepo(null);
+                  setDirectories([]);
+                  setSelectedPath('');
                   setUseSourceGitInfo(true);
+                  // 设置token
+                  if (gitInfo && gitInfo.token) {
+                    setGitToken(gitInfo.token);
+                  }
                 }}
                 style={{ marginRight: 8 }}
               >
@@ -296,6 +490,16 @@ const GitHubModal = ({ visible, onCancel, onSave, tests, language, loading, setL
               >
                 手动选择
               </Button>
+
+              {useSourceGitInfo && gitInfo && gitInfo.token && (
+                <Button
+                  type="primary"
+                  onClick={handleLoadRepositories}
+                  style={{ marginLeft: 8 }}
+                >
+                  加载仓库
+                </Button>
+              )}
             </div>
           </div>
         )}
@@ -348,13 +552,26 @@ const GitHubModal = ({ visible, onCancel, onSave, tests, language, loading, setL
 
         {directories.length > 0 && (
           <div>
-            <label style={{ display: 'block', marginBottom: 8 }}>选择目录:</label>
-            <DirectoryTree
-              treeData={directories}
-              onSelect={handleSelectDirectory}
-              loadData={handleLoadDirectory}
-              style={{ height: '300px', overflow: 'auto' }}
-            />
+            <label style={{ display: 'block', marginBottom: 8 }}>
+              选择目录:
+              {treeLoading && <Spin size="small" style={{ marginLeft: 8 }} />}
+            </label>
+
+            {/* 使用完全重写的目录树实现 */}
+            <div
+              style={{
+                height: '300px',
+                overflow: 'auto',
+                border: '1px solid #d9d9d9',
+                borderRadius: '4px',
+                padding: '8px',
+                backgroundColor: '#fafafa'
+              }}
+            >
+              {/* 递归渲染目录树 */}
+              {renderDirectoryTree(directories)}
+            </div>
+
             {selectedPath && (
               <div style={{ marginTop: 8 }}>
                 已选择路径: <strong>{selectedPath}</strong>
