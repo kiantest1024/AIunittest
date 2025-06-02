@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
+from typing import List, Optional
 
 class CodeSnippet(BaseModel):
     """代码片段模型"""
@@ -24,6 +24,7 @@ class TestResult(BaseModel):
     type: str
     test_code: str
     original_snippet: CodeSnippet
+    file_name: Optional[str] = None
 
 class GenerateTestResponse(BaseModel):
     """生成测试响应模型"""

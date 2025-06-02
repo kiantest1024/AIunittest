@@ -57,7 +57,13 @@ async def generate_test(request: GenerateTestRequest):
 
     # 生成测试
     logger.info(f"Generating tests for language: {request.language}, model: {request.model}")
-    tests = generate_tests(request.code, request.language, request.model)
+    # 如果提供了 Git 信息，使用文件路径
+    file_path = None
+    if request.git_repo and request.git_path:
+        file_path = request.git_path
+        logger.info(f"Using file path from Git: {file_path}")
+
+    tests = generate_tests(request.code, request.language, request.model, file_path)
     logger.info(f"Generated {len(tests)} tests")
 
     return GenerateTestResponse(tests=tests)
@@ -428,6 +434,12 @@ async def generate_test_stream(request: GenerateTestRequest):
                     "message": "开始生成测试用例"
                 }) + "\n"
 
+                # 如果提供了 Git 信息，使用文件路径
+                file_path = None
+                if request.git_repo and request.git_path:
+                    file_path = request.git_path
+                    logger.info(f"Using file path from Git: {file_path}")
+
                 # 解析代码
                 if request.language == "python":
                     snippets = parse_python_code_direct(request.code)
@@ -435,7 +447,7 @@ async def generate_test_stream(request: GenerateTestRequest):
                     # 对于其他语言，尝试使用已导入的解析器
                     try:
                         parser = ParserFactory.get_parser(request.language)
-                        snippets = [s.dict() for s in parser.parse_code(request.code)]
+                        snippets = [s.dict() for s in parser.parse_code(request.code, file_path)]
                     except Exception as e:
                         logger.error(f"解析 {request.language} 代码失败: {str(e)}")
                         snippets = []

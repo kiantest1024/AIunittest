@@ -7766,3 +7766,817 @@ def init_socketio(app_sock...
 2025-05-20 12:43:20,911 - ai_test_generator - INFO - Successfully created file: 'backend/data/broadcast_test_status.py', URL: https://github.com/GE-Kian/K6_WEBTOOLS/blob/main/backend/data/broadcast_test_status.py
 2025-05-20 12:43:20,913 - ai_test_generator - INFO - Saved 3 files to GE-Kian/K6_WEBTOOLS/backend/data
 2025-05-20 12:43:20,913 - ai_test_generator - INFO - Saved 3 test files to GitHub
+2025-05-20 12:50:37,109 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:50:38,729 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:50:54,127 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-20 12:50:54,599 - ai_test_generator - INFO - Found 5 repositories
+2025-05-20 12:50:54,599 - ai_test_generator - INFO - Found 5 repositories
+2025-05-20 12:50:59,038 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-20 12:51:00,135 - ai_test_generator - INFO - Found 9 items in GE-Kian/K6_WEBTOOLS/
+2025-05-20 12:51:00,138 - ai_test_generator - INFO - Found 9 directories/files
+2025-05-20 12:51:02,353 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-20 12:51:03,477 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-20 12:51:03,477 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-20 12:51:03,481 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-20 12:51:04,580 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-20 12:51:04,581 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-20 12:51:06,657 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-20 12:51:07,748 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-20 12:51:11,888 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 12:51:11,888 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 12:51:11,889 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 12:51:11,889 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 12:51:11,890 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 12:51:30,580 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 12:51:30,580 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 12:51:30,580 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 12:52:13,216 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 12:52:13,216 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 12:52:13,216 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 12:52:53,665 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 12:54:51,628 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:54:52,618 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:55:09,095 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:55:10,014 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:55:40,395 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:55:41,315 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:55:55,128 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:55:56,030 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:56:04,058 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:56:04,948 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:56:15,406 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:56:16,307 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:56:24,846 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:56:25,759 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:56:45,079 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:56:46,096 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:56:58,513 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:56:59,426 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:57:19,908 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:57:20,928 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:57:31,023 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:57:31,962 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:57:45,292 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:57:46,244 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:58:06,941 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:58:08,017 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:58:21,438 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:58:22,429 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:59:29,618 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 12:59:31,511 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 12:59:50,449 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 12:59:50,450 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 12:59:50,451 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 12:59:50,451 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 12:59:50,452 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 12:59:50,453 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 12:59:50,453 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 12:59:50,454 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 12:59:50,454 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 12:59:50,454 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 12:59:50,454 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 12:59:50,454 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 12:59:50,454 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 12:59:50,454 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 12:59:50,454 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 12:59:50,454 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 12:59:50,454 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 13:00:16,310 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 13:00:16,310 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 13:00:16,310 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 13:01:02,563 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 13:01:02,563 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 13:01:02,563 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 13:01:41,651 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 13:06:19,955 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:06:20,981 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:06:38,182 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:06:39,197 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:07:21,000 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:07:21,879 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:07:36,911 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:07:37,879 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:07:57,709 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:07:58,764 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:10:39,692 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:10:41,275 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:10:50,380 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 13:10:50,381 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 13:10:50,381 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 13:10:50,381 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 13:10:50,382 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 13:10:50,382 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 13:10:50,383 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 13:10:50,383 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 13:10:50,383 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 13:10:50,383 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 13:10:50,384 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 13:10:50,384 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 13:10:50,384 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 13:10:50,385 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 13:10:50,385 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 13:10:50,385 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 13:10:50,385 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 13:11:14,815 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 13:11:14,815 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 13:11:14,815 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 13:11:56,975 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 13:11:56,975 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 13:11:56,975 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 13:12:37,528 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 13:23:12,558 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:23:14,329 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:23:20,202 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 13:23:20,202 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 13:23:20,203 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 13:23:20,203 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 13:23:20,204 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 13:23:20,204 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 13:23:20,204 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 13:23:20,204 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 13:23:20,205 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 13:23:20,205 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 13:23:20,205 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 13:23:20,205 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 13:23:20,205 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 13:23:20,205 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 13:23:20,206 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 13:23:20,206 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 13:23:20,206 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 13:23:49,197 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 13:23:49,198 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 13:23:49,199 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 13:24:35,916 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 13:24:35,917 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 13:24:35,917 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 13:25:19,816 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 13:29:00,375 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:29:01,315 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:29:14,874 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:29:15,844 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:29:39,220 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:29:40,274 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:30:06,053 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:30:06,944 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:30:55,741 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:30:56,742 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:31:14,793 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:31:15,762 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:33:47,261 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:33:48,859 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:33:54,700 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 13:33:54,701 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 13:33:54,701 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 13:33:54,702 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 13:33:54,703 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 13:33:54,703 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 13:33:54,704 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 13:33:54,704 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 13:33:54,720 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 13:33:54,721 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 13:33:54,721 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 13:33:54,722 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 13:33:54,722 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 13:33:54,722 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 13:33:54,723 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 13:33:54,723 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 13:33:54,723 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 13:34:17,760 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 13:34:17,760 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 13:34:17,760 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 13:35:08,146 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 13:35:08,146 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 13:35:08,146 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 13:36:00,879 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 13:38:20,376 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:38:21,353 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:38:49,575 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:38:50,589 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:39:26,003 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:39:26,889 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:39:41,843 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:39:42,702 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:43:23,910 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:43:26,198 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:44:51,214 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 13:44:51,215 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 13:44:51,215 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 13:44:51,215 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 13:44:51,216 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 13:44:51,216 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 13:44:51,216 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 13:44:51,216 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 13:44:51,216 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 13:44:51,217 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 13:44:51,217 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 13:44:51,217 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 13:44:51,218 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 13:44:51,218 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 13:44:51,219 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 13:44:51,219 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 13:44:51,219 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 13:45:15,906 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 13:45:15,907 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 13:45:15,907 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 13:46:15,396 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 13:46:15,397 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 13:46:15,397 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 13:47:01,745 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 13:55:59,434 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:56:00,616 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:56:19,182 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:56:20,112 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:56:37,115 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:56:38,050 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:57:25,861 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:57:26,852 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:57:39,021 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:57:39,970 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:57:53,250 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:57:54,148 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:58:21,010 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 13:58:22,807 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 13:58:28,380 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 13:58:28,380 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 13:58:28,381 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 13:58:28,381 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 13:58:28,382 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 13:58:28,382 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 13:58:28,382 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 13:58:28,382 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 13:58:28,382 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 13:58:28,382 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 13:58:28,382 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 13:58:28,383 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 13:58:28,383 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 13:58:28,384 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 13:58:28,384 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 13:58:28,384 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 13:58:28,384 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 13:58:53,830 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 13:58:53,830 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 13:58:53,830 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 13:59:34,159 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 13:59:34,159 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 13:59:34,159 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 14:00:18,081 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 14:05:00,080 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 14:16:51,396 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:16:51,447 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:17:17,361 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 14:17:24,839 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 14:17:43,975 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:26:42,315 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:26:49,616 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-20 14:26:50,137 - ai_test_generator - INFO - Found 5 repositories
+2025-05-20 14:26:50,137 - ai_test_generator - INFO - Found 5 repositories
+2025-05-20 14:26:52,620 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-20 14:26:53,756 - ai_test_generator - INFO - Found 9 items in GE-Kian/K6_WEBTOOLS/
+2025-05-20 14:26:53,756 - ai_test_generator - INFO - Found 9 directories/files
+2025-05-20 14:26:55,549 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-20 14:26:56,635 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-20 14:26:56,636 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-20 14:26:56,638 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-20 14:26:57,715 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-20 14:26:57,715 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-20 14:26:59,694 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-20 14:27:01,281 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-20 14:27:10,732 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 14:27:10,733 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 14:27:10,733 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 14:27:10,734 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 14:27:10,735 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 14:27:10,735 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 14:27:10,736 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 14:27:10,736 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 14:27:10,737 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 14:27:10,737 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 14:27:10,737 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 14:27:10,739 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 14:27:10,740 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 14:27:10,753 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 14:27:10,754 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 14:27:10,754 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 14:27:10,754 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 14:27:36,182 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 14:27:36,182 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 14:27:36,182 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 14:28:36,327 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 14:28:36,328 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 14:28:36,328 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 14:29:26,593 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 14:33:27,314 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 14:33:28,244 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:33:49,839 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 14:33:50,912 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:34:10,493 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 14:34:11,418 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:34:30,092 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 14:34:31,138 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:35:12,507 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 14:45:35,110 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:45:46,545 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 14:45:46,546 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 14:45:46,546 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 14:45:46,547 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 14:45:46,548 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 14:45:46,548 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 14:45:46,548 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 14:45:46,549 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 14:45:46,549 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 14:45:46,549 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 14:45:46,549 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 14:45:46,550 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 14:45:46,550 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 14:45:46,550 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 14:45:46,550 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 14:45:46,551 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 14:45:46,551 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 14:46:12,892 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 14:46:12,892 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 14:46:12,892 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 14:47:08,362 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 14:47:08,363 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 14:47:08,363 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 14:47:55,579 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 14:51:57,893 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 14:51:58,919 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:52:21,989 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 14:52:37,700 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:52:50,056 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 14:52:54,124 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:53:23,405 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 14:53:27,195 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 14:53:56,878 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-20 14:53:57,344 - ai_test_generator - INFO - Found 5 repositories
+2025-05-20 14:53:57,344 - ai_test_generator - INFO - Found 5 repositories
+2025-05-20 14:53:59,398 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-20 14:54:00,526 - ai_test_generator - INFO - Found 9 items in GE-Kian/K6_WEBTOOLS/
+2025-05-20 14:54:00,526 - ai_test_generator - INFO - Found 9 directories/files
+2025-05-20 14:54:02,413 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-20 14:54:03,489 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-20 14:54:03,491 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-20 14:54:03,493 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-20 14:54:04,587 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-20 14:54:04,588 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-20 14:54:05,336 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-20 14:54:06,423 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-20 14:54:11,441 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 14:54:11,441 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 14:54:11,442 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 14:54:11,442 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 14:54:11,443 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 14:54:11,443 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 14:54:11,443 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 14:54:11,444 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 14:54:11,444 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 14:54:11,445 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 14:54:11,445 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 14:54:11,445 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 14:54:11,445 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 14:54:11,447 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 14:54:11,447 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 14:54:11,448 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 14:54:11,448 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 14:54:33,459 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 14:54:33,460 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 14:54:33,460 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 14:55:33,219 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 14:55:33,219 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 14:55:33,219 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 14:56:11,500 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 15:01:16,852 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:01:17,921 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:01:42,804 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:01:43,824 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:01:59,166 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:03:36,942 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-20 15:03:37,415 - ai_test_generator - INFO - Found 5 repositories
+2025-05-20 15:03:37,416 - ai_test_generator - INFO - Found 5 repositories
+2025-05-20 15:03:39,179 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-20 15:03:40,257 - ai_test_generator - INFO - Found 9 items in GE-Kian/K6_WEBTOOLS/
+2025-05-20 15:03:40,257 - ai_test_generator - INFO - Found 9 directories/files
+2025-05-20 15:03:45,100 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-20 15:03:46,208 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-20 15:03:46,208 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-20 15:03:46,223 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-20 15:03:47,308 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-20 15:03:47,308 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-20 15:03:50,716 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/automated-trigger, path: 
+2025-05-20 15:03:51,824 - ai_test_generator - INFO - Found 4 items in GE-Kian/automated-trigger/
+2025-05-20 15:03:51,824 - ai_test_generator - INFO - Found 4 directories/files
+2025-05-20 15:03:54,480 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/automated-trigger, path: automated-trigger.py
+2025-05-20 15:03:55,593 - ai_test_generator - INFO - File content retrieved successfully: automated-trigger.py
+2025-05-20 15:03:58,101 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/automated-trigger, path: Scripts
+2025-05-20 15:03:59,208 - ai_test_generator - INFO - Found 1 items in GE-Kian/automated-trigger/Scripts
+2025-05-20 15:03:59,224 - ai_test_generator - INFO - Found 1 directories/files
+2025-05-20 15:03:59,225 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/automated-trigger, path: Scripts
+2025-05-20 15:04:00,358 - ai_test_generator - INFO - Found 1 items in GE-Kian/automated-trigger/Scripts
+2025-05-20 15:04:00,358 - ai_test_generator - INFO - Found 1 directories/files
+2025-05-20 15:04:01,254 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/automated-trigger, path: Scripts/analysis_apifox_report_ge.py
+2025-05-20 15:04:02,342 - ai_test_generator - INFO - File content retrieved successfully: Scripts/analysis_apifox_report_ge.py
+2025-05-20 15:04:07,053 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/automated-monitor, path: 
+2025-05-20 15:04:08,276 - ai_test_generator - INFO - Found 5 items in GE-Kian/automated-monitor/
+2025-05-20 15:04:08,277 - ai_test_generator - INFO - Found 5 directories/files
+2025-05-20 15:04:14,288 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/automated-monitor, path: app.py
+2025-05-20 15:04:15,461 - ai_test_generator - INFO - File content retrieved successfully: app.py
+2025-05-20 15:04:21,812 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/automated-monitor, path: static
+2025-05-20 15:04:22,908 - ai_test_generator - INFO - Found 1 items in GE-Kian/automated-monitor/static
+2025-05-20 15:04:22,908 - ai_test_generator - INFO - Found 1 directories/files
+2025-05-20 15:04:22,908 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/automated-monitor, path: static
+2025-05-20 15:04:24,025 - ai_test_generator - INFO - Found 1 items in GE-Kian/automated-monitor/static
+2025-05-20 15:04:24,025 - ai_test_generator - INFO - Found 1 directories/files
+2025-05-20 15:04:24,025 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/automated-monitor, path: templates
+2025-05-20 15:04:25,133 - ai_test_generator - INFO - Found 3 items in GE-Kian/automated-monitor/templates
+2025-05-20 15:04:25,135 - ai_test_generator - INFO - Found 3 directories/files
+2025-05-20 15:04:25,137 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/automated-monitor, path: templates
+2025-05-20 15:04:26,231 - ai_test_generator - INFO - Found 3 items in GE-Kian/automated-monitor/templates
+2025-05-20 15:04:26,232 - ai_test_generator - INFO - Found 3 directories/files
+2025-05-20 15:04:35,776 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/AIunittest, path: 
+2025-05-20 15:04:36,941 - ai_test_generator - INFO - Found 14 items in GE-Kian/AIunittest/
+2025-05-20 15:04:36,941 - ai_test_generator - INFO - Found 14 directories/files
+2025-05-20 15:04:36,994 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/AIunittest, path: backend
+2025-05-20 15:04:38,142 - ai_test_generator - INFO - Found 7 items in GE-Kian/AIunittest/backend
+2025-05-20 15:04:38,142 - ai_test_generator - INFO - Found 7 directories/files
+2025-05-20 15:04:38,157 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/AIunittest, path: backend
+2025-05-20 15:04:39,286 - ai_test_generator - INFO - Found 7 items in GE-Kian/AIunittest/backend
+2025-05-20 15:04:39,286 - ai_test_generator - INFO - Found 7 directories/files
+2025-05-20 15:04:42,970 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/AIunittest, path: backend/test_deepseek_api.py
+2025-05-20 15:04:44,073 - ai_test_generator - INFO - File content retrieved successfully: backend/test_deepseek_api.py
+2025-05-20 15:04:56,461 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/AIunittest, path: setup.py
+2025-05-20 15:04:57,576 - ai_test_generator - INFO - File content retrieved successfully: setup.py
+2025-05-20 15:05:02,989 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/AIunittest, path: initial.py
+2025-05-20 15:05:04,124 - ai_test_generator - INFO - File content retrieved successfully: initial.py
+2025-05-20 15:05:05,023 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/AIunittest, path: gui.py
+2025-05-20 15:05:06,107 - ai_test_generator - INFO - File content retrieved successfully: gui.py
+2025-05-20 15:05:09,274 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/AIunittest, path: config.py
+2025-05-20 15:05:10,477 - ai_test_generator - INFO - File content retrieved successfully: config.py
+2025-05-20 15:05:12,568 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/AIunittest, path: backend/test_deepseek_api.py
+2025-05-20 15:05:13,703 - ai_test_generator - INFO - File content retrieved successfully: backend/test_deepseek_api.py
+2025-05-20 15:05:17,529 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 15:05:17,529 - ai_test_generator - INFO - Code length: 1982 characters
+2025-05-20 15:05:17,530 - ai_test_generator - INFO - Code preview: """
+测试 DeepSeek API 连通性
+"""
+import os
+import requests
+import json
+from dotenv import load_dotenv
+
+# ...
+2025-05-20 15:05:17,530 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 1982 字符
+2025-05-20 15:05:17,531 - ai_test_generator - INFO - 解析完成，找到 0 个代码片段
+2025-05-20 15:05:17,532 - ai_test_generator - INFO - 解析到 0 个代码片段
+2025-05-20 15:05:17,532 - ai_test_generator - WARNING - No code snippets found
+2025-05-20 15:05:28,993 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/AIunittest, path: backend/app
+2025-05-20 15:05:30,125 - ai_test_generator - INFO - Found 10 items in GE-Kian/AIunittest/backend/app
+2025-05-20 15:05:30,125 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-20 15:05:30,144 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/AIunittest, path: backend/app
+2025-05-20 15:05:31,243 - ai_test_generator - INFO - Found 10 items in GE-Kian/AIunittest/backend/app
+2025-05-20 15:05:31,244 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-20 15:05:34,270 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/AIunittest, path: backend/app/run.py
+2025-05-20 15:05:35,365 - ai_test_generator - INFO - File content retrieved successfully: backend/app/run.py
+2025-05-20 15:05:39,637 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/AIunittest, path: backend/app/services
+2025-05-20 15:05:40,764 - ai_test_generator - INFO - Found 8 items in GE-Kian/AIunittest/backend/app/services
+2025-05-20 15:05:40,764 - ai_test_generator - INFO - Found 8 directories/files
+2025-05-20 15:05:40,766 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/AIunittest, path: backend/app/services
+2025-05-20 15:05:41,850 - ai_test_generator - INFO - Found 8 items in GE-Kian/AIunittest/backend/app/services
+2025-05-20 15:05:41,852 - ai_test_generator - INFO - Found 8 directories/files
+2025-05-20 15:05:43,946 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/AIunittest, path: backend/app/services/ai_factory.py
+2025-05-20 15:05:45,040 - ai_test_generator - INFO - File content retrieved successfully: backend/app/services/ai_factory.py
+2025-05-20 15:05:46,124 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/AIunittest, path: backend/app/services/ai_service.py
+2025-05-20 15:05:47,242 - ai_test_generator - INFO - File content retrieved successfully: backend/app/services/ai_service.py
+2025-05-20 15:05:50,060 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 15:05:50,060 - ai_test_generator - INFO - Code length: 1623 characters
+2025-05-20 15:05:50,061 - ai_test_generator - INFO - Code preview: from app.models.schemas import CodeSnippet
+from app.config import PROMPT_TEMPLATES
+from app.services...
+2025-05-20 15:05:50,061 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 1623 字符
+2025-05-20 15:05:50,062 - ai_test_generator - INFO - 找到函数: generate_test_with_ai
+2025-05-20 15:05:50,062 - ai_test_generator - INFO - 解析完成，找到 1 个代码片段
+2025-05-20 15:05:50,062 - ai_test_generator - INFO - 解析到 1 个代码片段
+2025-05-20 15:05:50,062 - ai_test_generator - INFO - 代码片段 1: generate_test_with_ai (function)
+2025-05-20 15:05:50,063 - ai_test_generator - INFO - 代码片段预览: def generate_test_with_ai(snippet: CodeSnippet, model_name: str) -> str:
+    """
+    使用AI生成测试代码
+
+   ...
+2025-05-20 15:05:50,064 - ai_test_generator - INFO - 为 generate_test_with_ai 生成测试
+2025-05-20 15:05:50,064 - ai_test_generator - INFO - 生成提示长度: 1719 字符
+2025-05-20 15:06:32,380 - ai_test_generator - INFO - 成功生成测试: generate_test_with_ai
+2025-05-20 15:26:49,504 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:26:49,504 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:26:50,680 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:26:50,680 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:27:32,192 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:27:32,192 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:27:33,357 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:27:33,367 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:27:55,916 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:28:54,587 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:28:56,588 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:29:02,405 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:29:11,591 - ai_test_generator - INFO - Listing GitHub repositories
+2025-05-20 15:29:12,142 - ai_test_generator - INFO - Found 5 repositories
+2025-05-20 15:29:12,142 - ai_test_generator - INFO - Found 5 repositories
+2025-05-20 15:29:14,131 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: 
+2025-05-20 15:29:15,291 - ai_test_generator - INFO - Found 9 items in GE-Kian/K6_WEBTOOLS/
+2025-05-20 15:29:15,291 - ai_test_generator - INFO - Found 9 directories/files
+2025-05-20 15:29:17,329 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-20 15:29:18,540 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-20 15:29:18,540 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-20 15:29:18,540 - ai_test_generator - INFO - Listing directories for repo: GE-Kian/K6_WEBTOOLS, path: backend
+2025-05-20 15:29:19,574 - ai_test_generator - INFO - Found 10 items in GE-Kian/K6_WEBTOOLS/backend
+2025-05-20 15:29:19,591 - ai_test_generator - INFO - Found 10 directories/files
+2025-05-20 15:29:22,210 - ai_test_generator - INFO - Getting file content from repo: GE-Kian/K6_WEBTOOLS, path: backend/broadcast.py
+2025-05-20 15:29:23,339 - ai_test_generator - INFO - File content retrieved successfully: backend/broadcast.py
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 15:29:31,107 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 15:29:31,117 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 15:29:31,118 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 15:29:31,118 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 15:29:54,475 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 15:29:54,475 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 15:29:54,475 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 15:30:47,826 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 15:30:47,826 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 15:30:47,826 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 15:31:32,051 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 15:35:21,391 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:35:22,894 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:36:10,159 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:36:11,321 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:36:28,609 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:37:05,390 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:37:08,211 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:37:12,574 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:37:23,429 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-V3
+2025-05-20 15:37:23,429 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 15:37:23,429 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 15:37:23,430 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 15:37:57,728 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 15:37:57,728 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 15:37:57,728 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 15:38:46,592 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 15:38:46,592 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 15:38:46,592 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 15:39:27,176 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 15:42:51,861 - ai_test_generator - INFO - Directly generating tests for language: python, model: deepseek-R1
+2025-05-20 15:42:51,861 - ai_test_generator - INFO - Code length: 2723 characters
+2025-05-20 15:42:51,861 - ai_test_generator - INFO - Code preview: from datetime import datetime
+
+# 初始化时设置为None，在app.py中初始化
+socketio = None
+
+def init_socketio(app_sock...
+2025-05-20 15:42:51,861 - ai_test_generator - INFO - 直接解析 Python 代码，长度: 2723 字符
+2025-05-20 15:42:51,861 - ai_test_generator - INFO - 找到函数: init_socketio
+2025-05-20 15:42:51,868 - ai_test_generator - INFO - 找到函数: broadcast_metrics
+2025-05-20 15:42:51,868 - ai_test_generator - INFO - 找到函数: broadcast_test_status
+2025-05-20 15:42:51,868 - ai_test_generator - INFO - 解析完成，找到 3 个代码片段
+2025-05-20 15:42:51,868 - ai_test_generator - INFO - 解析到 3 个代码片段
+2025-05-20 15:42:51,868 - ai_test_generator - INFO - 代码片段 1: init_socketio (function)
+2025-05-20 15:42:51,868 - ai_test_generator - INFO - 代码片段预览: def init_socketio(app_socketio):
+    """初始化socketio实例"""
+    global socketio
+    socketio = app_sock...
+2025-05-20 15:42:51,870 - ai_test_generator - INFO - 代码片段 2: broadcast_metrics (function)
+2025-05-20 15:42:51,870 - ai_test_generator - INFO - 代码片段预览: def broadcast_metrics(metrics_data):
+    """广播测试指标数据
+    
+    Args:
+        metrics_data: 包含测试ID和指标数...
+2025-05-20 15:42:51,870 - ai_test_generator - INFO - 代码片段 3: broadcast_test_status (function)
+2025-05-20 15:42:51,870 - ai_test_generator - INFO - 代码片段预览: def broadcast_test_status(test_id, status, message=None):
+    """广播测试状态更新"""
+    if not socketio:
+  ...
+2025-05-20 15:42:51,870 - ai_test_generator - INFO - 为 init_socketio 生成测试
+2025-05-20 15:42:51,870 - ai_test_generator - INFO - 生成提示长度: 403 字符
+2025-05-20 15:45:27,117 - ai_test_generator - INFO - 成功生成测试: init_socketio
+2025-05-20 15:45:27,117 - ai_test_generator - INFO - 为 broadcast_metrics 生成测试
+2025-05-20 15:45:27,117 - ai_test_generator - INFO - 生成提示长度: 1767 字符
+2025-05-20 15:48:46,192 - ai_test_generator - INFO - 成功生成测试: broadcast_metrics
+2025-05-20 15:48:46,192 - ai_test_generator - INFO - 为 broadcast_test_status 生成测试
+2025-05-20 15:48:46,192 - ai_test_generator - INFO - 生成提示长度: 1372 字符
+2025-05-20 15:50:57,945 - ai_test_generator - INFO - 成功生成测试: broadcast_test_status
+2025-05-20 15:53:24,143 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-05-20 15:58:52,241 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-05-20 15:59:11,411 - ai_test_generator - INFO - Shutting down AI单元测试生成工具

@@ -8,12 +8,13 @@ from app.utils.logger import logger
 class PythonParser(BaseParser):
     """Python代码解析器"""
 
-    def parse_code(self, code: str) -> List[CodeSnippet]:
+    def parse_code(self, code: str, file_path: str = None) -> List[CodeSnippet]:
         """
         解析Python代码，提取函数和方法
 
         Args:
             code: Python代码字符串
+            file_path: 代码文件路径，用于生成正确的导入语句
 
         Returns:
             代码片段列表
@@ -60,7 +61,8 @@ class PythonParser(BaseParser):
                         type="function",
                         code=func_code,
                         language="python",
-                        class_name=None
+                        class_name=None,
+                        file_path=file_path
                     )
 
                     snippets.append(snippet)
@@ -85,7 +87,8 @@ class PythonParser(BaseParser):
                                 type="method",
                                 code=method_code,
                                 language="python",
-                                class_name=node.name
+                                class_name=node.name,
+                                file_path=file_path
                             )
 
                             snippets.append(snippet)
@@ -95,7 +98,7 @@ class PythonParser(BaseParser):
             # 如果没有找到任何函数，尝试使用正则表达式
             if not snippets:
                 logger.warning("AST解析未找到函数，尝试使用正则表达式")
-                regex_snippets = self._parse_with_regex(code)
+                regex_snippets = self._parse_with_regex(code, file_path)
                 if regex_snippets:
                     logger.info(f"使用正则表达式找到 {len(regex_snippets)} 个函数")
                     snippets.extend(regex_snippets)
@@ -107,7 +110,7 @@ class PythonParser(BaseParser):
             # 尝试使用正则表达式作为备选方案
             try:
                 logger.info("尝试使用正则表达式作为备选解析方法")
-                return self._parse_with_regex(code)
+                return self._parse_with_regex(code, file_path)
             except Exception as regex_error:
                 logger.error(f"正则表达式解析也失败: {str(regex_error)}")
                 return []
@@ -117,7 +120,7 @@ class PythonParser(BaseParser):
         # 这里可以添加一些常见语法问题的修复逻辑
         return code
 
-    def _parse_with_regex(self, code: str) -> List[CodeSnippet]:
+    def _parse_with_regex(self, code: str, file_path: str = None) -> List[CodeSnippet]:
         """使用正则表达式解析Python代码"""
         import re
         snippets = []
@@ -175,7 +178,8 @@ class PythonParser(BaseParser):
                 type="function",
                 code=func_code,
                 language="python",
-                class_name=None
+                class_name=None,
+                file_path=file_path
             )
 
             snippets.append(snippet)
