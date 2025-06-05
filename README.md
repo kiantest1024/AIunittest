@@ -2,7 +2,7 @@
 
 这个工具使用人工智能自动为多种编程语言生成单元测试。它支持多种 AI 模型，可以通过命令行、图形界面或 Web 界面使用。
 
-## 最新优化 (2023年6月更新)
+## 最新优化 (2025年6月更新)
 
 - **多语言支持**：现在支持 Python、Java、Go、C++ 和 C# 等多种编程语言
 - **多 AI 模型支持**：支持 OpenAI、Google Gemini、Anthropic Claude、xAI Grok 和 DeepSeek 等多种 AI 模型
