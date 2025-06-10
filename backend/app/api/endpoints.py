@@ -1,38 +1,96 @@
-from fastapi import APIRouter, UploadFile, File, Form, Depends, Query, status
+from fastapi import APIRouter, UploadFile, File, Query
 from fastapi.responses import StreamingResponse
-from typing import List, Optional, AsyncIterator
-import os
-import sys
 import json
 import asyncio
-
-# 动态调整导入路径
-try:
-    # 从backend目录运行时
-    from app.models.schemas import (
-        GenerateTestRequest, GenerateTestResponse, TestResult,
-        UploadFileResponse, GitRepositoriesResponse, GitDirectoriesResponse,
-        GitSaveRequest, GitSaveResponse, HealthResponse
-    )
-    from app.services.test_generator import generate_tests, generate_tests_stream
-    from app.services.git_service import list_repositories, list_directories, save_to_git
-    from app.services.parser_factory import ParserFactory
-    from app.config import settings, AI_MODELS
-    from app.utils.logger import logger
-except ImportError:
-    # 从app目录运行时
-    from models.schemas import (
-        GenerateTestRequest, GenerateTestResponse, TestResult,
-        UploadFileResponse, GitRepositoriesResponse, GitDirectoriesResponse,
-        GitSaveRequest, GitSaveResponse, HealthResponse
-    )
-    from services.test_generator import generate_tests, generate_tests_stream
-    from services.git_service import list_repositories, list_directories, save_to_git
-    from services.parser_factory import ParserFactory
-    from config import settings, AI_MODELS
-    from utils.logger import logger
+from app.services.gitlab_service import GitLabService
+from app.services.git_service import GitHubService
+from app.models.schemas import (
+    GenerateTestRequest, GenerateTestResponse,
+    UploadFileResponse, GitRepositoriesResponse, GitDirectoriesResponse,
+    GitSaveRequest, GitSaveResponse, HealthResponse, GitLabCloneRequest,
+    GitLabCloneResponse, GitHubCloneRequest, GitHubCloneResponse
+)
+from app.services.test_generator import generate_tests
+from app.services.git_service import list_directories, save_to_git
+from app.services.parser_factory import ParserFactory
+from app.config import settings, AI_MODELS
+from app.utils.logger import logger
 
 router = APIRouter()
+
+def build_gitlab_api_base(repo: str, server_url: str = "") -> tuple[str, str]:
+    """
+    统一的GitLab API基础URL构建函数
+
+    Args:
+        repo: 仓库标识符，可以是完整URL或项目路径
+        server_url: 服务器地址参数
+
+    Returns:
+        tuple: (api_base, project_path)
+    """
+    logger.info(f"Building GitLab API base for repo: {repo}, server_url: {server_url}")
+
+    # 解析仓库URL获取项目路径和服务器地址
+    if repo.startswith("https://"):
+        repo_url = repo.replace("https://", "")
+    elif repo.startswith("http://"):
+        repo_url = repo.replace("http://", "")
+    else:
+        repo_url = repo
+
+    parts = repo_url.split("/")
+    logger.info(f"URL parts: {parts}")
+
+    # 处理不同的repo格式
+    if len(parts) >= 3:
+        # 完整URL格式: server/user/project 或 server/user/project.git
+        gitlab_server = parts[0]
+        project_path = "/".join(parts[1:])
+        if project_path.endswith(".git"):
+            project_path = project_path[:-4]
+
+        # 构建GitLab API URL，使用正确的服务器地址
+        if server_url and server_url.strip():
+            # 如果提供了server_url参数，使用它
+            api_base = server_url.rstrip('/')
+            # 确保有协议前缀
+            if not api_base.startswith(('http://', 'https://')):
+                api_base = f"http://{api_base}"
+            logger.info(f"Using provided server_url: {server_url} -> {api_base}")
+        else:
+            # 否则从repo URL中提取服务器地址
+            if gitlab_server.startswith("gitlab.com"):
+                api_base = "https://gitlab.com"
+            else:
+                # 对于自定义GitLab实例，根据原始repo格式确定协议
+                if repo.startswith("https://"):
+                    api_base = f"https://{gitlab_server}"
+                else:
+                    api_base = f"http://{gitlab_server}"
+            logger.info(f"Extracted from repo URL: {api_base}")
+
+    elif len(parts) >= 2:
+        # 项目路径格式: user/project
+        project_path = repo_url
+        if project_path.endswith(".git"):
+            project_path = project_path[:-4]
+
+        # 必须有server_url参数
+        if server_url and server_url.strip():
+            api_base = server_url.rstrip('/')
+            # 确保有协议前缀
+            if not api_base.startswith(('http://', 'https://')):
+                api_base = f"http://{api_base}"
+            logger.info(f"Using server_url for project path: {server_url} -> {api_base}")
+        else:
+            raise ValueError("Server URL is required for project path format")
+
+    else:
+        raise ValueError("Invalid repository format")
+
+    logger.info(f"Final result: api_base={api_base}, project_path={project_path}")
+    return api_base, project_path
 
 @router.get("/health", response_model=HealthResponse)
 async def health_check():
@@ -92,16 +150,12 @@ async def generate_test_direct(request: GenerateTestRequest):
         logger.info(f"Code preview: {request.code[:100]}...")
 
         # 解析代码
-        if request.language == "python":
-            snippets = parse_python_code_direct(request.code)
-        else:
-            # 对于其他语言，尝试使用已导入的解析器
-            try:
-                parser = ParserFactory.get_parser(request.language)
-                snippets = [s.dict() for s in parser.parse_code(request.code)]
-            except Exception as e:
-                logger.error(f"解析 {request.language} 代码失败: {str(e)}")
-                snippets = []
+        try:
+            parser = ParserFactory.get_parser(request.language)
+            snippets = [s.dict() for s in parser.parse_code(request.code)]
+        except Exception as e:
+            logger.error(f"解析 {request.language} 代码失败: {str(e)}")
+            snippets = []
 
         logger.info(f"解析到 {len(snippets)} 个代码片段")
 
@@ -126,12 +180,34 @@ async def generate_test_direct(request: GenerateTestRequest):
                 logger.info(f"为 {snippet['name']} 生成测试")
 
                 # 生成测试代码
-                if request.language == "python":
-                    test_code = generate_python_test_direct(snippet, request.model)
-                else:
-                    # 对于其他语言，尝试使用已导入的生成器
+                if request.language == "java":
+                    # 对于Java，使用增强的分析器生成针对性测试
                     try:
-                        from app.services.test_generator import generate_test_with_ai
+                        from app.services.ai_service import generate_test_with_ai
+                        from app.models.schemas import CodeSnippet
+                        from app.services.java_analyzer import create_enhanced_java_test_prompt
+
+                        # 使用Java分析器创建增强的提示
+                        enhanced_prompt = create_enhanced_java_test_prompt(request.code)
+
+                        # 创建代码片段
+                        code_snippet = CodeSnippet(
+                            name=snippet["name"],
+                            type=snippet["type"],
+                            code=snippet["code"],  # 使用原始代码
+                            language=request.language,
+                            class_name=snippet.get("class_name")
+                        )
+
+                        # 使用增强的提示生成测试
+                        test_code = generate_test_with_ai(code_snippet, enhanced_prompt, request.model)
+                    except Exception as e:
+                        logger.error(f"Java测试生成失败: {str(e)}")
+                        test_code = f"// 生成测试失败: {str(e)}"
+                else:
+                    # 对于其他语言，使用基础生成器
+                    try:
+                        from app.services.ai_service import generate_test_with_ai
                         from app.models.schemas import CodeSnippet
 
                         # 转换为 CodeSnippet 对象
@@ -181,217 +257,7 @@ async def generate_test_direct(request: GenerateTestRequest):
             "tests": []
         }
 
-# 直接解析 Python 代码，不依赖复杂的导入
-def parse_python_code_direct(code: str):
-    """
-    直接解析 Python 代码，提取函数和方法
 
-    Args:
-        code: Python 代码字符串
-
-    Returns:
-        代码片段列表，每个片段包含 name, type, code 字段
-    """
-    import ast
-    import re
-
-    logger.info(f"直接解析 Python 代码，长度: {len(code)} 字符")
-
-    # 结果列表
-    snippets = []
-
-    # 尝试使用 AST 解析
-    try:
-        tree = ast.parse(code)
-
-        # 查找顶级函数
-        for node in ast.iter_child_nodes(tree):
-            if isinstance(node, ast.FunctionDef):
-                func_name = node.name
-                logger.info(f"找到函数: {func_name}")
-
-                # 提取函数代码
-                func_lines = code.splitlines()[node.lineno-1:node.end_lineno]
-                func_code = "\n".join(func_lines)
-
-                snippets.append({
-                    "name": func_name,
-                    "type": "function",
-                    "code": func_code
-                })
-
-        # 查找类和方法
-        for node in ast.iter_child_nodes(tree):
-            if isinstance(node, ast.ClassDef):
-                class_name = node.name
-                logger.info(f"找到类: {class_name}")
-
-                for child in node.body:
-                    if isinstance(child, ast.FunctionDef):
-                        method_name = child.name
-                        logger.info(f"找到方法: {method_name} 在类 {class_name} 中")
-
-                        # 提取方法代码
-                        method_lines = code.splitlines()[child.lineno-1:child.end_lineno]
-                        method_code = "\n".join(method_lines)
-
-                        snippets.append({
-                            "name": method_name,
-                            "type": "method",
-                            "code": method_code,
-                            "class_name": class_name
-                        })
-
-    except Exception as e:
-        logger.error(f"AST 解析失败: {str(e)}")
-
-        # 如果 AST 解析失败，尝试使用正则表达式
-        try:
-            # 匹配函数定义
-            func_pattern = r'def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)(?:\s*->.*?)?:'
-            matches = re.finditer(func_pattern, code)
-
-            for match in matches:
-                func_name = match.group(1)
-                func_start = match.start()
-                logger.info(f"使用正则表达式找到函数: {func_name}")
-
-                # 查找函数体结束位置
-                lines = code.splitlines()
-                line_no = code[:func_start].count('\n')
-                indent = None
-                func_end_line = line_no
-
-                # 跳过函数定义行
-                line_no += 1
-                if line_no < len(lines):
-                    # 获取函数体的缩进级别
-                    first_line = lines[line_no]
-                    indent_match = re.match(r'^(\s+)', first_line)
-                    if indent_match:
-                        indent = len(indent_match.group(1))
-
-                    # 查找函数体结束位置
-                    while line_no < len(lines):
-                        if line_no >= len(lines):
-                            break
-
-                        if lines[line_no].strip() == '' or lines[line_no].strip().startswith('#'):
-                            # 空行或注释行，继续
-                            line_no += 1
-                            func_end_line = line_no
-                            continue
-
-                        # 检查缩进级别
-                        current_line = lines[line_no]
-                        if not current_line.strip():
-                            line_no += 1
-                            func_end_line = line_no
-                            continue
-
-                        current_indent_match = re.match(r'^(\s+)', current_line)
-                        current_indent = len(current_indent_match.group(1)) if current_indent_match else 0
-
-                        if indent is None or current_indent > indent:
-                            # 仍在函数体内
-                            line_no += 1
-                            func_end_line = line_no
-                        else:
-                            # 函数体结束
-                            break
-
-                # 提取函数代码
-                func_lines = lines[code[:func_start].count('\n'):func_end_line]
-                func_code = '\n'.join(func_lines)
-
-                snippets.append({
-                    "name": func_name,
-                    "type": "function",
-                    "code": func_code
-                })
-
-        except Exception as regex_error:
-            logger.error(f"正则表达式解析也失败: {str(regex_error)}")
-
-    logger.info(f"解析完成，找到 {len(snippets)} 个代码片段")
-    return snippets
-
-# 直接生成 Python 测试代码，不依赖复杂的导入
-def generate_python_test_direct(code_snippet, model_name):
-    """
-    直接生成 Python 测试代码
-
-    Args:
-        code_snippet: 代码片段，包含 name, type, code 字段
-        model_name: 模型名称
-
-    Returns:
-        生成的测试代码
-    """
-    # 构建提示
-    prompt_template = """
-请为以下Python {code_type}生成单元测试代码:
-
-```python
-{code}
-```
-
-请生成完整的测试代码，包括必要的导入语句、测试函数和断言。
-测试应该全面覆盖代码的功能，包括正常情况和边缘情况。
-使用pytest框架，并遵循以下指南:
-
-1. 测试函数名应以'test_'开头
-2. 使用描述性的测试函数名称
-3. 为每个测试用例添加清晰的注释
-4. 包含必要的mock对象或测试夹具
-5. 使用有意义的断言消息
-6. 考虑边缘情况和异常处理
-
-假设可以使用以下导入语句: {import_statement}
-
-请仅返回测试代码，不要包含任何解释或额外的文本。
-"""
-
-    prompt = prompt_template.format(
-        code_type=code_snippet["type"],
-        code=code_snippet["code"],
-        import_statement="import unittest, pytest, mock"
-    )
-
-    logger.info(f"生成提示长度: {len(prompt)} 字符")
-
-    # 使用 AI 模型生成测试代码
-    try:
-        # 尝试使用已导入的 AI 模型
-        from app.services.ai_factory import AIServiceFactory
-        ai_service = AIServiceFactory.get_service(model_name)
-        test_code = ai_service.generate(prompt)
-        return test_code
-    except Exception as e:
-        logger.error(f"使用 AI 服务生成测试失败: {str(e)}")
-
-        # 如果失败，返回一个简单的测试模板
-        return f"""
-import pytest
-from unittest import mock
-
-def test_{code_snippet["name"]}():
-    \"\"\"
-    测试 {code_snippet["name"]} 函数
-
-    注意: 这是一个自动生成的测试模板，因为 AI 生成失败。
-    请根据函数的实际行为修改此测试。
-    \"\"\"
-    # 设置
-    # TODO: 设置测试环境
-
-    # 执行
-    # TODO: 调用被测函数
-
-    # 断言
-    # TODO: 添加断言
-    assert True  # 替换为实际断言
-"""
 
 @router.post("/generate-test-stream")
 async def generate_test_stream(request: GenerateTestRequest):
@@ -441,16 +307,12 @@ async def generate_test_stream(request: GenerateTestRequest):
                     logger.info(f"Using file path from Git: {file_path}")
 
                 # 解析代码
-                if request.language == "python":
-                    snippets = parse_python_code_direct(request.code)
-                else:
-                    # 对于其他语言，尝试使用已导入的解析器
-                    try:
-                        parser = ParserFactory.get_parser(request.language)
-                        snippets = [s.dict() for s in parser.parse_code(request.code, file_path)]
-                    except Exception as e:
-                        logger.error(f"解析 {request.language} 代码失败: {str(e)}")
-                        snippets = []
+                try:
+                    parser = ParserFactory.get_parser(request.language)
+                    snippets = [s.dict() for s in parser.parse_code(request.code, file_path)]
+                except Exception as e:
+                    logger.error(f"解析 {request.language} 代码失败: {str(e)}")
+                    snippets = []
 
                 logger.info(f"解析到 {len(snippets)} 个代码片段")
 
@@ -477,12 +339,34 @@ async def generate_test_stream(request: GenerateTestRequest):
                         logger.info(f"为 {snippet['name']} 生成测试")
 
                         # 生成测试代码
-                        if request.language == "python":
-                            test_code = generate_python_test_direct(snippet, request.model)
-                        else:
-                            # 对于其他语言，尝试使用已导入的生成器
+                        if request.language == "java":
+                            # 对于Java，使用增强的分析器生成针对性测试
                             try:
-                                from app.services.test_generator import generate_test_with_ai
+                                from app.services.ai_service import generate_test_with_ai
+                                from app.models.schemas import CodeSnippet
+                                from app.services.java_analyzer import create_enhanced_java_test_prompt
+
+                                # 使用Java分析器创建增强的提示
+                                enhanced_prompt = create_enhanced_java_test_prompt(request.code)
+
+                                # 创建代码片段
+                                code_snippet = CodeSnippet(
+                                    name=snippet["name"],
+                                    type=snippet["type"],
+                                    code=snippet["code"],  # 使用原始代码
+                                    language=request.language,
+                                    class_name=snippet.get("class_name")
+                                )
+
+                                # 使用增强的提示生成测试
+                                test_code = generate_test_with_ai(code_snippet, enhanced_prompt, request.model)
+                            except Exception as e:
+                                logger.error(f"Java测试生成失败: {str(e)}")
+                                test_code = f"// 生成测试失败: {str(e)}"
+                        else:
+                            # 对于其他语言，使用基础生成器
+                            try:
+                                from app.services.ai_service import generate_test_with_ai
                                 from app.models.schemas import CodeSnippet
 
                                 # 转换为 CodeSnippet 对象
@@ -597,25 +481,69 @@ async def upload_file(file: UploadFile = File(...)):
     )
 
 @router.get("/git/repositories", response_model=GitRepositoriesResponse)
-async def get_repositories(token: str = Query(...)):
-    """获取GitHub仓库列表"""
-    logger.info("Listing GitHub repositories")
+async def get_repositories(
+    token: str = Query(...),
+    platform: str = Query(default="github"),
+    server_url: str = Query(default="", description="自定义服务器地址，如 https://github.com 或 http://172.16.1.30")
+):
+    """获取仓库列表"""
+    logger.info(f"Listing {platform} repositories from server: {server_url or 'default'}")
 
-    if not token:
-        logger.warning("GitHub token is empty")
-        raise ValueError("GitHub token is required")
+    if not token or token.strip() == "":
+        logger.warning(f"{platform} token is empty")
+        raise ValueError(f"{platform} token is required")
 
-    repos = list_repositories(token)
-    logger.info(f"Found {len(repos)} repositories")
+    try:
+        git_service = get_git_service(platform, token, server_url)
+        repos = git_service.list_repositories()
 
-    return GitRepositoriesResponse(repositories=repos)
+        logger.info(f"Found {len(repos)} repositories")
+        return GitRepositoriesResponse(repositories=repos)
+
+    except ValueError as ve:
+        # 重新抛出已知的ValueError（如无效token）
+        logger.error(f"Validation error: {ve}")
+        raise ve
+    except Exception as e:
+        logger.error(f"Unexpected error listing {platform} repositories: {e}")
+        raise ValueError(f"Failed to list {platform} repositories: {str(e)}")
+
+def get_git_service(platform: str, token: str, server_url: str = ""):
+    """
+    获取Git服务实例
+
+    Args:
+        platform: 平台类型 ("github" 或 "gitlab")
+        token: 访问令牌
+        server_url: 自定义服务器地址（可选）
+
+    Returns:
+        Git服务实例
+    """
+    if platform == "gitlab":
+        if server_url and server_url.strip():
+            return GitLabService(token, server_url.strip())
+        else:
+            return GitLabService(token)  # 使用默认URL
+    else:  # github
+        if server_url and server_url.strip():
+            return GitHubService(token, server_url.strip())
+        else:
+            return GitHubService(token)  # 使用默认URL
 
 @router.get("/git/directories", response_model=GitDirectoriesResponse)
-async def get_directories(repo: str = Query(...), token: str = Query(...), path: str = Query("")):
-    """获取GitHub仓库目录列表"""
-    logger.info(f"Listing directories for repo: {repo}, path: {path}")
+async def get_directories(
+    repo: str = Query(...),
+    token: str = Query(default=""),
+    path: str = Query(""),
+    platform: str = Query(default="github"),
+    server_url: str = Query(default="", description="自定义服务器地址")
+):
+    """获取仓库目录列表"""
+    logger.info(f"Listing directories for repo: {repo}, path: {path}, platform: {platform}, server: {server_url or 'default'}")
 
-    if not token:
+    # GitHub仍然需要token
+    if not token and platform == "github":
         logger.warning("GitHub token is empty")
         raise ValueError("GitHub token is required")
 
@@ -623,19 +551,94 @@ async def get_directories(repo: str = Query(...), token: str = Query(...), path:
         logger.warning("Repository name is empty")
         raise ValueError("Repository name is required")
 
-    dirs = list_directories(repo, token, path)
+    if platform == "gitlab":
+        if not token:
+            # GitLab公共仓库，使用公共API
+            logger.info("No token provided for GitLab, attempting to access public repository")
+            try:
+                import requests
+
+                # 使用统一的URL构建函数
+                api_base, project_path = build_gitlab_api_base(repo, server_url)
+
+                # 构建GitLab API URL
+                gitlab_api_url = f"{api_base}/api/v4/projects/{project_path.replace('/', '%2F')}/repository/tree"
+                params = {"ref": "main"}  # 先尝试main分支
+                if path:
+                    params["path"] = path
+
+                logger.info(f"Attempting to access GitLab API: {gitlab_api_url}")
+                response = requests.get(gitlab_api_url, params=params, timeout=10)
+
+                # 如果main分支失败，尝试master分支
+                if response.status_code == 404:
+                    logger.info("main branch not found, trying master branch")
+                    params["ref"] = "master"
+                    response = requests.get(gitlab_api_url, params=params, timeout=10)
+
+                if response.status_code == 200:
+                    items = response.json()
+                    dirs = []
+                    for item in items:
+                        # 构建文件/目录的web URL
+                        if item["type"] == "tree":
+                            # 目录URL
+                            item_url = f"{api_base}/{project_path}/-/tree/{params['ref']}/{item['path']}"
+                        else:
+                            # 文件URL
+                            item_url = f"{api_base}/{project_path}/-/blob/{params['ref']}/{item['path']}"
+
+                        dirs.append({
+                            "name": item["name"],
+                            "path": item["path"],
+                            "type": "dir" if item["type"] == "tree" else "file",
+                            "url": item_url  # 添加必需的url字段
+                        })
+
+                    logger.info(f"Found {len(dirs)} directories/files from public GitLab repository")
+                    return GitDirectoriesResponse(directories=dirs)
+                else:
+                    logger.error(f"GitLab API response: {response.status_code}, {response.text[:200]}")
+                    raise ValueError(f"Failed to access public repository: HTTP {response.status_code}")
+            except Exception as e:
+                logger.error(f"Error accessing public GitLab repository: {e}")
+                raise ValueError(f"Failed to access public repository: {str(e)}")
+        else:
+            # 有token，使用GitLab API
+            gitlab_service = get_git_service("gitlab", token, server_url)
+            dirs = gitlab_service.list_directories(repo, path)
+    else:
+        # GitHub
+        dirs = list_directories(repo, token, path)
+
     logger.info(f"Found {len(dirs)} directories/files")
 
     return GitDirectoriesResponse(directories=dirs)
 
 @router.post("/git/save", response_model=GitSaveResponse)
 async def save_tests_to_git(request: GitSaveRequest):
-    """保存测试到GitHub仓库"""
-    logger.info(f"Saving tests to GitHub repo: {request.repo}, path: {request.path}")
+    """保存测试到代码仓库"""
+    platform = request.platform if hasattr(request, "platform") else "github"
+    logger.info(f"Saving tests to {platform} repo: {request.repo}, path: {request.path}")
+
+    # 详细的调试信息
+    logger.info(f"Save request debug info:")
+    logger.info(f"- Platform: {platform}")
+    logger.info(f"- Repository: {request.repo}")
+    logger.info(f"- Path: {request.path}")
+    logger.info(f"- Token present: {'Yes' if request.token else 'No'}")
+    logger.info(f"- Token length: {len(request.token) if request.token else 0}")
+    logger.info(f"- Server URL: {getattr(request, 'server_url', 'Not provided')}")
+    logger.info(f"- Tests count: {len(request.tests) if request.tests else 0}")
+    logger.info(f"- Language: {request.language}")
 
     if not request.token:
-        logger.warning("GitHub token is empty")
-        raise ValueError("GitHub token is required")
+        logger.warning(f"{platform} token is empty")
+        # 为GitLab提供更友好的错误信息
+        if platform == "gitlab":
+            raise ValueError("GitLab Personal Access Token is required for saving tests. Please provide a token with 'api' and 'write_repository' permissions.")
+        else:
+            raise ValueError(f"{platform} token is required")
 
     if not request.repo:
         logger.warning("Repository name is empty")
@@ -645,15 +648,26 @@ async def save_tests_to_git(request: GitSaveRequest):
         logger.warning("No tests to save")
         raise ValueError("No tests to save")
 
-    urls = save_to_git(
-        tests=request.tests,
-        language=request.language,
-        repo_full_name=request.repo,
-        base_path=request.path,
-        token=request.token
-    )
+    if platform == "gitlab":
+        # 获取服务器地址，如果没有提供则使用默认值
+        server_url = request.server_url or ''
+        gitlab_service = get_git_service("gitlab", request.token, server_url)
+        urls = gitlab_service.save_tests(
+            tests=request.tests,
+            language=request.language,
+            repo_full_name=request.repo,
+            base_path=request.path
+        )
+    else:
+        urls = save_to_git(
+            tests=request.tests,
+            language=request.language, 
+            repo_full_name=request.repo,
+            base_path=request.path,
+            token=request.token
+        )
 
-    logger.info(f"Saved {len(urls)} test files to GitHub")
+    logger.info(f"Saved {len(urls)} test files to {platform}")
     return GitSaveResponse(urls=urls)
 
 @router.get("/models")
@@ -666,14 +680,131 @@ async def get_languages():
     """获取支持的编程语言列表"""
     return {"languages": ParserFactory.get_supported_languages()}
 
-@router.get("/git/file-content")
-async def get_file_content(repo: str = Query(...), path: str = Query(...), token: str = Query(...)):
-    """获取GitHub文件内容"""
-    logger.info(f"Getting file content from repo: {repo}, path: {path}")
+@router.post("/git/gitlab/clone")
+async def clone_gitlab_repo(request: GitLabCloneRequest):
+    """克隆GitLab仓库"""
+    logger.info(f"Cloning GitLab repo: {request.repo_url}")
+
+    if not request.repo_url:
+        logger.warning("Repository URL is empty")
+        raise ValueError("Repository URL is required")
+
+    # 如果没有令牌，尝试克隆公共仓库
+    if not request.token or request.token.strip() == "":
+        logger.info("No token provided, attempting to clone public repository")
+        try:
+            # 使用git命令直接克隆公共仓库
+            import subprocess
+            import tempfile
+            import os
+
+            # 创建临时目录
+            temp_dir = tempfile.mkdtemp()
+            clone_path = os.path.join(temp_dir, "repo")
+
+            # 执行git clone命令
+            result = subprocess.run(
+                ["git", "clone", request.repo_url, clone_path],
+                capture_output=True,
+                text=True,
+                timeout=300  # 5分钟超时
+            )
+
+            if result.returncode == 0:
+                logger.info(f"Successfully cloned public repository to {clone_path}")
+
+                # 构建基本的仓库信息，即使是公共仓库克隆
+                try:
+                    # 从URL解析仓库信息
+                    repo_url_clean = request.repo_url
+                    if repo_url_clean.startswith("http://"):
+                        repo_url_clean = repo_url_clean.replace("http://", "")
+                    elif repo_url_clean.startswith("https://"):
+                        repo_url_clean = repo_url_clean.replace("https://", "")
+
+                    parts = repo_url_clean.split("/")
+                    if len(parts) >= 3:
+                        project_path = "/".join(parts[1:])
+                        if project_path.endswith(".git"):
+                            project_path = project_path[:-4]
+
+                        # 构建基本仓库信息
+                        repo_info = {
+                            "name": project_path.split('/')[-1],
+                            "full_name": project_path,
+                            "description": f"Public repository cloned from {request.repo_url}",
+                            "private": False,
+                            "default_branch": "main",  # 假设默认分支
+                            "clone_url": request.repo_url,
+                            "web_url": request.repo_url.replace('.git', '') if request.repo_url.endswith('.git') else request.repo_url
+                        }
+
+                        logger.info(f"Created basic repo info for public repository: {repo_info['full_name']}")
+                        return GitLabCloneResponse(success=True, clone_path=clone_path, repo_info=repo_info)
+                    else:
+                        logger.warning(f"Could not parse repository path from URL: {request.repo_url}")
+
+                except Exception as parse_error:
+                    logger.warning(f"Failed to parse repository info from URL: {parse_error}")
+
+                # 如果解析失败，返回没有repo_info的响应
+                return GitLabCloneResponse(success=True, clone_path=clone_path)
+            else:
+                logger.error(f"Git clone failed: {result.stderr}")
+                raise ValueError(f"Failed to clone repository: {result.stderr}")
+
+        except subprocess.TimeoutExpired:
+            logger.error("Git clone timeout")
+            raise ValueError("Repository clone timeout")
+        except Exception as e:
+            logger.error(f"Error cloning public repository: {e}")
+            raise ValueError(f"Failed to clone public repository: {str(e)}")
+    else:
+        # 有令牌，使用GitLab API
+        server_url = request.server_url or ''
+        git_service = get_git_service("gitlab", request.token, server_url)
+        result = git_service.clone_repository(request.repo_url, request.path)
+        return GitLabCloneResponse(
+            success=result.success,
+            clone_path=result.clone_path,
+            repo_info=result.repo_info
+        )
+
+@router.get("/git/gitlab/project")
+async def get_gitlab_project(
+    project_id: str = Query(...),
+    token: str = Query(...),
+    server_url: str = Query(default="", description="自定义服务器地址")
+):
+    """获取GitLab项目信息"""
+    logger.info(f"Getting GitLab project: {project_id} from server: {server_url or 'default'}")
 
     if not token:
+        logger.warning("GitLab token is empty")
+        raise ValueError("GitLab token is required")
+
+    git_service = get_git_service("gitlab", token, server_url)
+    return git_service.get_project(project_id)
+
+@router.get("/git/file-content")
+async def get_file_content(
+    repo: str = Query(...),
+    path: str = Query(...),
+    token: str = Query(default=""),
+    platform: str = Query(default="github"),
+    server_url: str = Query(default="", description="自定义服务器地址")
+):
+    """获取文件内容"""
+    logger.info(f"Getting file content from repo: {repo}, path: {path}, platform: {platform}, server: {server_url or 'default'}")
+
+    # 对于URL模式的公共仓库，token可以为空
+    if not token and platform == "github":
         logger.warning("GitHub token is empty")
         raise ValueError("GitHub token is required")
+
+    # GitLab URL模式支持公共仓库，不需要token
+    if not token and platform == "gitlab":
+        logger.info("No token provided for GitLab, attempting to access public repository")
 
     if not repo:
         logger.warning("Repository name is empty")
@@ -684,56 +815,190 @@ async def get_file_content(repo: str = Query(...), path: str = Query(...), token
         raise ValueError("File path is required")
 
     try:
-        from github import Github
+        # 如果是GitLab且没有token，尝试通过公共API获取文件内容
+        if platform == "gitlab" and not token:
+            import requests
 
-        # 创建GitHub客户端
-        g = Github(token)
+            # 使用统一的URL构建函数
+            api_base, project_path = build_gitlab_api_base(repo, server_url)
 
-        # 获取仓库
-        repository = g.get_repo(repo)
+            # 构建GitLab文件API URL
+            gitlab_api_url = f"{api_base}/api/v4/projects/{project_path.replace('/', '%2F')}/repository/files/{path.replace('/', '%2F')}/raw"
 
-        # 获取文件内容
-        file_content = repository.get_contents(path)
+            # 先尝试main分支
+            params = {"ref": "main"}
+            logger.info(f"Attempting to access GitLab file API: {gitlab_api_url}")
+            response = requests.get(gitlab_api_url, params=params, timeout=10)
 
-        # 获取文件扩展名
-        file_ext = path.split('.')[-1].lower() if '.' in path else ''
+            # 如果main分支失败，尝试master分支
+            if response.status_code == 404:
+                logger.info("main branch not found, trying master branch")
+                params["ref"] = "master"
+                response = requests.get(gitlab_api_url, params=params, timeout=10)
 
-        # 确定语言
-        language = None
-        if file_ext == 'py':
-            language = 'python'
-        elif file_ext == 'java':
-            language = 'java'
-        elif file_ext == 'go':
-            language = 'go'
-        elif file_ext in ['cpp', 'h', 'hpp']:
-            language = 'cpp'
-        elif file_ext == 'cs':
-            language = 'csharp'
+            if response.status_code == 200:
+                content = response.text
 
-        # 解码内容
-        try:
-            content = file_content.decoded_content.decode('utf-8')
-        except UnicodeDecodeError:
-            # 如果UTF-8解码失败，尝试其他编码
-            try:
-                content = file_content.decoded_content.decode('latin-1')
-            except Exception as e:
-                logger.error(f"Failed to decode file content: {e}")
-                content = "// 无法解码文件内容，可能是二进制文件"
+                # 获取文件扩展名
+                file_ext = path.split('.')[-1].lower() if '.' in path else ''
 
-        logger.info(f"File content retrieved successfully: {path}")
-        logger.debug(f"Content preview: {content[:100]}...")
+                # 确定语言
+                language = None
+                if file_ext == 'py':
+                    language = 'python'
+                elif file_ext == 'java':
+                    language = 'java'
+                elif file_ext == 'go':
+                    language = 'go'
+                elif file_ext in ['cpp', 'h', 'hpp']:
+                    language = 'cpp'
+                elif file_ext == 'cs':
+                    language = 'csharp'
 
-        result = {
-            "content": content,
-            "language": language,
-            "name": file_content.name,
-            "path": file_content.path
-        }
+                result = {
+                    "content": content,
+                    "language": language,
+                    "name": path.split('/')[-1],
+                    "path": path
+                }
 
-        return result
+                logger.info(f"File content retrieved from public GitLab repository: {path}")
+                return result
+            else:
+                logger.error(f"GitLab file API response: {response.status_code}, {response.text[:200]}")
+                raise ValueError(f"Failed to access public repository file: HTTP {response.status_code}")
+        else:
+            # 使用token访问私有仓库或GitHub
+            git_service = get_git_service(platform, token, server_url)
+
+            if platform == "github":
+                # GitHub服务返回元组 (content, language)
+                content, detected_language = git_service.get_file_content(repo, path)
+
+                # 获取文件扩展名
+                file_ext = path.split('.')[-1].lower() if '.' in path else ''
+
+                # 确定语言（优先使用检测到的语言）
+                language = detected_language
+                if not language or language == 'Unknown':
+                    if file_ext == 'py':
+                        language = 'python'
+                    elif file_ext == 'java':
+                        language = 'java'
+                    elif file_ext == 'go':
+                        language = 'go'
+                    elif file_ext in ['cpp', 'h', 'hpp']:
+                        language = 'cpp'
+                    elif file_ext == 'cs':
+                        language = 'csharp'
+
+                result = {
+                    "content": content,
+                    "language": language,
+                    "name": path.split('/')[-1],
+                    "path": path
+                }
+
+                logger.info(f"File content retrieved successfully from GitHub: {path}")
+                logger.debug(f"Content preview: {content[:100]}...")
+
+                return result
+            else:
+                # GitLab服务处理
+                file_content_str = git_service.get_file_content(repo, path)
+
+                # 获取文件扩展名
+                file_ext = path.split('.')[-1].lower() if '.' in path else ''
+
+                # 确定语言
+                language = None
+                if file_ext == 'py':
+                    language = 'python'
+                elif file_ext == 'java':
+                    language = 'java'
+                elif file_ext == 'go':
+                    language = 'go'
+                elif file_ext in ['cpp', 'h', 'hpp']:
+                    language = 'cpp'
+                elif file_ext == 'cs':
+                    language = 'csharp'
+
+                result = {
+                    "content": file_content_str,
+                    "language": language,
+                    "name": path.split('/')[-1],
+                    "path": path
+                }
+
+                logger.info(f"File content retrieved successfully from GitLab: {path}")
+                logger.debug(f"Content preview: {file_content_str[:100]}...")
+
+                return result
 
     except Exception as e:
         logger.error(f"Error getting file content: {e}")
         raise ValueError(f"Failed to get file content: {str(e)}")
+
+@router.post("/git/github/clone")
+async def clone_github_repo(request: GitHubCloneRequest):
+    """克隆GitHub仓库"""
+    logger.info(f"Cloning GitHub repo: {request.repo_url}")
+
+    if not request.token:
+        logger.warning("GitHub token is empty")
+        raise ValueError("GitHub token is required")
+
+    if not request.repo_url:
+        logger.warning("Repository URL is empty")
+        raise ValueError("Repository URL is required")
+
+    try:
+        git_service = GitHubService(request.token)
+        result = git_service.clone_repository(request.repo_url, request.path)
+
+        return GitHubCloneResponse(
+            success=result["success"],
+            clone_path=result["clone_path"],
+            repo_info=result["repo_info"]
+        )
+    except Exception as e:
+        logger.error(f"Error cloning GitHub repository: {e}")
+        raise ValueError(f"Failed to clone repository: {str(e)}")
+
+@router.post("/git/clone")
+async def clone_repo_universal(platform: str, repo_url: str, token: str, path: str = "", server_url: str = ""):
+    """通用仓库克隆接口，支持GitHub和GitLab"""
+    logger.info(f"Cloning {platform} repo: {repo_url} from server: {server_url or 'default'}")
+
+    if not token:
+        logger.warning(f"{platform} token is empty")
+        raise ValueError(f"{platform} token is required")
+
+    if not repo_url:
+        logger.warning("Repository URL is empty")
+        raise ValueError("Repository URL is required")
+
+    try:
+        if platform.lower() == "github":
+            git_service = get_git_service("github", token, server_url)
+            result = git_service.clone_repository(repo_url, path if path else None)
+            return {
+                "success": result["success"],
+                "clone_path": result["clone_path"],
+                "repo_info": result["repo_info"],
+                "platform": "github"
+            }
+        elif platform.lower() == "gitlab":
+            git_service = get_git_service("gitlab", token, server_url)
+            result = git_service.clone_repository(repo_url, path if path else None)
+            return {
+                "success": result.success,
+                "clone_path": result.clone_path,
+                "platform": "gitlab"
+            }
+        else:
+            raise ValueError(f"Unsupported platform: {platform}")
+
+    except Exception as e:
+        logger.error(f"Error cloning {platform} repository: {e}")
+        raise ValueError(f"Failed to clone repository: {str(e)}")

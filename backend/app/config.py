@@ -21,6 +21,11 @@ except ImportError:
                 pass
 
 class Settings(BaseSettings):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # 创建必要的目录
+        os.makedirs(self.GIT_TEMP_DIR, exist_ok=True)
+        os.makedirs(self.GIT_CACHE_DIR, exist_ok=True)
     """应用配置"""
     # 应用设置
     APP_NAME: str = "AI单元测试生成工具"
@@ -41,6 +46,30 @@ class Settings(BaseSettings):
 
     # 生成的测试文件保存目录
     GENERATED_TESTS_DIR: str = "tests/generated"
+    TEMP_DIR: str = "temp"
+    CACHE_DIR: str = "cache"
+    
+    # Git缓存配置
+    GIT_CACHE_TIMEOUT: int = 3600  # 1小时
+    GIT_MAX_CACHE_SIZE: int = 1024 * 1024 * 100  # 100MB
+
+    # Git服务配置
+    GIT_TEMP_DIR: str = os.path.join(os.path.dirname(__file__), "../temp")
+    GIT_CACHE_DIR: str = os.path.join(os.path.dirname(__file__), "../cache")
+    
+    # GitHub配置
+    GITHUB_DEFAULT_URL: str = "https://github.com"
+    GITHUB_DEFAULT_API_URL: str = "https://api.github.com"
+    GITHUB_DEFAULT_BRANCH: str = "main"
+
+    # GitLab配置
+    GITLAB_DEFAULT_URL: str = "https://gitlab.com"
+    GITLAB_DEFAULT_API_URL: str = "https://gitlab.com/api/v4"
+    GITLAB_DEFAULT_BRANCH: str = "master"
+    GITLAB_CLONE_DEPTH: int = 1
+
+    # 向后兼容的环境变量支持
+    GITLAB_API_URL: str = os.environ.get("GITLAB_API_URL", GITLAB_DEFAULT_API_URL)
 
     class Config:
         env_file = ".env"

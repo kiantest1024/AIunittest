@@ -17,7 +17,7 @@ export const cancelAllRequests = (message = 'Operation canceled by the user') =>
 
 // 创建axios实例
 const api = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:8888/api',
+  baseURL: 'http://localhost:8888/api',
   headers: {
     'Content-Type': 'application/json',
     // 添加CORS相关头
@@ -284,12 +284,17 @@ export const uploadFile = async (formData) => {
 };
 
 // 获取GitHub仓库列表
-export const getRepositories = async (token) => {
+export const getRepositories = async (token, platform = 'github', serverUrl = '') => {
   try {
-    console.log('Fetching repositories with token:', token ? 'token provided' : 'no token');
-    const response = await api.get('/git/repositories', {
-      params: { token },
-    });
+    console.log(`Fetching ${platform} repositories with token:`, token ? 'token provided' : 'no token');
+    console.log(`Using server URL:`, serverUrl || 'default');
+
+    const params = { token, platform };
+    if (serverUrl && serverUrl.trim()) {
+      params.server_url = serverUrl.trim();
+    }
+
+    const response = await api.get('/git/repositories', { params });
     console.log('Repositories response:', response);
 
     // 确保返回的是仓库数组
@@ -300,28 +305,35 @@ export const getRepositories = async (token) => {
       throw new Error('Invalid response format: missing repositories array');
     }
   } catch (error) {
-    console.error('Error fetching repositories:', error);
+    console.error(`Error fetching ${platform} repositories:`, error);
     throw error;
   }
 };
 
 // 获取GitHub目录列表
-export const getDirectories = async (repo, token, path = '') => {
+export const getDirectories = async (repo, token, path = '', platform = 'github', serverUrl = '') => {
   try {
-    console.log(`Fetching directories: repo=${repo}, path=${path}`);
+    console.log(`Fetching directories: repo=${repo}, path=${path}, platform=${platform}`);
+    console.log(`Using server URL:`, serverUrl || 'default');
 
     // 确保参数有效
     if (!repo) {
       throw new Error('Repository name is required');
     }
 
-    if (!token) {
+    // GitHub仍然需要token，GitLab在URL模式下可以不需要token
+    if (!token && platform === 'github') {
       throw new Error('GitHub token is required');
     }
 
     // 发送请求
+    const params = { repo, token, path, platform };
+    if (serverUrl && serverUrl.trim()) {
+      params.server_url = serverUrl.trim();
+    }
+
     const response = await api.get('/git/directories', {
-      params: { repo, token, path },
+      params,
       timeout: 30000, // 30秒超时
     });
 
@@ -344,9 +356,9 @@ export const getDirectories = async (repo, token, path = '') => {
 };
 
 // 保存测试到GitHub
-export const saveToGit = async (tests, language, repo, path, token) => {
+export const saveToGit = async (tests, language, repo, path, token, platform = 'github', serverUrl = '') => {
   try {
-    console.log(`Saving to Git: repo=${repo}, path=${path}, language=${language}, tests=${tests.length}`);
+    console.log(`Saving to ${platform}: repo=${repo}, path=${path}, language=${language}, tests=${tests.length}, server=${serverUrl || 'default'}`);
 
     // 确保参数有效
     if (!repo) {
@@ -354,21 +366,30 @@ export const saveToGit = async (tests, language, repo, path, token) => {
     }
 
     if (!token) {
-      throw new Error('GitHub token is required');
+      throw new Error(`${platform.toUpperCase()} token is required`);
     }
 
     if (!tests || tests.length === 0) {
       throw new Error('No tests to save');
     }
 
-    // 发送请求
-    const response = await api.post('/git/save', {
+    // 构建请求数据
+    const requestData = {
       tests,
       language,
       repo,
       path,
       token,
-    }, {
+      platform,
+    };
+
+    // 如果提供了服务器地址，添加到请求中
+    if (serverUrl && serverUrl.trim()) {
+      requestData.server_url = serverUrl.trim();
+    }
+
+    // 发送请求
+    const response = await api.post('/git/save', requestData, {
       timeout: 60000, // 60秒超时
     });
 
@@ -378,7 +399,7 @@ export const saveToGit = async (tests, language, repo, path, token) => {
 
     return response;
   } catch (error) {
-    console.error('Error saving to Git:', error);
+    console.error(`Error saving to ${platform}:`, error);
     console.error('Error details:', error.response?.data || error.message);
     throw error;
   }
@@ -397,16 +418,73 @@ export const getModels = async () => {
 };
 
 // 获取GitHub文件内容
-export const getFileContent = async (repo, path, token) => {
+export const getFileContent = async (repo, path, token, platform = 'github', serverUrl = '') => {
   try {
-    console.log(`Fetching file content: repo=${repo}, path=${path}`);
-    const response = await api.get('/git/file-content', {
-      params: { repo, path, token },
-    });
+    console.log(`Fetching file content: repo=${repo}, path=${path}, platform=${platform}, server=${serverUrl || 'default'}`);
+
+    const params = { repo, path, token, platform };
+    if (serverUrl && serverUrl.trim()) {
+      params.server_url = serverUrl.trim();
+    }
+
+    const response = await api.get('/git/file-content', { params });
     console.log('File content response:', response);
     return response;
   } catch (error) {
-    console.error('Error fetching file content:', error);
+    console.error(`Error fetching ${platform} file content:`, error);
+    throw error;
+  }
+};
+
+// 克隆 Git 仓库
+export const cloneRepo = async (repoUrl, token, platform = 'github', serverUrl = '') => {
+  try {
+    console.log(`Cloning ${platform} repository:`, repoUrl, `server: ${serverUrl || 'default'}`);
+
+    const requestData = {
+      repo_url: repoUrl,  // 统一使用repo_url字段名
+      token,
+      platform
+    };
+
+    // 如果提供了服务器地址，添加到请求中
+    if (serverUrl && serverUrl.trim()) {
+      requestData.server_url = serverUrl.trim();
+    }
+
+    const response = await api.post(`/git/${platform}/clone`, requestData, {
+      timeout: 300000, // 5分钟超时
+    });
+    console.log('Clone response:', response);
+    return response;
+  } catch (error) {
+    console.error(`Error cloning ${platform} repository:`, error);
+    console.error('Error details:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// 保持原有的 GitLab 克隆函数作为兼容性支持
+export const cloneGitLabRepo = async (repoUrl, token, serverUrl = '') => {
+  return cloneRepo(repoUrl, token, 'gitlab', serverUrl);
+};
+
+// 克隆 GitHub 仓库
+export const cloneGitHubRepo = async (repoUrl, token, path = '') => {
+  try {
+    console.log('Cloning GitHub repository:', repoUrl);
+    const response = await api.post('/git/github/clone', {
+      repo_url: repoUrl,
+      token,
+      path
+    }, {
+      timeout: 300000, // 5分钟超时
+    });
+    console.log('GitHub clone response:', response);
+    return response;
+  } catch (error) {
+    console.error('Error cloning GitHub repository:', error);
+    console.error('Error details:', error.response?.data || error.message);
     throw error;
   }
 };

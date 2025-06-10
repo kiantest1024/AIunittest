@@ -57,19 +57,7 @@ code {
   position: relative;
 }
 
-.directory-item:hover {
-  background-color: #f5f5f5 !important;
-}
-
-.directory-item.selected:hover {
-  background-color: #e6f7ff !important;
-}
-
 .directory-item.file {
   opacity: 0.7;
   cursor: not-allowed;
-}
-
-.directory-item.file:hover {
-  background-color: transparent !important;
 }

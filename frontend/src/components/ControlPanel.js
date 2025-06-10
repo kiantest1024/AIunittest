@@ -64,73 +64,124 @@ const ControlPanel = ({
   };
 
   return (
-    <Row gutter={16}>
-      <Col span={8}>
-        <div style={{ marginBottom: 16 }}>
-          <label style={{ display: 'block', marginBottom: 8 }}>
-            编程语言:
-            <Tooltip title="选择您的代码的编程语言">
-              <QuestionCircleOutlined style={{ marginLeft: 8 }} />
-            </Tooltip>
-          </label>
-          <Select
-            value={language}
-            onChange={onLanguageChange}
-            style={{ width: '100%' }}
-            placeholder="选择编程语言"
-          >
-            {languages.map(lang => (
-              <Option key={lang} value={lang}>{formatLanguageName(lang)}</Option>
-            ))}
-          </Select>
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr 1fr',
+      gap: '1rem',
+      marginBottom: '1.5rem'
+    }}>
+      {/* 编程语言选择 */}
+      <div className="form-group-modern">
+        <label className="form-label-modern" style={{
+          display: 'block',
+          fontWeight: 600,
+          marginBottom: '0.5rem',
+          color: '#374151'
+        }}>
+          💻 编程语言
+          <Tooltip title="选择您的代码的编程语言">
+            <QuestionCircleOutlined style={{ marginLeft: 8, color: '#6b7280' }} />
+          </Tooltip>
+        </label>
+        <Select
+          value={language}
+          onChange={onLanguageChange}
+          style={{ width: '100%' }}
+          placeholder="选择编程语言"
+          size="large"
+        >
+          {languages.map(lang => (
+            <Option key={lang} value={lang}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                {lang === 'python' && '🐍'}
+                {lang === 'java' && '☕'}
+                {lang === 'javascript' && '🟨'}
+                {lang === 'typescript' && '🔷'}
+                {lang === 'go' && '🐹'}
+                {lang === 'rust' && '🦀'}
+                {lang === 'cpp' && '⚡'}
+                {lang === 'csharp' && '🔷'}
+                {formatLanguageName(lang)}
+              </span>
+            </Option>
+          ))}
+        </Select>
+      </div>
+
+      {/* AI模型选择 */}
+      <div className="form-group-modern">
+        <label className="form-label-modern" style={{
+          display: 'block',
+          fontWeight: 600,
+          marginBottom: '0.5rem',
+          color: '#374151'
+        }}>
+          🤖 AI模型
+          <Tooltip title="选择用于生成测试的AI模型">
+            <QuestionCircleOutlined style={{ marginLeft: 8, color: '#6b7280' }} />
+          </Tooltip>
+        </label>
+        <Select
+          value={model}
+          onChange={onModelChange}
+          style={{ width: '100%' }}
+          placeholder="选择AI模型"
+          size="large"
+        >
+          {models.map(modelName => (
+            <Option key={modelName} value={modelName}>
+              <Tooltip title={getModelTooltip(modelName)}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  {modelName.includes('openai') && '🧠'}
+                  {modelName.includes('google') && '🔍'}
+                  {modelName.includes('anthropic') && '🎭'}
+                  {modelName.includes('grok') && '🚀'}
+                  {modelName.includes('deepseek') && '🔬'}
+                  {formatModelName(modelName)}
+                </span>
+              </Tooltip>
+            </Option>
+          ))}
+        </Select>
+        <div style={{
+          fontSize: '12px',
+          color: '#6b7280',
+          marginTop: '4px',
+          fontStyle: 'italic'
+        }}>
+          💡 需要在后端配置相应的 API 密钥
         </div>
-      </Col>
-      <Col span={8}>
-        <div style={{ marginBottom: 16 }}>
-          <label style={{ display: 'block', marginBottom: 8 }}>
-            AI模型:
-            <Tooltip title="选择用于生成测试的AI模型">
-              <QuestionCircleOutlined style={{ marginLeft: 8 }} />
-            </Tooltip>
-          </label>
-          <Select
-            value={model}
-            onChange={onModelChange}
-            style={{ width: '100%' }}
-            placeholder="选择AI模型"
-          >
-            {models.map(modelName => (
-              <Option key={modelName} value={modelName}>
-                <Tooltip title={getModelTooltip(modelName)}>
-                  <div>{formatModelName(modelName)}</div>
-                </Tooltip>
-              </Option>
-            ))}
-          </Select>
-          <div style={{ fontSize: '12px', color: '#999', marginTop: '4px' }}>
-            注意: 每个模型都需要相应的 API 密钥，请在后端 .env 文件中设置
-          </div>
-        </div>
-      </Col>
-      <Col span={8}>
-        <div style={{ marginBottom: 16 }}>
-          <label style={{ display: 'block', marginBottom: 8 }}>
-            操作:
-            <Tooltip title="生成单元测试用例">
-              <QuestionCircleOutlined style={{ marginLeft: 8 }} />
-            </Tooltip>
-          </label>
-          <Button
-            type="primary"
-            onClick={onGenerateTests}
-            loading={loading}
-            style={{ width: '100%' }}
-          >
-            生成用例
-          </Button>
-        </div>
-      </Col>
-    </Row>
+      </div>
+
+      {/* 操作按钮 */}
+      <div className="form-group-modern">
+        <label className="form-label-modern" style={{
+          display: 'block',
+          fontWeight: 600,
+          marginBottom: '0.5rem',
+          color: '#374151'
+        }}>
+          ⚡ 操作
+          <Tooltip title="生成单元测试用例">
+            <QuestionCircleOutlined style={{ marginLeft: 8, color: '#6b7280' }} />
+          </Tooltip>
+        </label>
+        <Button
+          className="btn-modern btn-modern-primary"
+          onClick={onGenerateTests}
+          loading={loading}
+          style={{
+            width: '100%',
+            height: '40px',
+            fontSize: '16px',
+            fontWeight: 600
+          }}
+          size="large"
+        >
+          {loading ? '🔄 生成中...' : '⚡ 生成用例'}
+        </Button>
+      </div>
+    </div>
   );
 };
 

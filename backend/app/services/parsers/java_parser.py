@@ -7,12 +7,13 @@ from app.utils.logger import logger
 class JavaParser(BaseParser):
     """Java代码解析器"""
 
-    def parse_code(self, code: str) -> List[CodeSnippet]:
+    def parse_code(self, code: str, file_path: str = None) -> List[CodeSnippet]:
         """
         解析Java代码，提取方法和类
 
         Args:
             code: Java代码字符串
+            file_path: 文件路径（可选）
 
         Returns:
             代码片段列表

@@ -68,12 +68,13 @@ def validate_test_code(test_code: str, snippet: CodeSnippet, module_path: str) -
 
     return True
 
-def generate_test_with_ai(snippet: CodeSnippet, model_name: str) -> str:
+def generate_test_with_ai(snippet: CodeSnippet, enhanced_prompt: str = None, model_name: str = None) -> str:
     """
     使用AI生成测试代码
 
     Args:
         snippet: 代码片段
+        enhanced_prompt: 增强的提示（可选，用于Java等特殊语言）
         model_name: AI模型名称
 
     Returns:
@@ -83,48 +84,52 @@ def generate_test_with_ai(snippet: CodeSnippet, model_name: str) -> str:
         ValueError: 如果模型不存在或语言不支持
     """
     try:
-        # 获取提示模板
-        if snippet.language not in PROMPT_TEMPLATES:
-            raise ValueError(f"Unsupported language for test generation: {snippet.language}")
+        # 如果提供了增强的提示，直接使用
+        if enhanced_prompt:
+            prompt = enhanced_prompt
+        else:
+            # 获取提示模板
+            if snippet.language not in PROMPT_TEMPLATES:
+                raise ValueError(f"Unsupported language for test generation: {snippet.language}")
 
-        prompt_template = PROMPT_TEMPLATES[snippet.language]
+            prompt_template = PROMPT_TEMPLATES[snippet.language]
 
-        # 构建提示
-        code_type = "函数" if snippet.type == "function" else f"类 {snippet.class_name} 的方法"
+            # 构建提示
+            code_type = "函数" if snippet.type == "function" else f"类 {snippet.class_name} 的方法"
 
-        # 构建导入语句（根据语言不同而不同）
-        import_statement = ""
-        if snippet.language == "python":
-            # 强制使用 broadcast 模块名
-            module_path = "broadcast"
+            # 构建导入语句（根据语言不同而不同）
+            import_statement = ""
+            if snippet.language == "python":
+                # 强制使用 broadcast 模块名
+                module_path = "broadcast"
 
-            # 记录模块路径
-            logger.info(f"Using module path: {module_path} for function: {snippet.name}")
+                # 记录模块路径
+                logger.info(f"Using module path: {module_path} for function: {snippet.name}")
 
-            # 构建导入语句 - 简化并强调 broadcast 模块
-            if snippet.class_name:
-                # 如果是类方法，导入类
-                import_statement = f"# 被测代码的导入语句 - 这是必须的，不要修改这一行\nfrom {module_path} import {snippet.class_name}  # 必须使用broadcast模块名"
-            else:
-                # 如果是函数，直接导入函数
-                import_statement = f"# 被测代码的导入语句 - 这是必须的，不要修改这一行\nfrom {module_path} import {snippet.name}  # 必须使用broadcast模块名"
+                # 构建导入语句 - 简化并强调 broadcast 模块
+                if snippet.class_name:
+                    # 如果是类方法，导入类
+                    import_statement = f"# 被测代码的导入语句 - 这是必须的，不要修改这一行\nfrom {module_path} import {snippet.class_name}  # 必须使用broadcast模块名"
+                else:
+                    # 如果是函数，直接导入函数
+                    import_statement = f"# 被测代码的导入语句 - 这是必须的，不要修改这一行\nfrom {module_path} import {snippet.name}  # 必须使用broadcast模块名"
 
-            # 添加全局变量导入
-            import_statement += f"\n\n# 如果需要访问其他函数或全局变量，也从broadcast导入\nfrom {module_path} import socketio  # 全局变量"
+                # 添加全局变量导入
+                import_statement += f"\n\n# 如果需要访问其他函数或全局变量，也从broadcast导入\nfrom {module_path} import socketio  # 全局变量"
 
-            # 添加常用的测试库导入
-            import_statement += "\n\n# 测试所需的库\nimport pytest\nimport unittest\nfrom unittest import mock\nfrom unittest.mock import MagicMock, patch, Mock, call\nfrom datetime import datetime\nimport io\nimport sys"
+                # 添加常用的测试库导入
+                import_statement += "\n\n# 测试所需的库\nimport pytest\nimport unittest\nfrom unittest import mock\nfrom unittest.mock import MagicMock, patch, Mock, call\nfrom datetime import datetime\nimport io\nimport sys"
 
-            # 添加mock示例
-            import_statement += f"\n\n# 当使用mock.patch时，必须使用'broadcast.socketio'作为路径，例如:\n# @pytest.fixture\n# def mock_socketio():\n#     with mock.patch('broadcast.socketio') as mock_socket:  # 注意这里是broadcast而不是your_module\n#         yield mock_socket"
+                # 添加mock示例
+                import_statement += f"\n\n# 当使用mock.patch时，必须使用'broadcast.socketio'作为路径，例如:\n# @pytest.fixture\n# def mock_socketio():\n#     with mock.patch('broadcast.socketio') as mock_socket:  # 注意这里是broadcast而不是your_module\n#         yield mock_socket"
 
-        prompt = prompt_template.format(
-            code_type=code_type,
-            code=snippet.code,
-            import_statement=import_statement,
-            class_name=snippet.class_name or "",
-            function_name=snippet.name
-        )
+            prompt = prompt_template.format(
+                code_type=code_type,
+                code=snippet.code,
+                import_statement=import_statement,
+                class_name=snippet.class_name or "",
+                function_name=snippet.name
+            )
 
         # 使用AI服务工厂获取服务并生成测试
         ai_service = AIServiceFactory.get_service(model_name)

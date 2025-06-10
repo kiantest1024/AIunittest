@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.8.0",
+    "@ant-design/plots": "^2.4.0",
     "@monaco-editor/react": "^4.5.1",
     "ai-test-generator-frontend": "file:",
     "antd": "^5.4.0",

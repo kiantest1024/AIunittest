@@ -11,13 +11,17 @@ services:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - GROK_API_KEY=${GROK_API_KEY}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - GITLAB_API_URL=${GITLAB_API_URL:-https://gitlab.com/api/v4}
+      - GITLAB_DEFAULT_BRANCH=${GITLAB_DEFAULT_BRANCH:-master}
     volumes:
       - ./backend:/app
       - ./tests:/app/tests
       - ./logs:/app/logs
+      - ./backend/temp:/app/temp
+      - ./backend/cache:/app/cache
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3

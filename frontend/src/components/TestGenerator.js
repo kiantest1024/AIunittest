@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Button, message, Tabs, Spin, Row, Col, Progress, Alert } from 'antd';
 import { SaveOutlined, CopyOutlined, GithubOutlined, CodeOutlined, LoadingOutlined } from '@ant-design/icons';
-import GitHubModal from './GitHubModal';
+import GitModal from './GitModal';
 import CodeEditor from './CodeEditor';
 import ControlPanel from './ControlPanel';
-import GitCodeFetcher from './GitCodeFetcher';
+import GitSourceSelector from './GitSourceSelector';
 import { generateTests, generateTestsStream, generateTestsDirect, uploadFile, getLanguages, getModels, getFileContent } from '../services/api';
 import { useAppContext, ActionTypes } from '../context/AppContext';
 
@@ -49,7 +49,8 @@ const TestGenerator = () => {
   const [gitInfo, setGitInfo] = useState({
     token: '',
     repo: '',
-    path: ''
+    path: '',
+    provider: 'github' // 添加 provider 字段
   });
 
   // 加载支持的语言和模型
@@ -154,12 +155,12 @@ const TestGenerator = () => {
   }, [dispatch]);
 
   // 处理从Git获取代码
-  const handleCodeFetched = useCallback(async (path, token, repo) => {
+  const handleCodeFetched = useCallback(async (platform, path, token, repo, serverUrl = '') => {
     dispatch({ type: ActionTypes.SET_LOADING, payload: true });
 
     try {
-      console.log(`Fetching code from repo: ${repo}, path: ${path}`);
-      const response = await getFileContent(repo, path, token);
+      console.log(`Fetching code from ${platform} repo: ${repo}, path: ${path}, server: ${serverUrl || 'default'}`);
+      const response = await getFileContent(repo, path, token, platform, serverUrl);
 
       // 检查响应格式
       console.log('Response received:', response);
@@ -195,8 +196,9 @@ const TestGenerator = () => {
       // 保存Git信息，用于后续上传
       const dirPath = path.includes('/') ? path.substring(0, path.lastIndexOf('/')) : '';
       setGitInfo({
-        token: token,
-        repo: repo,
+        platform,
+        token,
+        repo,
         path: dirPath
       });
 
@@ -617,49 +619,72 @@ const TestGenerator = () => {
 
   return (
     <div className="test-generator">
-      <Card title={
-        <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
-          <CodeOutlined style={{ marginRight: 8 }} />
-          AI单元测试生成工具
-        </div>
-      } style={{ marginBottom: 16 }}>
-        <Row gutter={16}>
-          <Col span={24}>
-            <div style={{ marginBottom: 16, fontWeight: 'bold' }}>
-              工作流程：1. 从GitHub获取代码 → 2. 选择代码语言和AI模型 → 3. 生成单元测试 → 4. 保存测试结果
-            </div>
-          </Col>
-        </Row>
-      </Card>
+      {/* 现代化内容网格 */}
+      <div className="content-grid">
+        {/* 左侧面板 - Git源码选择 */}
+        <div className="left-panel">
+          <h2 className="section-title" style={{
+            fontSize: '1.5rem',
+            fontWeight: 700,
+            marginBottom: '1.5rem',
+            color: '#1e293b',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+          }}>
+            <span style={{
+              width: '4px',
+              height: '24px',
+              background: 'linear-gradient(45deg, #4ade80, #06b6d4)',
+              borderRadius: '2px',
+              display: 'inline-block'
+            }}></span>
+            代码仓库获取代码
+          </h2>
 
-      <Row gutter={16}>
-        <Col span={8}>
-          <GitCodeFetcher
+          <GitSourceSelector
             onCodeFetched={handleCodeFetched}
             loading={loading}
             setLoading={(value) => dispatch({ type: ActionTypes.SET_LOADING, payload: value })}
           />
-        </Col>
+        </div>
 
-        <Col span={16}>
-          <Card title={
-            <div>
-              <span style={{ fontWeight: 'bold' }}>代码与测试</span>
-            </div>
-          }>
-            <ControlPanel
-              language={language}
-              model={model}
-              languages={languages}
-              models={models}
-              onLanguageChange={handleLanguageChange}
-              onModelChange={handleModelChange}
-              onFileUpload={handleFileUpload}
-              onGenerateTests={handleGenerateTests}
-              loading={loading}
-              acceptedFileTypes={LANGUAGE_EXTENSIONS}
-            />
+        {/* 右侧面板 - 代码与测试 */}
+        <div className="right-panel">
+          <h2 className="section-title" style={{
+            fontSize: '1.5rem',
+            fontWeight: 700,
+            marginBottom: '1.5rem',
+            color: '#1e293b',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+          }}>
+            <span style={{
+              width: '4px',
+              height: '24px',
+              background: 'linear-gradient(45deg, #4ade80, #06b6d4)',
+              borderRadius: '2px',
+              display: 'inline-block'
+            }}></span>
+            代码与测试
+          </h2>
 
+          <ControlPanel
+            language={language}
+            model={model}
+            languages={languages}
+            models={models}
+            onLanguageChange={handleLanguageChange}
+            onModelChange={handleModelChange}
+            onFileUpload={handleFileUpload}
+            onGenerateTests={handleGenerateTests}
+            loading={loading}
+            acceptedFileTypes={LANGUAGE_EXTENSIONS}
+          />
+
+          {/* 现代化代码区域 */}
+          <div className="monaco-editor-container" style={{ marginTop: '1rem' }}>
             <Spin spinning={loading} tip={isStreaming ? "正在生成测试用例，请耐心等待..." : "加载中..."}>
               {/* 流式生成进度显示 */}
               {isStreaming && streamProgress > 0 && (
@@ -668,7 +693,7 @@ const TestGenerator = () => {
                   description={`已生成 ${streamProgress} 个测试用例`}
                   type="info"
                   showIcon
-                  style={{ marginBottom: 16 }}
+                  style={{ marginBottom: 16, borderRadius: '12px' }}
                 />
               )}
 
@@ -688,15 +713,32 @@ const TestGenerator = () => {
                     percent={Math.round(generationProgress)}
                     status={generationProgress >= 100 ? (currentSnippet === '生成失败' ? 'exception' : 'success') : 'active'}
                     strokeColor={{
-                      '0%': '#108ee9',
-                      '100%': '#87d068',
+                      '0%': '#4ade80',
+                      '100%': '#06b6d4',
                     }}
                   />
                 </div>
               )}
 
-              <Tabs activeKey={activeTabKey} onChange={setActiveTabKey}>
-                <TabPane tab="源代码" key="code">
+              <Tabs
+                activeKey={activeTabKey}
+                onChange={setActiveTabKey}
+                style={{ marginTop: '50px' }}
+                tabBarStyle={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  borderRadius: '12px 12px 0 0',
+                  margin: 0,
+                  padding: '0 20px'
+                }}
+              >
+                <TabPane
+                  tab={
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      📝 源代码
+                    </span>
+                  }
+                  key="code"
+                >
                   <CodeEditor
                     code={code}
                     language={language}
@@ -713,27 +755,41 @@ const TestGenerator = () => {
                   generatedTests.map((test, index) => {
                     console.log(`Rendering test tab ${index}:`, test);
                     return (
-                      <TabPane tab={`测试: ${test.name}`} key={`test-${index}`}>
+                      <TabPane
+                        tab={
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            🧪 测试: {test.name}
+                          </span>
+                        }
+                        key={`test-${index}`}
+                      >
                         <Card
-                          title={`${test.type === 'method' ? '方法' : '函数'}: ${test.name}`}
+                          title={
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              {test.type === 'method' ? '⚙️' : '🔧'}
+                              {test.type === 'method' ? '方法' : '函数'}: {test.name}
+                            </span>
+                          }
                           extra={
                             <div>
                               <Button
+                                className="btn-modern btn-modern-secondary"
                                 icon={<SaveOutlined />}
                                 onClick={() => handleSaveToLocal(test.test_code, test.name)}
                                 style={{ marginRight: 8 }}
                               >
-                                保存到本地
+                                💾 保存到本地
                               </Button>
                               <Button
-                                type="primary"
+                                className="btn-modern btn-modern-primary"
                                 icon={<GithubOutlined />}
                                 onClick={handleOpenGitModal}
                               >
-                                上传到Git
+                                📤 上传到Git
                               </Button>
                             </div>
                           }
+                          style={{ border: 'none', boxShadow: 'none' }}
                         >
                           <CodeEditor
                             code={test.test_code}
@@ -747,20 +803,37 @@ const TestGenerator = () => {
                   })
                 ) : (
                   // 如果没有测试，显示一个空的 TabPane
-                  <TabPane tab="没有测试" key="no-tests" disabled>
-                    <div style={{ padding: '20px', textAlign: 'center' }}>
-                      没有找到可以生成测试的函数或方法
+                  <TabPane
+                    tab={
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        ❌ 没有测试
+                      </span>
+                    }
+                    key="no-tests"
+                    disabled
+                  >
+                    <div style={{
+                      padding: '3rem',
+                      textAlign: 'center',
+                      color: '#64748b',
+                      background: '#f8fafc',
+                      borderRadius: '12px',
+                      border: '2px dashed #e2e8f0'
+                    }}>
+                      <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🤖</div>
+                      <h3 style={{ color: '#475569', marginBottom: '0.5rem' }}>没有找到可以生成测试的函数或方法</h3>
+                      <p>请确保您的代码包含函数或方法定义</p>
                     </div>
                   </TabPane>
                 )}
               </Tabs>
             </Spin>
-            </Card>
-          </Col>
-        </Row>
+          </div>
+        </div>
+      </div>
 
       {/* GitHub保存模态框 */}
-      <GitHubModal
+      <GitModal
         visible={gitModalVisible}
         onCancel={handleCloseGitModal}
         onSave={handleCloseGitModal}
