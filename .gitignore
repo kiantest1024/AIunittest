@@ -1,0 +1,3 @@
+# Node.js dependencies
+frontend/node_modules/
+backend/app/logs/app.log
