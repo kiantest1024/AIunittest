@@ -1,10 +1,10 @@
-import React, { createContext, useReducer, useContext } from 'react';
+import { createContext, useReducer, useContext } from 'react';
 
 // 初始状态
 const initialState = {
   code: '',
-  language: 'python',
-  model: 'openai_gpt35',
+  language: 'java',
+  model: 'deepseek-V3',
   generatedTests: [],
   loading: false,
   error: null

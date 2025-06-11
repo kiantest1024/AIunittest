@@ -1,6 +1,5 @@
-import React from 'react';
-import { Row, Col, Select, Button, Upload, Tooltip } from 'antd';
-import { UploadOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Select, Button, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -26,18 +25,9 @@ const ControlPanel = ({
   models,
   onLanguageChange,
   onModelChange,
-  onFileUpload,
   onGenerateTests,
-  loading,
-  acceptedFileTypes = {}
+  loading
 }) => {
-  // 获取当前语言的文件扩展名
-  const getAcceptedFileTypes = () => {
-    if (language && acceptedFileTypes[language]) {
-      return acceptedFileTypes[language];
-    }
-    return Object.values(acceptedFileTypes).flat().join(',');
-  };
 
   // 格式化模型名称显示
   const formatModelName = (modelName) => {

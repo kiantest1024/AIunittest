@@ -1,9 +1,18 @@
 from typing import Dict, Any
-from app.services.parsers.python_parser import PythonParser
-from app.services.parsers.java_parser import JavaParser
-from app.services.parsers.go_parser import GoParser
-from app.services.parsers.cpp_parser import CppParser
-from app.services.parsers.csharp_parser import CSharpParser
+
+# 根据运行位置动态调整导入路径
+try:
+    from app.services.parsers.python_parser import PythonParser
+    from app.services.parsers.java_parser import JavaParser
+    from app.services.parsers.go_parser import GoParser
+    from app.services.parsers.cpp_parser import CppParser
+    from app.services.parsers.csharp_parser import CSharpParser
+except ModuleNotFoundError:
+    from services.parsers.python_parser import PythonParser
+    from services.parsers.java_parser import JavaParser
+    from services.parsers.go_parser import GoParser
+    from services.parsers.cpp_parser import CppParser
+    from services.parsers.csharp_parser import CSharpParser
 
 class ParserFactory:
     """代码解析器工厂"""

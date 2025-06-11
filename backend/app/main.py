@@ -33,9 +33,33 @@ async def lifespan(app_instance: FastAPI):
     # 启动事件
     logger.info(f"Starting {settings.APP_NAME} v{settings.APP_VERSION}")
     logger.info(f"App instance: {app_instance.title}")
+
+    # 初始化任务队列
+    try:
+        try:
+            from app.services.task_queue import get_task_queue
+        except ModuleNotFoundError:
+            from services.task_queue import get_task_queue
+        task_queue = get_task_queue()
+        logger.info("Task queue initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize task queue: {e}")
+
     yield
+
     # 关闭事件
     logger.info(f"Shutting down {settings.APP_NAME}")
+
+    # 清理任务队列
+    try:
+        try:
+            from app.services.task_queue import shutdown_task_queue
+        except ModuleNotFoundError:
+            from services.task_queue import shutdown_task_queue
+        shutdown_task_queue()
+        logger.info("Task queue shutdown successfully")
+    except Exception as e:
+        logger.error(f"Error shutting down task queue: {e}")
 
 # 创建FastAPI应用
 app = FastAPI(
@@ -91,5 +115,13 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=8888,
         reload=True,
-        log_level="info"
+        log_level="info",
+        # 优化并发性能
+        workers=1,  # 单进程，使用异步处理
+        loop="asyncio",
+        access_log=True,
+        # 增加连接限制
+        limit_concurrency=100,
+        limit_max_requests=1000,
+        timeout_keep_alive=30
     )

@@ -67,7 +67,7 @@ const GitSourceSelector = ({ onCodeFetched, loading, setLoading }) => {
     if (type === 'token') {
       setTokenError(errorMessage);
     }
-    message.error(errorMessage);
+    message.error(errorMessage, 3);
   };
 
   // 更新缓存统计信息
@@ -471,8 +471,8 @@ const handleLoadRepositories = async () => {
     <Card title={
       <div>
         <span style={{ marginRight: 16 }}>从代码仓库获取代码</span>
-        <Radio.Group 
-          value={gitPlatform} 
+        <Radio.Group
+          value={gitPlatform}
           onChange={(e) => {
             setLoadingType('switch');
             setLoadingMessage('切换平台中...');
@@ -490,11 +490,13 @@ const handleLoadRepositories = async () => {
           }}
           style={{ marginLeft: 8 }}
         >
-          <Radio.Button value="github">
-            <GithubOutlined /> GitHub
+          <Radio.Button value="github" style={{ minWidth: '100px', textAlign: 'center' }}>
+            <GithubOutlined style={{ marginRight: '6px' }} />
+            GitHub
           </Radio.Button>
-          <Radio.Button value="gitlab">
-            <GitlabOutlined /> GitLab
+          <Radio.Button value="gitlab" style={{ minWidth: '100px', textAlign: 'center' }}>
+            <GitlabOutlined style={{ marginRight: '6px' }} />
+            GitLab
           </Radio.Button>
         </Radio.Group>
       </div>
@@ -559,16 +561,15 @@ const handleLoadRepositories = async () => {
           </div>
         )}
       </div>
-      <LoadingIndicator loading={loading} type={loadingType} message={loadingMessage} progress={progress}>
+      <div style={{ marginBottom: 16 }}>
+        {/* 服务器地址输入 */}
         <div style={{ marginBottom: 16 }}>
-          {/* 服务器地址输入 */}
-          <div style={{ marginBottom: 16 }}>
-            <label style={{ display: 'block', marginBottom: 8 }}>
-              {gitPlatform === 'github' ? 'GitHub' : 'GitLab'} 服务器地址:
-              <Tooltip title={`输入自定义服务器地址，留空则使用默认地址 (${gitPlatform === 'github' ? 'github.com' : 'gitlab.com'})`}>
-                <QuestionCircleOutlined style={{ marginLeft: 8 }} />
-              </Tooltip>
-            </label>
+          <label style={{ display: 'block', marginBottom: 8 }}>
+            {gitPlatform === 'github' ? 'GitHub' : 'GitLab'} 服务器地址:
+            <Tooltip title={`输入自定义服务器地址，留空则使用默认地址 (${gitPlatform === 'github' ? 'github.com' : 'gitlab.com'})`}>
+              <QuestionCircleOutlined style={{ marginLeft: 8 }} />
+            </Tooltip>
+          </label>
             <Input
               value={gitPlatform === 'github' ? githubServerUrl : gitlabServerUrl}
               onChange={e => {
@@ -712,6 +713,8 @@ const handleLoadRepositories = async () => {
           {tokenError && <div style={{ color: 'red', marginTop: 8 }}>{tokenError}</div>}
         </div>
 
+        {/* 仓库文件区域 - 包含加载状态 */}
+        <LoadingIndicator loading={loading} type={loadingType} message={loadingMessage} progress={progress}>
         {repositories.length > 0 && (
           <div style={{ marginTop: 24 }}>
             <Divider orientation="left">仓库文件</Divider>
@@ -769,48 +772,49 @@ const handleLoadRepositories = async () => {
             )}
           </div>
         )}
-
-        {loadedFiles.length > 0 && (
-          <div style={{ marginTop: 16 }}>
-            <Divider orientation="left">已加载的文件</Divider>
-            <List
-              size="small"
-              bordered
-              dataSource={[...loadedFiles].sort((a, b) => b.loadedAt - a.loadedAt)}
-              renderItem={file => (
-                <List.Item
-                  key={`${file.platform}-${file.repo}-${file.path}`}
-                  actions={[
-                    <Button
-                      type="link"
-                      size="small"
-                      onClick={async () => {
-                        try {
-                          setGitPlatform(file.platform);
-                          // URL模式下不需要令牌
-                          const token = gitMode === 'token' ? gitToken : '';
-                          const serverUrl = file.platform === 'github' ? githubServerUrl : gitlabServerUrl;
-                          await onCodeFetched(file.platform, file.path, token, file.repo, serverUrl);
-                        } catch (error) {
-                          handleError(error, 'reload');
-                        }
-                      }}
-                    >
-                      重新加载
-                    </Button>
-                  ]}
-                >
-                  <List.Item.Meta
-                    avatar={file.platform === 'github' ? <GithubOutlined /> : <GitlabOutlined />}
-                    title={file.name}
-                    description={`${file.repo} (${file.type || '未知类型'})`}
-                  />
-                </List.Item>
-              )}
-            />
-          </div>
-        )}
       </LoadingIndicator>
+
+      {/* 已加载的文件区域 - 不受加载状态影响 */}
+      {loadedFiles.length > 0 && (
+        <div style={{ marginTop: 16 }}>
+          <Divider orientation="left">已加载的文件</Divider>
+          <List
+            size="small"
+            bordered
+            dataSource={[...loadedFiles].sort((a, b) => b.loadedAt - a.loadedAt)}
+            renderItem={file => (
+              <List.Item
+                key={`${file.platform}-${file.repo}-${file.path}`}
+                actions={[
+                  <Button
+                    type="link"
+                    size="small"
+                    onClick={async () => {
+                      try {
+                        setGitPlatform(file.platform);
+                        // URL模式下不需要令牌
+                        const token = gitMode === 'token' ? gitToken : '';
+                        const serverUrl = file.platform === 'github' ? githubServerUrl : gitlabServerUrl;
+                        await onCodeFetched(file.platform, file.path, token, file.repo, serverUrl);
+                      } catch (error) {
+                        handleError(error, 'reload');
+                      }
+                    }}
+                  >
+                    重新加载
+                  </Button>
+                ]}
+              >
+                <List.Item.Meta
+                  avatar={file.platform === 'github' ? <GithubOutlined /> : <GitlabOutlined />}
+                  title={file.name}
+                  description={`${file.repo} (${file.type || '未知类型'})`}
+                />
+              </List.Item>
+            )}
+          />
+        </div>
+      )}
     </Card>
   );
 };

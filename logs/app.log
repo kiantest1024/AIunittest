@@ -45,3 +45,96 @@
 2025-06-10 11:32:58,743 - ai_test_generator - INFO - GitLab service initialized successfully for http://172.16.1.30
 2025-06-10 11:32:58,744 - ai_test_generator - INFO - Parsing project path from: kian/backend-lotto-game
 2025-06-10 11:32:58,744 - ai_test_generator - INFO - Using full_name format: kian/backend-lotto-game
+2025-06-10 17:37:44,149 - ai_test_generator - INFO - Serving frontend from: D:\Personal\Script\GE\AIuintCode\frontend\build
+2025-06-10 17:37:44,257 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-06-10 17:37:44,258 - ai_test_generator - INFO - App instance: AI单元测试生成工具
+2025-06-11 08:41:52,364 - ai_test_generator - INFO - Directly generating tests for language: java, model: deepseek-V3
+2025-06-11 08:41:52,364 - ai_test_generator - INFO - Code length: 10046 characters
+2025-06-11 08:41:52,365 - ai_test_generator - INFO - Code preview: package com.login.view;
+
+import com.login.model.User;
+import com.login.service.UserService;
+
+import ...
+2025-06-11 08:41:52,377 - ai_test_generator - INFO - 解析到 12 个代码片段
+2025-06-11 08:41:52,377 - ai_test_generator - INFO - 代码片段 1: initializeComponents (method)
+2025-06-11 08:41:52,377 - ai_test_generator - INFO - 代码片段预览:     private void initializeComponents() {
+        usernameField = new JTextField(20);
+        passwo...
+2025-06-11 08:41:52,378 - ai_test_generator - INFO - 代码片段 2: setupLayout (method)
+2025-06-11 08:41:52,378 - ai_test_generator - INFO - 代码片段预览:     private void setupLayout() {
+        setLayout(new BorderLayout());
+        
+        // Title pa...
+2025-06-11 08:41:52,379 - ai_test_generator - INFO - 代码片段 3: setupEventListeners (method)
+2025-06-11 08:41:52,379 - ai_test_generator - INFO - 代码片段预览:     private void setupEventListeners() {
+        loginButton.addActionListener(new ActionListener() ...
+2025-06-11 08:41:52,380 - ai_test_generator - INFO - 代码片段 4: switchMode (method)
+2025-06-11 08:41:52,380 - ai_test_generator - INFO - 代码片段预览:     private void switchMode() {
+        isLoginMode = !isLoginMode;
+        
+        if (isLoginMode...
+2025-06-11 08:41:52,381 - ai_test_generator - INFO - 代码片段 5: showEmailField (method)
+2025-06-11 08:41:52,381 - ai_test_generator - INFO - 代码片段预览:     private void showEmailField() {
+        Component[] components = ((JPanel) getContentPane().getC...
+2025-06-11 08:41:52,381 - ai_test_generator - INFO - 代码片段 6: hideEmailField (method)
+2025-06-11 08:41:52,381 - ai_test_generator - INFO - 代码片段预览:     private void hideEmailField() {
+        Component[] components = ((JPanel) getContentPane().getC...
+2025-06-11 08:41:52,382 - ai_test_generator - INFO - 代码片段 7: performLogin (method)
+2025-06-11 08:41:52,382 - ai_test_generator - INFO - 代码片段预览:     private void performLogin() {
+        String username = usernameField.getText().trim();
+        ...
+2025-06-11 08:41:52,382 - ai_test_generator - INFO - 代码片段 8: performRegistration (method)
+2025-06-11 08:41:52,382 - ai_test_generator - INFO - 代码片段预览:     private void performRegistration() {
+        String username = usernameField.getText().trim();
+ ...
+2025-06-11 08:41:52,383 - ai_test_generator - INFO - 代码片段 9: showMainWindow (method)
+2025-06-11 08:41:52,383 - ai_test_generator - INFO - 代码片段预览:     private void showMainWindow(User user) {
+        // Create a simple welcome window
+        JFram...
+2025-06-11 08:41:52,384 - ai_test_generator - INFO - 代码片段 10: showStatus (method)
+2025-06-11 08:41:52,386 - ai_test_generator - INFO - 代码片段预览:     private void showStatus(String message, Color color) {
+        statusLabel.setText(message);
+   ...
+2025-06-11 08:41:52,386 - ai_test_generator - INFO - 代码片段 11: clearStatus (method)
+2025-06-11 08:41:52,387 - ai_test_generator - INFO - 代码片段预览:     private void clearStatus() {
+        statusLabel.setText(" ");
+    }...
+2025-06-11 08:41:52,389 - ai_test_generator - INFO - 代码片段 12: clearFields (method)
+2025-06-11 08:41:52,390 - ai_test_generator - INFO - 代码片段预览:     private void clearFields() {
+        usernameField.setText("");
+        passwordField.setText(""...
+2025-06-11 08:41:52,390 - ai_test_generator - INFO - 为 initializeComponents 生成测试
+2025-06-11 08:43:13,540 - ai_test_generator - INFO - Generated valid test code for initializeComponents on attempt 1
+2025-06-11 08:43:13,540 - ai_test_generator - INFO - 成功生成测试: initializeComponents
+2025-06-11 08:43:13,541 - ai_test_generator - INFO - 为 setupLayout 生成测试
+2025-06-11 08:44:46,035 - ai_test_generator - INFO - Generated valid test code for setupLayout on attempt 1
+2025-06-11 08:44:46,035 - ai_test_generator - INFO - 成功生成测试: setupLayout
+2025-06-11 08:44:46,035 - ai_test_generator - INFO - 为 setupEventListeners 生成测试
+2025-06-11 08:45:57,734 - ai_test_generator - INFO - Generated valid test code for setupEventListeners on attempt 1
+2025-06-11 08:45:57,734 - ai_test_generator - INFO - 成功生成测试: setupEventListeners
+2025-06-11 08:45:57,735 - ai_test_generator - INFO - 为 switchMode 生成测试
+2025-06-11 08:47:15,197 - ai_test_generator - INFO - Generated valid test code for switchMode on attempt 1
+2025-06-11 08:47:15,197 - ai_test_generator - INFO - 成功生成测试: switchMode
+2025-06-11 08:47:15,198 - ai_test_generator - INFO - 为 showEmailField 生成测试
+2025-06-11 08:48:37,887 - ai_test_generator - INFO - Generated valid test code for showEmailField on attempt 1
+2025-06-11 08:48:37,887 - ai_test_generator - INFO - 成功生成测试: showEmailField
+2025-06-11 08:48:37,887 - ai_test_generator - INFO - 为 hideEmailField 生成测试
+2025-06-11 08:50:21,476 - ai_test_generator - INFO - Generated valid test code for hideEmailField on attempt 1
+2025-06-11 08:50:21,476 - ai_test_generator - INFO - 成功生成测试: hideEmailField
+2025-06-11 08:50:21,476 - ai_test_generator - INFO - 为 performLogin 生成测试
+2025-06-11 08:52:08,716 - ai_test_generator - INFO - Generated valid test code for performLogin on attempt 1
+2025-06-11 08:52:08,717 - ai_test_generator - INFO - 成功生成测试: performLogin
+2025-06-11 08:52:08,717 - ai_test_generator - INFO - 为 performRegistration 生成测试
+2025-06-11 08:54:01,590 - ai_test_generator - INFO - Generated valid test code for performRegistration on attempt 1
+2025-06-11 08:54:01,590 - ai_test_generator - INFO - 成功生成测试: performRegistration
+2025-06-11 08:54:01,591 - ai_test_generator - INFO - 为 showMainWindow 生成测试
+2025-06-11 08:55:49,364 - ai_test_generator - INFO - Generated valid test code for showMainWindow on attempt 1
+2025-06-11 08:55:49,364 - ai_test_generator - INFO - 成功生成测试: showMainWindow
+2025-06-11 08:55:49,365 - ai_test_generator - INFO - 为 showStatus 生成测试
+2025-06-11 08:57:26,918 - ai_test_generator - INFO - Generated valid test code for showStatus on attempt 1
+2025-06-11 08:57:26,918 - ai_test_generator - INFO - 成功生成测试: showStatus
+2025-06-11 08:57:26,918 - ai_test_generator - INFO - 为 clearStatus 生成测试
+2025-06-11 08:59:03,995 - ai_test_generator - INFO - Generated valid test code for clearStatus on attempt 1
+2025-06-11 08:59:03,995 - ai_test_generator - INFO - 成功生成测试: clearStatus
+2025-06-11 08:59:03,995 - ai_test_generator - INFO - 为 clearFields 生成测试

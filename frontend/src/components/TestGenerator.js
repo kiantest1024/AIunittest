@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, Button, message, Tabs, Spin, Row, Col, Progress, Alert } from 'antd';
-import { SaveOutlined, CopyOutlined, GithubOutlined, CodeOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Card, Button, message, Tabs, Spin, Row, Col, Progress, Alert, Modal } from 'antd';
+import { SaveOutlined, CopyOutlined, GithubOutlined, CodeOutlined, LoadingOutlined, CloseOutlined, EyeOutlined } from '@ant-design/icons';
 import GitModal from './GitModal';
 import CodeEditor from './CodeEditor';
 import ControlPanel from './ControlPanel';
 import GitSourceSelector from './GitSourceSelector';
-import { generateTests, generateTestsStream, generateTestsDirect, uploadFile, getLanguages, getModels, getFileContent } from '../services/api';
+import QueueStatus from './QueueStatus';
+import { generateTests, generateTestsStream, generateTestsDirect, uploadFile, getLanguages, getModels, getFileContent, cancelTask } from '../services/api';
 import { useAppContext, ActionTypes } from '../context/AppContext';
+import './TestGenerator.css';
 
 const { TabPane } = Tabs;
 
@@ -53,6 +55,14 @@ const TestGenerator = () => {
     provider: 'github' // 添加 provider 字段
   });
 
+  // 全屏进度显示状态
+  const [fullScreenProgress, setFullScreenProgress] = useState(false);
+  const [backgroundGeneration, setBackgroundGeneration] = useState(false);
+
+  // 任务管理状态
+  const [currentTaskId, setCurrentTaskId] = useState(null); // 当前任务ID
+  const [cancellingTask, setCancellingTask] = useState(false); // 取消任务状态
+
   // 加载支持的语言和模型
   useEffect(() => {
     const fetchData = async () => {
@@ -66,7 +76,7 @@ const TestGenerator = () => {
         setModels(modelsData);
       } catch (error) {
         console.error('Error loading languages and models:', error);
-        message.error('Failed to load languages and models');
+        message.error('Failed to load languages and models', 3);
       }
     };
 
@@ -123,7 +133,7 @@ const TestGenerator = () => {
       }
 
       if (!fileLanguage) {
-        message.error('不支持的文件类型！');
+        message.error('不支持的文件类型！', 3);
         return false;
       }
 
@@ -137,11 +147,11 @@ const TestGenerator = () => {
         const response = await uploadFile(formData);
         dispatch({ type: ActionTypes.SET_CODE, payload: response.content });
         dispatch({ type: ActionTypes.SET_LANGUAGE, payload: response.language || fileLanguage });
-        message.success('文件上传成功！');
+        message.success('文件上传成功！', 3);
       } catch (error) {
         console.error('Error uploading file:', error);
         dispatch({ type: ActionTypes.SET_ERROR, payload: error.message });
-        message.error('文件上传失败: ' + (error.response?.data?.detail || error.message));
+        message.error('文件上传失败: ' + (error.response?.data?.detail || error.message), 3);
       } finally {
         dispatch({ type: ActionTypes.SET_LOADING, payload: false });
       }
@@ -149,7 +159,7 @@ const TestGenerator = () => {
       return false; // 阻止自动上传
     } catch (error) {
       console.error('Error handling file upload:', error);
-      message.error('文件上传处理失败');
+      message.error('文件上传处理失败', 3);
       return false;
     }
   }, [dispatch]);
@@ -202,12 +212,12 @@ const TestGenerator = () => {
         path: dirPath
       });
 
-      message.success('代码获取成功！');
+      message.success('代码获取成功！', 3);
       setActiveTabKey('code');
     } catch (error) {
       console.error('Error fetching code:', error);
       dispatch({ type: ActionTypes.SET_ERROR, payload: error.message });
-      message.error('获取代码失败: ' + (error.response?.data?.detail || error.message));
+      message.error('获取代码失败: ' + (error.response?.data?.detail || error.message), 3);
     } finally {
       dispatch({ type: ActionTypes.SET_LOADING, payload: false });
     }
@@ -216,7 +226,7 @@ const TestGenerator = () => {
   // 流式生成测试
   const handleStreamGenerateTests = useCallback(async () => {
     if (!code.trim()) {
-      message.error('请先输入或上传代码！');
+      message.error('请先输入或上传代码！', 3);
       return;
     }
 
@@ -224,14 +234,26 @@ const TestGenerator = () => {
     setStreamingTests([]);
     setStreamProgress(0);
     setIsStreaming(true);
+    setGenerationProgress(5); // 立即设置初始进度
+    setTotalSnippets(0);
+    setCurrentSnippet('正在准备生成单元测试用例...');
+    setGenerationStartTime(new Date());
+
+    // 显示全屏进度
+    setFullScreenProgress(true);
+
     dispatch({ type: ActionTypes.SET_LOADING, payload: true });
     dispatch({ type: ActionTypes.SET_GENERATED_TESTS, payload: [] });
 
     try {
-      message.info({
-        content: '正在生成测试用例，这可能需要几分钟时间...',
-        duration: 3
-      });
+      message.info('正在生成单元测试用例，这可能需要几分钟时间...', 3);
+
+      // 估算代码中的函数/方法数量
+      const functionMatches = code.match(/\b(function|def|class|method|func|public\s+\w+|private\s+\w+|protected\s+\w+)\b/g);
+      const estimatedSnippets = functionMatches ? functionMatches.length : 1;
+      setTotalSnippets(estimatedSnippets);
+      setCurrentSnippet('正在解析代码...');
+      setGenerationProgress(5);
 
       // 创建一个临时数组来存储流式生成的测试
       let tempTests = [];
@@ -250,7 +272,7 @@ const TestGenerator = () => {
             // 处理错误消息
             if (result.error) {
               console.error('Error in test generation stream:', result.error);
-              message.error('生成测试时出错: ' + result.error);
+              message.error('生成单元测试用例时出错: ' + result.error, 3);
               return;
             }
 
@@ -258,23 +280,49 @@ const TestGenerator = () => {
             if (result.status) {
               console.log(`Stream status: ${result.status}, message: ${result.message}`);
 
+              // 更新进度
+              if (result.progress !== undefined) {
+                setGenerationProgress(result.progress);
+              }
+
               if (result.status === 'started') {
-                message.info(result.message || '开始生成测试用例');
+                setCurrentSnippet('开始生成单元测试用例...');
+                message.info(result.message || '开始生成单元测试用例', 3);
+                return;
+              }
+
+              if (result.status === 'parsing_completed') {
+                setCurrentSnippet(`代码解析完成，找到 ${result.total_snippets || 0} 个代码片段`);
+                if (result.total_snippets) {
+                  setTotalSnippets(result.total_snippets);
+                }
+                return;
+              }
+
+              if (result.status === 'generating') {
+                setCurrentSnippet(result.message || `正在为 ${result.current_snippet} 生成单元测试用例`);
+                if (result.completed !== undefined && result.total !== undefined) {
+                  setStreamProgress(result.completed);
+                }
                 return;
               }
 
               if (result.status === 'completed') {
-                message.success(result.message || '测试生成完成');
+                setCurrentSnippet('测试生成完成');
+                setGenerationProgress(100);
+                message.success(result.message || '测试生成完成', 3);
                 return;
               }
 
               if (result.status === 'warning') {
-                message.warning(result.message || '生成测试时出现警告');
+                setCurrentSnippet('生成单元测试用例时出现警告');
+                message.warning(result.message || '生成单元测试用例时出现警告', 3);
                 return;
               }
 
               if (result.status === 'error') {
-                message.error(result.message || '生成测试时出错');
+                setCurrentSnippet('生成单元测试用例时出错');
+                message.error(result.message || '生成单元测试用例时出错', 3);
                 return;
               }
 
@@ -282,43 +330,7 @@ const TestGenerator = () => {
               return;
             }
 
-            // 处理不同类型的消息
-            if (result.status) {
-              console.log(`Received status message: ${result.status}, message: ${result.message}`);
-
-              // 如果是警告消息，但我们已经有测试，则忽略它
-              if (result.status === 'warning' && tempTests.length > 0) {
-                console.log('Ignoring warning message because we already have tests:', tempTests.length);
-                return;
-              }
-
-              // 如果是完成消息
-              if (result.status === 'completed') {
-                console.log('Test generation completed with message:', result.message);
-
-                // 如果有测试计数
-                if (result.test_count && result.test_count > 0) {
-                  console.log(`Completed with ${result.test_count} tests`);
-
-                  // 如果我们的临时数组为空但后端报告有测试，显示错误
-                  if (tempTests.length === 0) {
-                    console.error('Backend reported tests but frontend has none!');
-                    message.error('后端生成了测试，但前端未能接收。请检查控制台日志。');
-                  } else {
-                    // 更新全局状态
-                    dispatch({ type: ActionTypes.SET_GENERATED_TESTS, payload: tempTests });
-                    message.success(`测试生成成功！共生成 ${result.test_count} 个测试用例`);
-                  }
-                } else {
-                  console.log('Completed but no tests were generated');
-                  message.warning('没有找到可以生成测试的函数或方法。');
-                }
-                return;
-              }
-
-              // 如果是其他状态消息，直接返回
-              return;
-            }
+            // 这里已经在上面处理了状态消息，不需要重复处理
 
             // 验证结果包含必要的字段
             if (!result.name || !result.test_code) {
@@ -329,7 +341,7 @@ const TestGenerator = () => {
             // 如果有成功标志，记录它
             if (result.success) {
               console.log(`Successfully generated test for ${result.name}: ${result.message}`);
-              message.success(result.message || `生成测试: ${result.name}`, 1);
+              message.success(result.message || `生成单元测试用例: ${result.name}`, 3);
             }
 
             console.log(`Received test for ${result.name} with code length: ${result.test_code.length}`);
@@ -358,98 +370,101 @@ const TestGenerator = () => {
               tempTests = [...tempTests, newTest];
             }
 
-            // 更新状态
+            // 立即更新全局状态，让新测试立即显示
+            console.log('Updating global state with tempTests:', tempTests);
             setStreamingTests(tempTests);
+
+            // 使用setTimeout确保状态更新不被React批量处理延迟
+            setTimeout(() => {
+              dispatch({ type: ActionTypes.SET_GENERATED_TESTS, payload: [...tempTests] });
+              console.log('Global state updated, tempTests length:', tempTests.length);
+            }, 0);
 
             // 更新进度
             setStreamProgress(tempTests.length);
 
-            // 更新全局状态
-            console.log('Updating global state with tests:', tempTests);
-            dispatch({ type: ActionTypes.SET_GENERATED_TESTS, payload: [...tempTests] });
-
-            // 检查全局状态是否更新
-            setTimeout(() => {
-              console.log('Current generatedTests in state:', state.generatedTests);
-            }, 100);
-
-            // 如果这是第一个测试，切换到测试标签
-            if (tempTests.length === 1) {
-              console.log('Switching to test tab: test-0');
-              // 使用延迟切换，确保状态已更新
-              setTimeout(() => {
-                setActiveTabKey('test-0');
-                console.log('Tab switched to test-0');
-              }, 500);
+            // 使用后端提供的进度信息，如果没有则使用估算
+            if (result.progress !== undefined) {
+              setGenerationProgress(result.progress);
+            } else {
+              const progressPercent = Math.min(95, 20 + (tempTests.length / Math.max(estimatedSnippets, 1)) * 75);
+              setGenerationProgress(progressPercent);
             }
 
-            // 显示成功消息
-            message.success(`已生成测试: ${result.name}`, 1);
+            // 使用后端提供的进度信息更新当前状态
+            if (result.completed !== undefined && result.total !== undefined) {
+              setCurrentSnippet(`已生成单元测试用例: ${result.name} (${result.completed}/${result.total})`);
+            } else {
+              setCurrentSnippet(`已生成单元测试用例: ${result.name} (${tempTests.length}/${estimatedSnippets})`);
+            }
+
+            // 如果这是第一个测试，自动切换到测试标签页
+            if (tempTests.length === 1) {
+              setTimeout(() => {
+                setActiveTabKey('test-0');
+                console.log('Auto-switched to first test tab');
+              }, 100);
+            }
+
+            // 显示成功消息（避免重复显示）
+            if (!result.success) {
+              message.success(`已生成单元测试用例: ${result.name}`, 3);
+            }
           } catch (e) {
             console.error('Error processing test result:', e);
           }
+        }, (taskId) => {
+          // 任务ID回调
+          console.log('Received task ID:', taskId);
+          setCurrentTaskId(taskId);
         });
       } catch (streamError) {
         console.error('Error in stream processing:', streamError);
-        message.error('流式生成测试失败: ' + streamError.message);
+        message.error('流式生成单元测试用例失败: ' + streamError.message, 3);
       }
 
       // 确保最终状态更新
       console.log('Stream completed, tempTests:', tempTests);
 
+      // 最终状态已经在每个测试生成时更新了，这里只需要显示完成消息
       if (tempTests.length > 0) {
-        console.log('Final update of global state with tests:', tempTests);
-        // 使用延迟更新，确保所有流式响应都已处理
-        setTimeout(() => {
-          // 强制创建一个新数组，确保状态更新
-          const finalTests = [...tempTests];
-          console.log('Dispatching final tests:', finalTests);
-
-          dispatch({ type: ActionTypes.SET_GENERATED_TESTS, payload: finalTests });
-          message.success(`测试生成成功！共生成 ${finalTests.length} 个测试用例`);
-
-          // 如果有测试，切换到第一个测试标签
-          setActiveTabKey(`test-0`);
-          console.log('Switched to first test tab');
-
-          // 再次检查状态是否更新
-          setTimeout(() => {
-            console.log('Final check of generatedTests:', state.generatedTests);
-
-            // 如果状态仍然没有更新，尝试再次更新
-            if (!state.generatedTests || state.generatedTests.length === 0) {
-              console.log('State still not updated, trying again');
-              dispatch({ type: ActionTypes.SET_GENERATED_TESTS, payload: finalTests });
-            }
-          }, 1000);
-        }, 500);
+        console.log('Stream generation completed with tests:', tempTests.length);
+        message.success(`单元测试用例生成成功！共生成 ${tempTests.length} 个测试用例`, 3);
       } else {
         console.log('No tests were generated');
-        message.warning('没有找到可以生成测试的函数或方法。');
+        message.warning('没有找到可以生成单元测试用例的函数或方法。', 3);
       }
     } catch (error) {
       console.error('生成测试时出错:', error);
       dispatch({ type: ActionTypes.SET_ERROR, payload: error.message });
       const errorMsg = error.response?.data?.detail || error.message;
-      message.error('生成测试失败: ' + errorMsg);
+      message.error('生成测试失败: ' + errorMsg, 3);
 
       // 检查是否是API密钥错误
       if (errorMsg.includes('API key') || errorMsg.includes('Authentication') || errorMsg.includes('auth header')) {
-        message.warning({
-          content: '请确保您已在后端设置了有效的API密钥。请查看.env文件或环境变量。',
-          duration: 10
-        });
+        message.warning('请确保您已在后端设置了有效的API密钥。请查看.env文件或环境变量。', 10);
       }
     } finally {
       setIsStreaming(false);
+      setGenerationProgress(100);
+
+      // 关闭全屏进度
+      setFullScreenProgress(false);
+
+      // 使用当前的generatedTests状态而不是streamingTests
+      const currentTests = state.generatedTests || [];
+      setCurrentSnippet(currentTests.length > 0 ? '生成完成' : '未找到可测试的代码');
       dispatch({ type: ActionTypes.SET_LOADING, payload: false });
+
+      // 确保最终状态正确
+      console.log('Stream generation finally block - current tests:', currentTests.length);
     }
   }, [code, language, model, dispatch, setActiveTabKey]);
 
   // 使用直接 API 生成测试
   const handleDirectGenerateTests = useCallback(async () => {
     if (!code.trim()) {
-      message.error('请先输入或上传代码！');
+      message.error('请先输入或上传代码！', 3);
       return;
     }
 
@@ -462,10 +477,7 @@ const TestGenerator = () => {
     dispatch({ type: ActionTypes.SET_LOADING, payload: true });
 
     try {
-      message.info({
-        content: '正在生成测试用例，这可能需要几分钟时间...',
-        duration: 3
-      });
+      message.info('正在生成单元测试用例，这可能需要几分钟时间...', 3);
 
       // 使用正则表达式粗略估计代码中的函数/方法数量
       const functionMatches = code.match(/\b(function|def|class|method|func)\b/g);
@@ -493,7 +505,7 @@ const TestGenerator = () => {
             if (newProgress > 10 && newProgress <= 30) {
               setCurrentSnippet('正在分析代码结构...');
             } else if (newProgress > 30 && newProgress <= 60) {
-              setCurrentSnippet('正在生成测试用例...');
+              setCurrentSnippet('正在生成单元测试用例...');
             } else if (newProgress > 60 && newProgress < 95) {
               setCurrentSnippet('正在优化测试代码...');
             }
@@ -533,7 +545,7 @@ const TestGenerator = () => {
 
         // 显示成功消息
         const testCount = testsData.length;
-        message.success(result.message || `成功生成 ${testCount} 个测试用例`);
+        message.success(result.message || `成功生成 ${testCount} 个单元测试用例`, 3);
 
         // 切换到第一个测试标签
         setActiveTabKey('test-0');
@@ -544,7 +556,7 @@ const TestGenerator = () => {
         setCurrentSnippet('未找到可测试的代码');
 
         // 显示警告消息
-        message.warning(result.message || '没有找到可以生成测试的函数或方法');
+        message.warning(result.message || '没有找到可以生成单元测试用例的函数或方法', 3);
       }
     } catch (error) {
       console.error('生成测试时出错:', error);
@@ -556,17 +568,17 @@ const TestGenerator = () => {
 
       // 检查是否是超时错误
       if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
-        message.error('生成测试超时，DeepSeek-R1 模型可能需要更长时间。请尝试使用其他模型或稍后再试。');
+        message.error('生成单元测试用例超时，DeepSeek-R1 模型可能需要更长时间。请尝试使用其他模型或稍后再试。', 3);
       } else if (error.response) {
         // 服务器返回了错误状态码
         const errorMsg = error.response.data?.detail || error.response.data?.message || error.message;
-        message.error('生成测试失败: ' + errorMsg);
+        message.error('生成单元测试用例失败: ' + errorMsg, 3);
       } else if (error.request) {
         // 请求已发送但没有收到响应
-        message.error('服务器没有响应，请检查网络连接或稍后再试。');
+        message.error('服务器没有响应，请检查网络连接或稍后再试。', 3);
       } else {
         // 其他错误
-        message.error('生成测试失败: ' + error.message);
+        message.error('生成单元测试用例失败: ' + error.message, 3);
       }
     } finally {
       // 保持进度状态，但停止加载动画
@@ -574,17 +586,17 @@ const TestGenerator = () => {
     }
   }, [code, language, model, dispatch, setActiveTabKey]);
 
-  // 生成测试 (使用直接 API 替代流式生成)
+  // 生成测试 (使用流式生成替代直接生成)
   const handleGenerateTests = useCallback(async () => {
-    // 使用直接 API 生成测试
-    await handleDirectGenerateTests();
-  }, [handleDirectGenerateTests]);
+    // 使用流式生成测试，提供实时进度
+    await handleStreamGenerateTests();
+  }, [handleStreamGenerateTests]);
 
   // 复制测试代码
   const handleCopyTest = (testCode) => {
     navigator.clipboard.writeText(testCode)
-      .then(() => message.success('Test code copied to clipboard!'))
-      .catch(() => message.error('Failed to copy test code'));
+      .then(() => message.success('Test code copied to clipboard!', 3))
+      .catch(() => message.error('Failed to copy test code', 3));
   };
 
   // 打开Git保存模态框
@@ -596,6 +608,33 @@ const TestGenerator = () => {
   const handleCloseGitModal = () => {
     setGitModalVisible(false);
   };
+
+  // 取消任务
+  const handleCancelTask = useCallback(async () => {
+    if (!currentTaskId) {
+      console.warn('No current task ID to cancel');
+      return;
+    }
+
+    setCancellingTask(true);
+    try {
+      console.log('Cancelling task:', currentTaskId);
+      await cancelTask(currentTaskId);
+
+      // 重置状态
+      setIsStreaming(false);
+      setFullScreenProgress(false);
+      setCurrentTaskId(null);
+      dispatch({ type: ActionTypes.SET_LOADING, payload: false });
+
+      message.success('任务已取消', 3);
+    } catch (error) {
+      console.error('Error cancelling task:', error);
+      message.error('取消任务失败: ' + error.message, 3);
+    } finally {
+      setCancellingTask(false);
+    }
+  }, [currentTaskId, dispatch]);
 
   // 保存到本地
   const handleSaveToLocal = (testCode, testName) => {
@@ -614,11 +653,11 @@ const TestGenerator = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    message.success('Test saved to local file!');
+    message.success('Test saved to local file!', 3);
   };
 
   return (
-    <div className="test-generator">
+    <div className="test-generator test-generator-container">
       {/* 现代化内容网格 */}
       <div className="content-grid">
         {/* 左侧面板 - Git源码选择 */}
@@ -684,24 +723,21 @@ const TestGenerator = () => {
           />
 
           {/* 现代化代码区域 */}
-          <div className="monaco-editor-container" style={{ marginTop: '1rem' }}>
-            <Spin spinning={loading} tip={isStreaming ? "正在生成测试用例，请耐心等待..." : "加载中..."}>
-              {/* 流式生成进度显示 */}
-              {isStreaming && streamProgress > 0 && (
-                <Alert
-                  message="测试生成进行中"
-                  description={`已生成 ${streamProgress} 个测试用例`}
-                  type="info"
-                  showIcon
-                  style={{ marginBottom: 16, borderRadius: '12px' }}
-                />
-              )}
-
-              {/* 直接生成进度条 */}
-              {loading && !isStreaming && generationProgress > 0 && (
+          <div className="monaco-editor-container" style={{
+            marginTop: '1rem',
+            width: '100%',
+            maxWidth: '100%',
+            overflow: 'hidden',
+            boxSizing: 'border-box'
+          }}>
+            <Spin spinning={loading} tip={isStreaming ? "正在生成单元测试用例，请耐心等待..." : "加载中..."}>
+              {/* 统一的进度显示 */}
+              {loading && (isStreaming || generationProgress > 0) && (
                 <div style={{ marginBottom: 16 }}>
                   <div style={{ marginBottom: 8 }}>
-                    <span style={{ fontWeight: 'bold' }}>测试生成进度：</span>
+                    <span style={{ fontWeight: 'bold' }}>
+                      {isStreaming ? '流式生成进度：' : '单元测试用例生成进度：'}
+                    </span>
                     <span>{currentSnippet}</span>
                     {elapsedTime > 0 && (
                       <span style={{ float: 'right' }}>
@@ -711,25 +747,59 @@ const TestGenerator = () => {
                   </div>
                   <Progress
                     percent={Math.round(generationProgress)}
-                    status={generationProgress >= 100 ? (currentSnippet === '生成失败' ? 'exception' : 'success') : 'active'}
+                    status={generationProgress >= 100 ? (currentSnippet.includes('失败') ? 'exception' : 'success') : 'active'}
                     strokeColor={{
                       '0%': '#4ade80',
                       '100%': '#06b6d4',
                     }}
                   />
+                  {isStreaming && streamProgress > 0 && (
+                    <div style={{
+                      marginTop: 8,
+                      padding: '8px 16px',
+                      background: 'rgba(24, 144, 255, 0.1)',
+                      borderRadius: '6px',
+                      border: '1px solid rgba(24, 144, 255, 0.2)',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center'
+                    }}>
+                      <span style={{ fontSize: '14px', color: '#1890ff', fontWeight: '500' }}>
+                        📊 生成进度统计
+                      </span>
+                      <span style={{ fontSize: '14px', color: '#666', fontWeight: 'bold' }}>
+                        已生成 {streamProgress} 个测试用例
+                        {totalSnippets > 0 && ` / 预计 ${totalSnippets} 个`}
+                      </span>
+                    </div>
+                  )}
                 </div>
               )}
 
               <Tabs
                 activeKey={activeTabKey}
                 onChange={setActiveTabKey}
-                style={{ marginTop: '50px' }}
+                type="editable-card"
+                hideAdd={true}
+                tabPosition="top"
+                style={{
+                  marginTop: '50px',
+                  width: '100%',
+                  maxWidth: '100%',
+                  overflow: 'hidden',
+                  boxSizing: 'border-box'
+                }}
                 tabBarStyle={{
                   background: 'rgba(255, 255, 255, 0.1)',
                   borderRadius: '12px 12px 0 0',
                   margin: 0,
-                  padding: '0 20px'
+                  padding: '0 20px',
+                  overflow: 'auto',
+                  whiteSpace: 'nowrap',
+                  scrollbarWidth: 'thin'
                 }}
+                tabBarGutter={8}
+                size="small"
               >
                 <TabPane
                   tab={
@@ -757,8 +827,19 @@ const TestGenerator = () => {
                     return (
                       <TabPane
                         tab={
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            🧪 测试: {test.name}
+                          <span
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.3rem',
+                              maxWidth: '150px',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap'
+                            }}
+                            title={`测试: ${test.name}`}
+                          >
+                            🧪 {test.name.length > 12 ? test.name.substring(0, 12) + '...' : test.name}
                           </span>
                         }
                         key={`test-${index}`}
@@ -789,7 +870,14 @@ const TestGenerator = () => {
                               </Button>
                             </div>
                           }
-                          style={{ border: 'none', boxShadow: 'none' }}
+                          style={{
+                            border: 'none',
+                            boxShadow: 'none',
+                            width: '100%',
+                            maxWidth: '100%',
+                            overflow: 'hidden',
+                            boxSizing: 'border-box'
+                          }}
                         >
                           <CodeEditor
                             code={test.test_code}
@@ -832,6 +920,147 @@ const TestGenerator = () => {
         </div>
       </div>
 
+      {/* 全屏进度显示 */}
+      <Modal
+        title={null}
+        open={fullScreenProgress}
+        footer={null}
+        closable={false}
+        width="90%"
+        style={{ top: 20 }}
+        bodyStyle={{
+          padding: '40px',
+          minHeight: '500px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          borderRadius: '12px'
+        }}
+      >
+        <div style={{ textAlign: 'center', width: '100%', maxWidth: '600px' }}>
+          {/* 标题 */}
+          <div style={{ marginBottom: '30px' }}>
+            <h2 style={{ color: 'white', fontSize: '28px', marginBottom: '10px' }}>
+              🤖 AI正在生成单元测试用例
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '16px' }}>
+              请耐心等待，每个测试用例生成后会立即显示
+            </p>
+          </div>
+
+          {/* 进度条 */}
+          <div style={{ marginBottom: '30px' }}>
+            <Progress
+              percent={Math.round(generationProgress)}
+              strokeColor={{
+                '0%': '#108ee9',
+                '100%': '#87d068',
+              }}
+              trailColor="rgba(255,255,255,0.3)"
+              strokeWidth={8}
+              format={(percent) => (
+                <span style={{ color: 'white', fontSize: '18px', fontWeight: 'bold' }}>
+                  {percent}%
+                </span>
+              )}
+            />
+          </div>
+
+          {/* 状态信息 */}
+          <div style={{ marginBottom: '30px' }}>
+            <p style={{ color: 'white', fontSize: '16px', marginBottom: '10px' }}>
+              {currentSnippet || '正在准备生成单元测试用例...'}
+            </p>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px' }}>
+              已生成: {streamProgress} / {totalSnippets > 0 ? totalSnippets : '?'} 个测试
+            </p>
+            {elapsedTime > 0 && (
+              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px' }}>
+                已用时: {Math.floor(elapsedTime / 60)}分{elapsedTime % 60}秒
+              </p>
+            )}
+          </div>
+
+          {/* 操作按钮 */}
+          <div style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
+            <Button
+              type="default"
+              icon={<EyeOutlined />}
+              onClick={() => {
+                setBackgroundGeneration(true);
+                setFullScreenProgress(false);
+              }}
+              style={{
+                background: 'rgba(255,255,255,0.2)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                color: 'white'
+              }}
+            >
+              后台生成
+            </Button>
+            <Button
+              type="primary"
+              danger
+              icon={<CloseOutlined />}
+              loading={cancellingTask}
+              onClick={handleCancelTask}
+            >
+              {cancellingTask ? '正在取消...' : '取消生成'}
+            </Button>
+          </div>
+
+          {/* 提示信息 */}
+          <div style={{ marginTop: '30px', padding: '20px', background: 'rgba(255,255,255,0.1)', borderRadius: '8px' }}>
+            <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px', margin: 0 }}>
+              💡 提示：您可以点击"后台生成"继续使用其他功能，生成的测试会实时显示在测试标签页中
+            </p>
+          </div>
+        </div>
+      </Modal>
+
+      {/* 后台生成进度提示 */}
+      {backgroundGeneration && isStreaming && (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 1000,
+          background: 'white',
+          padding: '15px 20px',
+          borderRadius: '8px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          border: '1px solid #d9d9d9',
+          minWidth: '300px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+            <LoadingOutlined style={{ color: '#1890ff' }} />
+            <span style={{ fontWeight: 'bold' }}>后台生成中</span>
+            <Button
+              type="link"
+              size="small"
+              icon={<EyeOutlined />}
+              onClick={() => {
+                setBackgroundGeneration(false);
+                setFullScreenProgress(true);
+              }}
+            >
+              查看进度
+            </Button>
+          </div>
+          <Progress
+            percent={Math.round(generationProgress)}
+            size="small"
+            showInfo={false}
+          />
+          <p style={{ margin: '5px 0 0 0', fontSize: '12px', color: '#666' }}>
+            {currentSnippet} ({streamProgress}/{totalSnippets > 0 ? totalSnippets : '?'})
+          </p>
+        </div>
+      )}
+
       {/* GitHub保存模态框 */}
       <GitModal
         visible={gitModalVisible}
@@ -842,6 +1071,13 @@ const TestGenerator = () => {
         loading={loading}
         setLoading={(value) => dispatch({ type: ActionTypes.SET_LOADING, payload: value })}
         gitInfo={gitInfo}
+        isGeneratingTests={isStreaming}
+      />
+
+      {/* 队列状态显示 */}
+      <QueueStatus
+        visible={true}
+        refreshInterval={2000}
       />
     </div>
   );

@@ -1,5 +1,10 @@
 from typing import List, Optional
-from app.models.schemas import CodeSnippet
+
+# 根据运行位置动态调整导入路径
+try:
+    from app.models.schemas import CodeSnippet
+except ModuleNotFoundError:
+    from models.schemas import CodeSnippet
 
 class BaseParser:
     """代码解析器基类"""

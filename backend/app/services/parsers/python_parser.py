@@ -1,9 +1,16 @@
 import ast
 import inspect
 from typing import List, Dict, Any, Optional
-from app.models.schemas import CodeSnippet
-from app.services.parsers.base_parser import BaseParser
-from app.utils.logger import logger
+
+# 根据运行位置动态调整导入路径
+try:
+    from app.models.schemas import CodeSnippet
+    from app.services.parsers.base_parser import BaseParser
+    from app.utils.logger import logger
+except ModuleNotFoundError:
+    from models.schemas import CodeSnippet
+    from services.parsers.base_parser import BaseParser
+    from utils.logger import logger
 
 class PythonParser(BaseParser):
     """Python代码解析器"""

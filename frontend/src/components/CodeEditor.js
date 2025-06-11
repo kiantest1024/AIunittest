@@ -39,10 +39,16 @@ const CodeEditor = ({
   });
 
   return (
-    <Card>
+    <Card style={{
+      width: '100%',
+      maxWidth: '100%',
+      overflow: 'hidden',
+      boxSizing: 'border-box'
+    }}>
       {code ? (
         <Editor
           height={height}
+          width="100%"
           language={language}
           value={code}
           onChange={onChange}
@@ -55,11 +61,32 @@ const CodeEditor = ({
             automaticLayout: true,
             fontSize: 14,
             tabSize: 2,
-            wordWrap: 'on'
+            wordWrap: 'on',
+            wordWrapColumn: 80,
+            wordWrapMinified: true,
+            wrappingIndent: 'indent',
+            scrollbar: {
+              horizontal: 'auto',
+              vertical: 'auto',
+              horizontalScrollbarSize: 8,
+              verticalScrollbarSize: 8
+            },
+            overviewRulerLanes: 0,
+            hideCursorInOverviewRuler: true,
+            overviewRulerBorder: false
           }}
         />
       ) : (
-        <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999' }}>
+        <div style={{
+          height,
+          width: '100%',
+          maxWidth: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#999',
+          boxSizing: 'border-box'
+        }}>
           请选择或输入代码
         </div>
       )}

@@ -4,7 +4,7 @@ Java代码分析器 - 专门用于分析Java代码特征并生成针对性的测
 
 import re
 import logging
-from typing import Dict, List, Set, Optional
+from typing import Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 

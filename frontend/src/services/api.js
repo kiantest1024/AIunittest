@@ -150,128 +150,113 @@ export const generateTestsDirect = async (code, language, model) => {
   }
 };
 
-// 流式生成测试
-export const generateTestsStream = async (code, language, model, onProgress) => {
+// 流式生成测试 - 使用EventSource进行服务器发送事件
+export const generateTestsStream = async (code, language, model, onProgress, onTaskId = null) => {
   console.log(`Streaming tests for ${language} code using model ${model}`);
   console.log(`Code length: ${code.length} characters`);
 
-  // 为大型代码文件设置更长的超时时间
-  const timeout = code.length > 10000 ? 600000 : 300000; // 10分钟或5分钟
+  return new Promise((resolve, reject) => {
+    try {
+      console.log('Starting streaming request...');
 
-  try {
-    // 创建一个变量来存储累积的响应文本
-    let accumulatedText = '';
-    let processedLines = new Set();
+      // 创建请求参数
+      const params = new URLSearchParams({
+        code: code,
+        language: language,
+        model: model
+      });
 
-    const response = await api.post('/generate-test-stream', {
-      code,
-      language,
-      model,
-    }, {
-      timeout: timeout, // 覆盖默认超时设置
-      responseType: 'text', // 设置响应类型为文本
-      onDownloadProgress: (progressEvent) => {
-        try {
-          // 安全地获取响应文本
-          let text = '';
+      // 使用XMLHttpRequest进行流式处理，这是最可靠的方法
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/generate-test-stream', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('user-id', 'anonymous'); // 添加用户ID头
 
-          // 检查不同的属性路径，以适应不同浏览器
-          if (progressEvent && progressEvent.currentTarget && progressEvent.currentTarget.response) {
-            text = progressEvent.currentTarget.response;
-          } else if (progressEvent && progressEvent.target && progressEvent.target.response) {
-            text = progressEvent.target.response;
-          } else if (progressEvent && progressEvent.response) {
-            text = progressEvent.response;
-          } else {
-            console.log('Progress event received but no response text available:', progressEvent);
-            return; // 如果没有响应文本，则退出
-          }
+      let processedLength = 0;
+      let processedLines = new Set();
 
-          // 确保文本是字符串
-          if (typeof text !== 'string') {
-            console.log('Response is not a string:', text);
-            return;
-          }
+      xhr.onprogress = function() {
+        console.log('XHR progress event triggered');
 
-          // 更新累积的文本
-          accumulatedText = text;
+        // 获取新的响应文本
+        const responseText = xhr.responseText;
+        const newText = responseText.substring(processedLength);
+        processedLength = responseText.length;
 
-          // 按行分割
-          const lines = text.split('\n').filter(line => line.trim());
+        if (newText) {
+          console.log('New text received:', newText);
 
-          console.log(`Received ${lines.length} lines of text`);
+          // 按行分割新文本
+          const lines = newText.split('\n');
 
-          // 处理每一行，但只处理新行
-          lines.forEach(line => {
+          for (const line of lines) {
+            const trimmedLine = line.trim();
+            if (!trimmedLine) continue;
+
+            // 避免重复处理
+            if (processedLines.has(trimmedLine)) {
+              continue;
+            }
+            processedLines.add(trimmedLine);
+
             try {
-              // 如果已经处理过这一行，则跳过
-              if (processedLines.has(line)) {
-                return;
-              }
-
-              // 标记为已处理
-              processedLines.add(line);
-
-              console.log('Processing new line:', line);
-
-              const result = JSON.parse(line);
-
-              // 记录接收到的结果
+              console.log('Processing line:', trimmedLine);
+              const result = JSON.parse(trimmedLine);
               console.log('Parsed result:', result);
 
+              // 如果收到任务ID，通知调用者
+              if (result.task_id && onTaskId && typeof onTaskId === 'function') {
+                console.log('Received task ID:', result.task_id);
+                onTaskId(result.task_id);
+              }
+
               if (onProgress && typeof onProgress === 'function') {
-                // 调用回调函数
+                console.log('Calling onProgress with result');
                 onProgress(result);
-                console.log('Called onProgress with result');
               }
             } catch (e) {
-              // 只有当行不为空时才记录错误
-              if (line.trim()) {
-                console.error('Error parsing JSON:', e, line);
-              }
+              console.error('Error parsing JSON line:', e, trimmedLine);
             }
-          });
-        } catch (e) {
-          console.error('Error in download progress handler:', e);
+          }
         }
-      }
-    });
+      };
 
-    // 请求完成后，再次处理累积的文本，确保所有行都被处理
-    console.log('Request completed, processing accumulated text');
-    const finalLines = accumulatedText.split('\n').filter(line => line.trim());
-
-    finalLines.forEach(line => {
-      try {
-        // 如果已经处理过这一行，则跳过
-        if (processedLines.has(line)) {
-          return;
+      xhr.onload = function() {
+        console.log('XHR load event - request completed');
+        if (xhr.status === 200) {
+          console.log('Stream completed successfully');
+          resolve({ status: 'completed' });
+        } else {
+          console.error('XHR failed with status:', xhr.status);
+          reject(new Error(`HTTP error! status: ${xhr.status}`));
         }
+      };
 
-        // 标记为已处理
-        processedLines.add(line);
+      xhr.onerror = function() {
+        console.error('XHR error event');
+        reject(new Error('Network error'));
+      };
 
-        console.log('Processing final line:', line);
+      xhr.ontimeout = function() {
+        console.error('XHR timeout event');
+        reject(new Error('Request timeout'));
+      };
 
-        const result = JSON.parse(line);
+      // 设置30分钟超时
+      xhr.timeout = 1800000;
 
-        if (onProgress && typeof onProgress === 'function') {
-          onProgress(result);
-          console.log('Called onProgress with final result');
-        }
-      } catch (e) {
-        // 只有当行不为空时才记录错误
-        if (line.trim()) {
-          console.error('Error parsing final JSON:', e, line);
-        }
-      }
-    });
+      console.log('Sending XHR request...');
+      xhr.send(JSON.stringify({
+        code,
+        language,
+        model
+      }));
 
-    return response;
-  } catch (error) {
-    console.error('Error streaming tests:', error);
-    throw error;
-  }
+    } catch (error) {
+      console.error('Error setting up streaming request:', error);
+      reject(error);
+    }
+  });
 };
 
 // 上传文件
@@ -415,6 +400,32 @@ export const getLanguages = async () => {
 export const getModels = async () => {
   const response = await api.get('/models');
   return response.models;
+};
+
+// 获取队列状态
+export const getQueueStatus = async () => {
+  const response = await api.get('/queue/status');
+  return response;
+};
+
+// 获取任务状态
+export const getTaskStatus = async (taskId) => {
+  const response = await api.get(`/queue/task/${taskId}`, {
+    headers: {
+      'user-id': 'anonymous' // 可以根据实际用户系统调整
+    }
+  });
+  return response;
+};
+
+// 取消任务
+export const cancelTask = async (taskId) => {
+  const response = await api.delete(`/queue/task/${taskId}`, {
+    headers: {
+      'user-id': 'anonymous' // 可以根据实际用户系统调整
+    }
+  });
+  return response;
 };
 
 // 获取GitHub文件内容

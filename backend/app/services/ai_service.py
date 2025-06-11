@@ -123,6 +123,13 @@ def generate_test_with_ai(snippet: CodeSnippet, enhanced_prompt: str = None, mod
                 # 添加mock示例
                 import_statement += f"\n\n# 当使用mock.patch时，必须使用'broadcast.socketio'作为路径，例如:\n# @pytest.fixture\n# def mock_socketio():\n#     with mock.patch('broadcast.socketio') as mock_socket:  # 注意这里是broadcast而不是your_module\n#         yield mock_socket"
 
+            elif snippet.language == "java":
+                # Java语言的导入语句处理
+                logger.info(f"Processing Java code for: {snippet.name}")
+
+                # Java不需要特殊的导入语句，模板中已经包含了标准的JUnit导入
+                import_statement = ""
+
             prompt = prompt_template.format(
                 code_type=code_type,
                 code=snippet.code,
@@ -258,11 +265,40 @@ def test_{snippet.name}_basic():
     except Exception as e:
         logger.error(f"Error generating test with AI: {e}")
 
-        # 强制使用 broadcast 模块名
-        module_path = "broadcast"
+        # 根据语言返回不同的错误模板
+        if snippet.language == "java":
+            # Java错误模板
+            class_name = snippet.class_name or "Main"
+            return f"""// 错误生成测试: {str(e)}
+// 以下是基本的Java测试模板，请根据需要修改
 
-        # 返回一个基本的测试模板
-        return f"""# 错误生成测试: {str(e)}
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
+
+class {class_name}Test {{
+
+    @Test
+    void test{snippet.name}Basic() {{
+        // 准备测试数据
+
+        // 执行被测方法
+
+        // 验证结果
+        assertTrue(true); // 替换为实际的断言
+    }}
+
+    @Test
+    void test{snippet.name}EdgeCases() {{
+        // 测试边缘情况
+        assertTrue(true); // 替换为实际的断言
+    }}
+}}"""
+        else:
+            # Python错误模板（保持原有逻辑）
+            module_path = "broadcast"
+            return f"""# 错误生成测试: {str(e)}
 # 以下是基本的测试模板，请根据需要修改
 
 # 被测代码的导入语句

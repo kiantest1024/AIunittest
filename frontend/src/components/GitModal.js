@@ -25,7 +25,7 @@ const { DirectoryTree } = Tree;
  * @param {Object} gitInfo - Git信息，包含token、repo和path
  * @returns {JSX.Element} Git保存模态框组件
  */
-const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoading, gitInfo }) => {
+const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoading, gitInfo, isGeneratingTests = false }) => {
   // 状态管理
   const [gitPlatform, setGitPlatform] = useState('github'); // 'github' 或 'gitlab'
   const [gitMode, setGitMode] = useState('token'); // 'token' 或 'url' (GitHub的两种模式)
@@ -98,7 +98,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
   const handleLoadRepositories = async () => {
     if (!gitToken) {
       setTokenError('Please enter a Git token!');
-      message.error('Please enter a Git token!');
+      message.error('Please enter a Git token!', 3);
       return;
     }
 
@@ -107,7 +107,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
       const repoUrl = gitPlatform === 'github' ? githubUrl : gitlabUrl;
       if (!repoUrl) {
         setTokenError(`Please enter ${gitPlatform === 'github' ? 'GitHub' : 'GitLab'} repository URL!`);
-        message.error(`Please enter ${gitPlatform === 'github' ? 'GitHub' : 'GitLab'} repository URL!`);
+        message.error(`Please enter ${gitPlatform === 'github' ? 'GitHub' : 'GitLab'} repository URL!`, 3);
         return;
       }
     }
@@ -135,9 +135,9 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
         setRepositories(repos);
 
         if (repos.length === 0) {
-          message.warning(`No repositories found for this ${gitPlatform} token.`);
+          message.warning(`No repositories found for this ${gitPlatform} token.`, 3);
         } else {
-          message.success(`Found ${repos.length} repositories`);
+          message.success(`Found ${repos.length} repositories`, 3);
         }
       } else {
         // URL模式：直接克隆指定仓库
@@ -152,7 +152,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
             description: repoInfo.repo_info.description
           };
           setRepositories([repoData]);
-          message.success(`Successfully cloned GitHub repository: ${repoData.name}`);
+          message.success(`Successfully cloned GitHub repository: ${repoData.name}`, 3);
           handleSelectRepository(repoData);
         } else {
           const cloneResponse = await cloneGitLabRepo(repoUrl, gitToken, gitlabServerUrl);
@@ -206,7 +206,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
 
           console.log('Final repo_info for directory loading:', repoInfo);
           setRepositories([repoInfo]);
-          message.success(`Successfully cloned GitLab repository: ${repoInfo.name || 'Repository'}`);
+          message.success(`Successfully cloned GitLab repository: ${repoInfo.name || 'Repository'}`, 3);
           handleSelectRepository(repoInfo);
         }
       }
@@ -214,7 +214,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
       console.error('Error loading repositories:', error);
       const errorMessage = error.response?.data?.detail || error.message || 'Unknown error';
       setTokenError(`Failed to ${gitMode === 'token' ? 'load repositories' : 'clone repository'}: ${errorMessage}`);
-      message.error(`Failed to ${gitMode === 'token' ? 'load repositories' : 'clone repository'}: ${errorMessage}`);
+      message.error(`Failed to ${gitMode === 'token' ? 'load repositories' : 'clone repository'}: ${errorMessage}`, 3);
     } finally {
       setLoading(false);
     }
@@ -226,7 +226,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
 
     // 验证repo对象
     if (!repo) {
-      message.error('Repository information is missing');
+      message.error('Repository information is missing', 3);
       console.error('handleSelectRepository: repo is null or undefined');
       return;
     }
@@ -242,7 +242,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
         // 这里需要更多信息来构建完整路径，暂时使用name作为fallback
         repo.full_name = repo.name;
       } else {
-        message.error('Repository full_name is missing and cannot be constructed');
+        message.error('Repository full_name is missing and cannot be constructed', 3);
         return;
       }
     }
@@ -286,7 +286,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
       setDirectories(treeData);
     } catch (error) {
       console.error('Error loading directories:', error);
-      message.error('Failed to load directories: ' + (error.response?.data?.detail || error.message));
+      message.error('Failed to load directories: ' + (error.response?.data?.detail || error.message), 3);
     } finally {
       setLoading(false);
     }
@@ -312,7 +312,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
   const handleLoadDirectory = async (treeNode) => {
     const { key } = treeNode;
     if (!selectedRepo || !gitToken) {
-      message.error('Repository or token information is missing');
+      message.error('Repository or token information is missing', 3);
       return [];
     }
 
@@ -348,7 +348,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
       return treeNodes;
     } catch (error) {
       console.error('Error loading directory:', error);
-      message.error('Failed to load directory: ' + (error.response?.data?.detail || error.message));
+      message.error('Failed to load directory: ' + (error.response?.data?.detail || error.message), 3);
       return [];
     } finally {
       setTreeLoading(false);
@@ -379,28 +379,28 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
           }
         }
 
-        message.success(`Selected directory: ${path}`);
+        message.success(`Selected directory: ${path}`, 3);
       }
     } catch (error) {
-      message.error('Failed to select directory: ' + error.message);
+      message.error('Failed to select directory: ' + error.message, 3);
     }
   };
 
   // 保存到Git
   const handleSaveToGit = async () => {
     if (!selectedRepo || !selectedPath) {
-      message.error('Please select repository and directory!');
+      message.error('Please select repository and directory!', 3);
       return;
     }
 
     if (tests.length === 0) {
-      message.error('No tests to save!');
+      message.error('No tests to save!', 3);
       return;
     }
 
     // 验证token
     if (!gitToken || gitToken.trim() === '') {
-      message.error(`${gitPlatform === 'github' ? 'GitHub' : 'GitLab'} Personal Access Token is required for saving tests. Please enter your token above.`);
+      message.error(`${gitPlatform === 'github' ? 'GitHub' : 'GitLab'} Personal Access Token is required for saving tests. Please enter your token above.`, 3);
       return;
     }
 
@@ -414,12 +414,12 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
     console.log('- Tests count:', tests.length);
 
     setLoading(true);
-    message.loading({ content: 'Saving tests...', key: 'saveGit', duration: 0 });
+    message.loading({ content: 'Saving tests...', key: 'saveGit', duration: 3 });
 
     try {
       const serverUrl = gitPlatform === 'github' ? githubServerUrl : gitlabServerUrl;
       const result = await saveToGit(tests, language, selectedRepo.full_name, selectedPath, gitToken, gitPlatform, serverUrl);
-      message.success({ content: `Tests saved successfully! Created ${result.urls.length} files`, key: 'saveGit' });
+      message.success({ content: `Tests saved successfully! Created ${result.urls.length} files`, key: 'saveGit', duration: 3 });
       onSave();
     } catch (error) {
       console.error('Error saving to Git:', error);
@@ -438,7 +438,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
         errorMessage = error.message;
       }
 
-      message.error({ content: 'Failed to save: ' + errorMessage, key: 'saveGit' });
+      message.error({ content: 'Failed to save: ' + errorMessage, key: 'saveGit', duration: 3 });
     } finally {
       setLoading(false);
     }
@@ -475,7 +475,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
       ]}
       width={800}
     >
-      <Spin spinning={loading}>
+      <Spin spinning={loading && !isGeneratingTests}>
         {/* Git平台选择 */}
         <div style={{ marginBottom: 16 }}>
           <label style={{ display: 'block', marginBottom: 8 }}>Select Platform:</label>
@@ -491,7 +491,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
                   setGitMode('token');
                 }
               } catch (error) {
-                message.error('Failed to change platform: ' + error.message);
+                message.error('Failed to change platform: ' + error.message, 3);
               }
             }}
           >
@@ -513,7 +513,7 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
                 resetState();
                 setLoading(false);
               } catch (error) {
-                message.error('Failed to change mode: ' + error.message);
+                message.error('Failed to change mode: ' + error.message, 3);
               }
             }}
           >
@@ -739,10 +739,10 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
                   );
                   if (repo) {
                     await handleSelectRepository(repo);
-                    message.success(`Selected repository: ${repo.name || repo.full_name}`);
+                    message.success(`Selected repository: ${repo.name || repo.full_name}`, 3);
                   }
                 } catch (error) {
-                  message.error('Failed to select repository: ' + error.message);
+                  message.error('Failed to select repository: ' + error.message, 3);
                 }
               }}
               value={selectedRepo?.full_name || selectedRepo?.name}

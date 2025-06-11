@@ -1,3 +1,232 @@
 2025-06-09 17:45:23,213 - ai_test_generator - INFO - Serving frontend from: D:\Personal\Script\GE\AIuintCode\frontend\build
 2025-06-09 17:45:23,253 - ai_test_generator - INFO - Starting server with uvicorn...
 2025-06-09 17:45:24,088 - ai_test_generator - INFO - Serving frontend from: D:\Personal\Script\GE\AIuintCode\frontend\build
+2025-06-11 12:05:54,601 - ai_test_generator - INFO - Serving frontend from: D:\Personal\Script\GE\AIuintCode\frontend\build
+2025-06-11 12:05:54,633 - ai_test_generator - INFO - Starting server with uvicorn...
+2025-06-11 12:05:55,486 - ai_test_generator - INFO - Serving frontend from: D:\Personal\Script\GE\AIuintCode\frontend\build
+2025-06-11 12:05:55,561 - ai_test_generator - INFO - Serving frontend from: D:\Personal\Script\GE\AIuintCode\frontend\build
+2025-06-11 12:05:55,563 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-06-11 12:05:55,563 - ai_test_generator - INFO - App instance: AI单元测试生成工具
+2025-06-11 12:06:09,552 - ai_test_generator - INFO - Listing gitlab repositories from server: http://172.16.1.30
+2025-06-11 12:06:09,552 - ai_test_generator - INFO - Normalized GitLab URL: http://172.16.1.30
+2025-06-11 12:06:09,553 - ai_test_generator - INFO - Using custom GitLab URL: http://172.16.1.30
+2025-06-11 12:06:09,553 - ai_test_generator - INFO - Initializing GitLab service with URL: http://172.16.1.30
+2025-06-11 12:06:09,553 - ai_test_generator - INFO - Token format: glpat-Npta... (length: 26)
+2025-06-11 12:06:09,657 - ai_test_generator - INFO - GitLab service initialized successfully for http://172.16.1.30
+2025-06-11 12:06:09,657 - ai_test_generator - INFO - Validating GitLab token: glpat-Npta...
+2025-06-11 12:06:10,088 - ai_test_generator - INFO - Found 4 owned projects
+2025-06-11 12:06:10,089 - ai_test_generator - INFO - Successfully processed 4 GitLab repositories
+2025-06-11 12:06:10,089 - ai_test_generator - INFO - Found 4 repositories
+2025-06-11 12:06:14,441 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: , platform: gitlab, server: http://172.16.1.30
+2025-06-11 12:06:14,442 - ai_test_generator - INFO - Normalized GitLab URL: http://172.16.1.30
+2025-06-11 12:06:14,442 - ai_test_generator - INFO - Using custom GitLab URL: http://172.16.1.30
+2025-06-11 12:06:14,443 - ai_test_generator - INFO - Initializing GitLab service with URL: http://172.16.1.30
+2025-06-11 12:06:14,443 - ai_test_generator - INFO - Token format: glpat-Npta... (length: 26)
+2025-06-11 12:06:14,444 - ai_test_generator - INFO - GitLab service initialized successfully for http://172.16.1.30
+2025-06-11 12:06:14,444 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: 
+2025-06-11 12:06:14,444 - ai_test_generator - INFO - Parsing project path from: kian/jacocotest
+2025-06-11 12:06:14,445 - ai_test_generator - INFO - Using full_name format: kian/jacocotest
+2025-06-11 12:06:14,445 - ai_test_generator - INFO - Parsed project path: kian/jacocotest
+2025-06-11 12:06:14,691 - ai_test_generator - INFO - Got project: jacocoTest (ID: 1)
+2025-06-11 12:06:14,692 - ai_test_generator - INFO - Project default branch: main
+2025-06-11 12:06:14,692 - ai_test_generator - INFO - Trying branch: main
+2025-06-11 12:06:14,849 - ai_test_generator - INFO - Successfully found 4 items using branch: main
+2025-06-11 12:06:14,850 - ai_test_generator - INFO - Found 4 directories/files
+2025-06-11 12:06:16,018 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: src, platform: gitlab, server: http://172.16.1.30
+2025-06-11 12:06:16,019 - ai_test_generator - INFO - Normalized GitLab URL: http://172.16.1.30
+2025-06-11 12:06:16,020 - ai_test_generator - INFO - Using custom GitLab URL: http://172.16.1.30
+2025-06-11 12:06:16,020 - ai_test_generator - INFO - Initializing GitLab service with URL: http://172.16.1.30
+2025-06-11 12:06:16,020 - ai_test_generator - INFO - Token format: glpat-Npta... (length: 26)
+2025-06-11 12:06:16,021 - ai_test_generator - INFO - GitLab service initialized successfully for http://172.16.1.30
+2025-06-11 12:06:16,021 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: src
+2025-06-11 12:06:16,021 - ai_test_generator - INFO - Parsing project path from: kian/jacocotest
+2025-06-11 12:06:16,022 - ai_test_generator - INFO - Using full_name format: kian/jacocotest
+2025-06-11 12:06:16,022 - ai_test_generator - INFO - Parsed project path: kian/jacocotest
+2025-06-11 12:06:16,347 - ai_test_generator - INFO - Got project: jacocoTest (ID: 1)
+2025-06-11 12:06:16,347 - ai_test_generator - INFO - Project default branch: main
+2025-06-11 12:06:16,347 - ai_test_generator - INFO - Trying branch: main
+2025-06-11 12:06:16,499 - ai_test_generator - INFO - Successfully found 2 items using branch: main
+2025-06-11 12:06:16,499 - ai_test_generator - INFO - Found 2 directories/files
+2025-06-11 12:06:17,385 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: src/main, platform: gitlab, server: http://172.16.1.30
+2025-06-11 12:06:17,385 - ai_test_generator - INFO - Normalized GitLab URL: http://172.16.1.30
+2025-06-11 12:06:17,385 - ai_test_generator - INFO - Using custom GitLab URL: http://172.16.1.30
+2025-06-11 12:06:17,385 - ai_test_generator - INFO - Initializing GitLab service with URL: http://172.16.1.30
+2025-06-11 12:06:17,385 - ai_test_generator - INFO - Token format: glpat-Npta... (length: 26)
+2025-06-11 12:06:17,386 - ai_test_generator - INFO - GitLab service initialized successfully for http://172.16.1.30
+2025-06-11 12:06:17,386 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: src/main
+2025-06-11 12:06:17,387 - ai_test_generator - INFO - Parsing project path from: kian/jacocotest
+2025-06-11 12:06:17,388 - ai_test_generator - INFO - Using full_name format: kian/jacocotest
+2025-06-11 12:06:17,388 - ai_test_generator - INFO - Parsed project path: kian/jacocotest
+2025-06-11 12:06:17,631 - ai_test_generator - INFO - Got project: jacocoTest (ID: 1)
+2025-06-11 12:06:17,631 - ai_test_generator - INFO - Project default branch: main
+2025-06-11 12:06:17,632 - ai_test_generator - INFO - Trying branch: main
+2025-06-11 12:06:17,910 - ai_test_generator - INFO - Successfully found 2 items using branch: main
+2025-06-11 12:06:17,910 - ai_test_generator - INFO - Found 2 directories/files
+2025-06-11 12:06:19,061 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: src/main/java, platform: gitlab, server: http://172.16.1.30
+2025-06-11 12:06:19,062 - ai_test_generator - INFO - Normalized GitLab URL: http://172.16.1.30
+2025-06-11 12:06:19,062 - ai_test_generator - INFO - Using custom GitLab URL: http://172.16.1.30
+2025-06-11 12:06:19,062 - ai_test_generator - INFO - Initializing GitLab service with URL: http://172.16.1.30
+2025-06-11 12:06:19,063 - ai_test_generator - INFO - Token format: glpat-Npta... (length: 26)
+2025-06-11 12:06:19,063 - ai_test_generator - INFO - GitLab service initialized successfully for http://172.16.1.30
+2025-06-11 12:06:19,063 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: src/main/java
+2025-06-11 12:06:19,064 - ai_test_generator - INFO - Parsing project path from: kian/jacocotest
+2025-06-11 12:06:19,064 - ai_test_generator - INFO - Using full_name format: kian/jacocotest
+2025-06-11 12:06:19,064 - ai_test_generator - INFO - Parsed project path: kian/jacocotest
+2025-06-11 12:06:19,383 - ai_test_generator - INFO - Got project: jacocoTest (ID: 1)
+2025-06-11 12:06:19,383 - ai_test_generator - INFO - Project default branch: main
+2025-06-11 12:06:19,383 - ai_test_generator - INFO - Trying branch: main
+2025-06-11 12:06:19,533 - ai_test_generator - INFO - Successfully found 1 items using branch: main
+2025-06-11 12:06:19,533 - ai_test_generator - INFO - Found 1 directories/files
+2025-06-11 12:06:20,970 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: src/main/java/com, platform: gitlab, server: http://172.16.1.30
+2025-06-11 12:06:20,972 - ai_test_generator - INFO - Normalized GitLab URL: http://172.16.1.30
+2025-06-11 12:06:20,972 - ai_test_generator - INFO - Using custom GitLab URL: http://172.16.1.30
+2025-06-11 12:06:20,972 - ai_test_generator - INFO - Initializing GitLab service with URL: http://172.16.1.30
+2025-06-11 12:06:20,972 - ai_test_generator - INFO - Token format: glpat-Npta... (length: 26)
+2025-06-11 12:06:20,973 - ai_test_generator - INFO - GitLab service initialized successfully for http://172.16.1.30
+2025-06-11 12:06:20,973 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: src/main/java/com
+2025-06-11 12:06:20,973 - ai_test_generator - INFO - Parsing project path from: kian/jacocotest
+2025-06-11 12:06:20,973 - ai_test_generator - INFO - Using full_name format: kian/jacocotest
+2025-06-11 12:06:20,973 - ai_test_generator - INFO - Parsed project path: kian/jacocotest
+2025-06-11 12:06:21,268 - ai_test_generator - INFO - Got project: jacocoTest (ID: 1)
+2025-06-11 12:06:21,268 - ai_test_generator - INFO - Project default branch: main
+2025-06-11 12:06:21,268 - ai_test_generator - INFO - Trying branch: main
+2025-06-11 12:06:21,412 - ai_test_generator - INFO - Successfully found 1 items using branch: main
+2025-06-11 12:06:21,413 - ai_test_generator - INFO - Found 1 directories/files
+2025-06-11 12:06:22,224 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: src/main/java/com/login, platform: gitlab, server: http://172.16.1.30
+2025-06-11 12:06:22,224 - ai_test_generator - INFO - Normalized GitLab URL: http://172.16.1.30
+2025-06-11 12:06:22,225 - ai_test_generator - INFO - Using custom GitLab URL: http://172.16.1.30
+2025-06-11 12:06:22,225 - ai_test_generator - INFO - Initializing GitLab service with URL: http://172.16.1.30
+2025-06-11 12:06:22,225 - ai_test_generator - INFO - Token format: glpat-Npta... (length: 26)
+2025-06-11 12:06:22,226 - ai_test_generator - INFO - GitLab service initialized successfully for http://172.16.1.30
+2025-06-11 12:06:22,227 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: src/main/java/com/login
+2025-06-11 12:06:22,228 - ai_test_generator - INFO - Parsing project path from: kian/jacocotest
+2025-06-11 12:06:22,228 - ai_test_generator - INFO - Using full_name format: kian/jacocotest
+2025-06-11 12:06:22,229 - ai_test_generator - INFO - Parsed project path: kian/jacocotest
+2025-06-11 12:06:22,468 - ai_test_generator - INFO - Got project: jacocoTest (ID: 1)
+2025-06-11 12:06:22,469 - ai_test_generator - INFO - Project default branch: main
+2025-06-11 12:06:22,469 - ai_test_generator - INFO - Trying branch: main
+2025-06-11 12:06:22,687 - ai_test_generator - INFO - Successfully found 6 items using branch: main
+2025-06-11 12:06:22,687 - ai_test_generator - INFO - Found 6 directories/files
+2025-06-11 12:06:26,249 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: src/main/java/com/login/view, platform: gitlab, server: http://172.16.1.30
+2025-06-11 12:06:26,249 - ai_test_generator - INFO - Normalized GitLab URL: http://172.16.1.30
+2025-06-11 12:06:26,250 - ai_test_generator - INFO - Using custom GitLab URL: http://172.16.1.30
+2025-06-11 12:06:26,250 - ai_test_generator - INFO - Initializing GitLab service with URL: http://172.16.1.30
+2025-06-11 12:06:26,250 - ai_test_generator - INFO - Token format: glpat-Npta... (length: 26)
+2025-06-11 12:06:26,250 - ai_test_generator - INFO - GitLab service initialized successfully for http://172.16.1.30
+2025-06-11 12:06:26,250 - ai_test_generator - INFO - Listing directories for repo: kian/jacocotest, path: src/main/java/com/login/view
+2025-06-11 12:06:26,251 - ai_test_generator - INFO - Parsing project path from: kian/jacocotest
+2025-06-11 12:06:26,251 - ai_test_generator - INFO - Using full_name format: kian/jacocotest
+2025-06-11 12:06:26,251 - ai_test_generator - INFO - Parsed project path: kian/jacocotest
+2025-06-11 12:06:26,539 - ai_test_generator - INFO - Got project: jacocoTest (ID: 1)
+2025-06-11 12:06:26,539 - ai_test_generator - INFO - Project default branch: main
+2025-06-11 12:06:26,539 - ai_test_generator - INFO - Trying branch: main
+2025-06-11 12:06:26,743 - ai_test_generator - INFO - Successfully found 1 items using branch: main
+2025-06-11 12:06:26,744 - ai_test_generator - INFO - Found 1 directories/files
+2025-06-11 12:06:28,404 - ai_test_generator - INFO - Getting file content from repo: kian/jacocotest, path: src/main/java/com/login/view/LoginFrame.java, platform: gitlab, server: http://172.16.1.30
+2025-06-11 12:06:28,404 - ai_test_generator - INFO - Normalized GitLab URL: http://172.16.1.30
+2025-06-11 12:06:28,404 - ai_test_generator - INFO - Using custom GitLab URL: http://172.16.1.30
+2025-06-11 12:06:28,405 - ai_test_generator - INFO - Initializing GitLab service with URL: http://172.16.1.30
+2025-06-11 12:06:28,405 - ai_test_generator - INFO - Token format: glpat-Npta... (length: 26)
+2025-06-11 12:06:28,405 - ai_test_generator - INFO - GitLab service initialized successfully for http://172.16.1.30
+2025-06-11 12:06:28,405 - ai_test_generator - INFO - Parsing project path from: kian/jacocotest
+2025-06-11 12:06:28,405 - ai_test_generator - INFO - Using full_name format: kian/jacocotest
+2025-06-11 12:06:28,406 - ai_test_generator - INFO - Trying to get project with encoded path: kian%2Fjacocotest
+2025-06-11 12:06:28,589 - ai_test_generator - WARNING - Failed to get project with encoded path: 404: 404 Project Not Found
+2025-06-11 12:06:28,590 - ai_test_generator - INFO - Trying to get project with direct path: kian/jacocotest
+2025-06-11 12:06:28,780 - ai_test_generator - INFO - Using project default branch for file content: main
+2025-06-11 12:06:28,780 - ai_test_generator - INFO - Trying to get file content from branch: main
+2025-06-11 12:06:28,975 - ai_test_generator - INFO - Successfully got file content from branch: main
+2025-06-11 12:06:28,975 - ai_test_generator - INFO - File content retrieved successfully from GitLab: src/main/java/com/login/view/LoginFrame.java
+2025-06-11 12:06:31,680 - ai_test_generator - INFO - Streaming tests for language: java, model: deepseek-V3
+2025-06-11 12:06:31,680 - ai_test_generator - INFO - Code length: 10046 characters
+2025-06-11 12:06:31,681 - ai_test_generator - INFO - Code preview: package com.login.view;
+
+import com.login.model.User;
+import com.login.service.UserService;
+
+import ...
+2025-06-11 12:06:31,692 - ai_test_generator - INFO - 解析到 12 个代码片段
+2025-06-11 12:06:31,692 - ai_test_generator - INFO - 代码片段 1: initializeComponents (method)
+2025-06-11 12:06:31,693 - ai_test_generator - INFO - 代码片段预览:     private void initializeComponents() {
+        usernameField = new JTextField(20);
+        passwo...
+2025-06-11 12:06:31,693 - ai_test_generator - INFO - 代码片段 2: setupLayout (method)
+2025-06-11 12:06:31,693 - ai_test_generator - INFO - 代码片段预览:     private void setupLayout() {
+        setLayout(new BorderLayout());
+        
+        // Title pa...
+2025-06-11 12:06:31,693 - ai_test_generator - INFO - 代码片段 3: setupEventListeners (method)
+2025-06-11 12:06:31,693 - ai_test_generator - INFO - 代码片段预览:     private void setupEventListeners() {
+        loginButton.addActionListener(new ActionListener() ...
+2025-06-11 12:06:31,693 - ai_test_generator - INFO - 代码片段 4: switchMode (method)
+2025-06-11 12:06:31,693 - ai_test_generator - INFO - 代码片段预览:     private void switchMode() {
+        isLoginMode = !isLoginMode;
+        
+        if (isLoginMode...
+2025-06-11 12:06:31,694 - ai_test_generator - INFO - 代码片段 5: showEmailField (method)
+2025-06-11 12:06:31,694 - ai_test_generator - INFO - 代码片段预览:     private void showEmailField() {
+        Component[] components = ((JPanel) getContentPane().getC...
+2025-06-11 12:06:31,694 - ai_test_generator - INFO - 代码片段 6: hideEmailField (method)
+2025-06-11 12:06:31,694 - ai_test_generator - INFO - 代码片段预览:     private void hideEmailField() {
+        Component[] components = ((JPanel) getContentPane().getC...
+2025-06-11 12:06:31,694 - ai_test_generator - INFO - 代码片段 7: performLogin (method)
+2025-06-11 12:06:31,695 - ai_test_generator - INFO - 代码片段预览:     private void performLogin() {
+        String username = usernameField.getText().trim();
+        ...
+2025-06-11 12:06:31,695 - ai_test_generator - INFO - 代码片段 8: performRegistration (method)
+2025-06-11 12:06:31,695 - ai_test_generator - INFO - 代码片段预览:     private void performRegistration() {
+        String username = usernameField.getText().trim();
+ ...
+2025-06-11 12:06:31,695 - ai_test_generator - INFO - 代码片段 9: showMainWindow (method)
+2025-06-11 12:06:31,695 - ai_test_generator - INFO - 代码片段预览:     private void showMainWindow(User user) {
+        // Create a simple welcome window
+        JFram...
+2025-06-11 12:06:31,696 - ai_test_generator - INFO - 代码片段 10: showStatus (method)
+2025-06-11 12:06:31,696 - ai_test_generator - INFO - 代码片段预览:     private void showStatus(String message, Color color) {
+        statusLabel.setText(message);
+   ...
+2025-06-11 12:06:31,696 - ai_test_generator - INFO - 代码片段 11: clearStatus (method)
+2025-06-11 12:06:31,696 - ai_test_generator - INFO - 代码片段预览:     private void clearStatus() {
+        statusLabel.setText(" ");
+    }...
+2025-06-11 12:06:31,696 - ai_test_generator - INFO - 代码片段 12: clearFields (method)
+2025-06-11 12:06:31,696 - ai_test_generator - INFO - 代码片段预览:     private void clearFields() {
+        usernameField.setText("");
+        passwordField.setText(""...
+2025-06-11 12:06:31,697 - ai_test_generator - INFO - 为 initializeComponents 生成测试 (1/12)
+2025-06-11 12:08:17,172 - ai_test_generator - INFO - Generated valid test code for initializeComponents on attempt 1
+2025-06-11 12:08:17,172 - ai_test_generator - INFO - 成功生成测试 1: initializeComponents
+2025-06-11 12:08:17,285 - ai_test_generator - INFO - 为 setupLayout 生成测试 (2/12)
+2025-06-11 12:10:04,970 - ai_test_generator - INFO - Generated valid test code for setupLayout on attempt 1
+2025-06-11 12:10:04,970 - ai_test_generator - INFO - 成功生成测试 2: setupLayout
+2025-06-11 12:10:05,078 - ai_test_generator - INFO - 为 setupEventListeners 生成测试 (3/12)
+2025-06-11 12:11:50,305 - ai_test_generator - INFO - Generated valid test code for setupEventListeners on attempt 1
+2025-06-11 12:11:50,305 - ai_test_generator - INFO - 成功生成测试 3: setupEventListeners
+2025-06-11 12:11:50,415 - ai_test_generator - INFO - 为 switchMode 生成测试 (4/12)
+2025-06-11 12:13:32,073 - ai_test_generator - INFO - Generated valid test code for switchMode on attempt 1
+2025-06-11 12:13:32,074 - ai_test_generator - INFO - 成功生成测试 4: switchMode
+2025-06-11 12:13:32,181 - ai_test_generator - INFO - 为 showEmailField 生成测试 (5/12)
+2025-06-11 12:15:35,694 - ai_test_generator - INFO - Generated valid test code for showEmailField on attempt 1
+2025-06-11 12:15:35,694 - ai_test_generator - INFO - 成功生成测试 5: showEmailField
+2025-06-11 12:15:35,798 - ai_test_generator - INFO - 为 hideEmailField 生成测试 (6/12)
+2025-06-11 12:17:23,909 - ai_test_generator - INFO - Generated valid test code for hideEmailField on attempt 1
+2025-06-11 12:17:23,910 - ai_test_generator - INFO - 成功生成测试 6: hideEmailField
+2025-06-11 12:17:24,016 - ai_test_generator - INFO - 为 performLogin 生成测试 (7/12)
+2025-06-11 12:19:38,612 - ai_test_generator - INFO - Generated valid test code for performLogin on attempt 1
+2025-06-11 12:19:38,613 - ai_test_generator - INFO - 成功生成测试 7: performLogin
+2025-06-11 12:19:38,716 - ai_test_generator - INFO - 为 performRegistration 生成测试 (8/12)
+2025-06-11 12:21:37,598 - ai_test_generator - INFO - Generated valid test code for performRegistration on attempt 1
+2025-06-11 12:21:37,598 - ai_test_generator - INFO - 成功生成测试 8: performRegistration
+2025-06-11 12:21:37,707 - ai_test_generator - INFO - 为 showMainWindow 生成测试 (9/12)
+2025-06-11 12:23:29,595 - ai_test_generator - INFO - Generated valid test code for showMainWindow on attempt 1
+2025-06-11 12:23:29,595 - ai_test_generator - INFO - 成功生成测试 9: showMainWindow
+2025-06-11 12:23:29,705 - ai_test_generator - INFO - 为 showStatus 生成测试 (10/12)
+2025-06-11 12:25:17,068 - ai_test_generator - INFO - Generated valid test code for showStatus on attempt 1
+2025-06-11 12:25:17,068 - ai_test_generator - INFO - 成功生成测试 10: showStatus
+2025-06-11 12:25:17,173 - ai_test_generator - INFO - 为 clearStatus 生成测试 (11/12)
+2025-06-11 12:27:19,584 - ai_test_generator - INFO - Generated valid test code for clearStatus on attempt 1
+2025-06-11 12:27:19,587 - ai_test_generator - INFO - 成功生成测试 11: clearStatus
+2025-06-11 12:27:19,690 - ai_test_generator - INFO - 为 clearFields 生成测试 (12/12)
+2025-06-11 12:29:22,353 - ai_test_generator - INFO - Generated valid test code for clearFields on attempt 1
+2025-06-11 12:29:22,354 - ai_test_generator - INFO - 成功生成测试 12: clearFields
+2025-06-11 13:03:10,511 - ai_test_generator - INFO - Shutting down AI单元测试生成工具

@@ -1,9 +1,10 @@
-from fastapi import APIRouter, UploadFile, File, Query
+from fastapi import APIRouter, UploadFile, File, Query, Header
 from fastapi.responses import StreamingResponse
 import json
 import asyncio
 from app.services.gitlab_service import GitLabService
 from app.services.git_service import GitHubService
+# 已移除冗余的异步生成器
 from app.models.schemas import (
     GenerateTestRequest, GenerateTestResponse,
     UploadFileResponse, GitRepositoriesResponse, GitDirectoriesResponse,
@@ -219,7 +220,7 @@ async def generate_test_direct(request: GenerateTestRequest):
                             class_name=snippet.get("class_name")
                         )
 
-                        test_code = generate_test_with_ai(code_snippet, request.model)
+                        test_code = generate_test_with_ai(code_snippet, None, request.model)
                     except Exception as e:
                         logger.error(f"生成 {request.language} 测试失败: {str(e)}")
                         test_code = f"// 生成测试失败: {str(e)}"
@@ -260,8 +261,8 @@ async def generate_test_direct(request: GenerateTestRequest):
 
 
 @router.post("/generate-test-stream")
-async def generate_test_stream(request: GenerateTestRequest):
-    """流式生成测试代码"""
+async def generate_test_stream(request: GenerateTestRequest, user_id: str = Header(default="anonymous")):
+    """流式生成测试代码（使用队列系统）"""
     try:
         # 检查语言是否支持
         supported_languages = ["python", "java", "go", "cpp", "csharp"]
@@ -288,86 +289,82 @@ async def generate_test_stream(request: GenerateTestRequest):
                 media_type="application/x-ndjson"
             )
 
-        logger.info(f"Streaming tests for language: {request.language}, model: {request.model}")
+        logger.info(f"Streaming tests for language: {request.language}, model: {request.model}, user: {user_id}")
         logger.info(f"Code length: {len(request.code)} characters")
-        logger.info(f"Code preview: {request.code[:100]}...")
 
-        async def stream_generator():
-            try:
-                # 发送初始消息
-                yield json.dumps({
-                    "status": "started",
-                    "message": "开始生成测试用例"
-                }) + "\n"
+        # 使用简化的队列系统进行并发控制
+        from services.simple_queue import execute_with_queue
 
-                # 如果提供了 Git 信息，使用文件路径
-                file_path = None
-                if request.git_repo and request.git_path:
-                    file_path = request.git_path
-                    logger.info(f"Using file path from Git: {file_path}")
+        # 获取文件路径
+        file_path = None
+        if request.git_repo and request.git_path:
+            file_path = request.git_path
+            logger.info(f"Using file path from Git: {file_path}")
 
-                # 解析代码
+        # 定义流式生成任务
+        async def stream_task(**kwargs):
+            async def stream_generator():
                 try:
-                    parser = ParserFactory.get_parser(request.language)
-                    snippets = [s.dict() for s in parser.parse_code(request.code, file_path)]
-                except Exception as e:
-                    logger.error(f"解析 {request.language} 代码失败: {str(e)}")
-                    snippets = []
-
-                logger.info(f"解析到 {len(snippets)} 个代码片段")
-
-                # 如果没有找到任何代码片段，直接返回警告
-                if not snippets:
-                    logger.warning("No code snippets found")
+                    # 发送初始消息
                     yield json.dumps({
-                        "status": "warning",
-                        "message": "没有找到可以生成测试的函数或方法"
+                        "status": "started",
+                        "message": "开始生成测试用例",
+                        "progress": 5,
+                        "user_id": user_id
                     }) + "\n"
-                    return
 
-                # 记录找到的代码片段
-                for i, snippet in enumerate(snippets):
-                    logger.info(f"代码片段 {i+1}: {snippet['name']} ({snippet['type']})")
-                    logger.info(f"代码片段预览: {snippet['code'][:100]}...")
-
-                # 计数器
-                count = 0
-
-                # 为每个代码片段生成测试
-                for snippet in snippets:
+                    # 解析代码
                     try:
-                        logger.info(f"为 {snippet['name']} 生成测试")
+                        from services.parser_factory import ParserFactory
+                        parser = ParserFactory.get_parser(request.language)
+                        snippets = [s.dict() for s in parser.parse_code(request.code, file_path)]
+                    except Exception as e:
+                        logger.error(f"解析 {request.language} 代码失败: {str(e)}")
+                        snippets = []
 
-                        # 生成测试代码
-                        if request.language == "java":
-                            # 对于Java，使用增强的分析器生成针对性测试
+                    logger.info(f"解析到 {len(snippets)} 个代码片段")
+
+                    # 发送解析完成消息
+                    yield json.dumps({
+                        "status": "parsing_completed",
+                        "message": f"代码解析完成，找到 {len(snippets)} 个代码片段",
+                        "total_snippets": len(snippets),
+                        "progress": 10
+                    }) + "\n"
+
+                    # 如果没有找到任何代码片段，直接返回警告
+                    if not snippets:
+                        logger.warning("No code snippets found")
+                        yield json.dumps({
+                            "status": "warning",
+                            "message": "没有找到可以生成测试的函数或方法",
+                            "progress": 100
+                        }) + "\n"
+                        return
+
+                    # 计数器
+                    count = 0
+
+                    # 为每个代码片段生成测试
+                    for i, snippet in enumerate(snippets):
+                        try:
+                            logger.info(f"为 {snippet['name']} 生成测试 ({i+1}/{len(snippets)})")
+
+                            # 发送当前进度
+                            current_progress = 10 + (i / len(snippets)) * 80
+                            yield json.dumps({
+                                "status": "generating",
+                                "message": f"正在为 {snippet['name']} 生成测试 ({i+1}/{len(snippets)})",
+                                "current_snippet": snippet['name'],
+                                "progress": int(current_progress),
+                                "completed": i,
+                                "total": len(snippets)
+                            }) + "\n"
+
+                            # 生成测试代码
                             try:
-                                from app.services.ai_service import generate_test_with_ai
-                                from app.models.schemas import CodeSnippet
-                                from app.services.java_analyzer import create_enhanced_java_test_prompt
-
-                                # 使用Java分析器创建增强的提示
-                                enhanced_prompt = create_enhanced_java_test_prompt(request.code)
-
-                                # 创建代码片段
-                                code_snippet = CodeSnippet(
-                                    name=snippet["name"],
-                                    type=snippet["type"],
-                                    code=snippet["code"],  # 使用原始代码
-                                    language=request.language,
-                                    class_name=snippet.get("class_name")
-                                )
-
-                                # 使用增强的提示生成测试
-                                test_code = generate_test_with_ai(code_snippet, enhanced_prompt, request.model)
-                            except Exception as e:
-                                logger.error(f"Java测试生成失败: {str(e)}")
-                                test_code = f"// 生成测试失败: {str(e)}"
-                        else:
-                            # 对于其他语言，使用基础生成器
-                            try:
-                                from app.services.ai_service import generate_test_with_ai
-                                from app.models.schemas import CodeSnippet
+                                from services.ai_service import generate_test_with_ai
+                                from models.schemas import CodeSnippet
 
                                 # 转换为 CodeSnippet 对象
                                 code_snippet = CodeSnippet(
@@ -378,61 +375,75 @@ async def generate_test_stream(request: GenerateTestRequest):
                                     class_name=snippet.get("class_name")
                                 )
 
-                                test_code = generate_test_with_ai(code_snippet, request.model)
+                                test_code = generate_test_with_ai(code_snippet, None, request.model)
                             except Exception as e:
                                 logger.error(f"生成 {request.language} 测试失败: {str(e)}")
                                 test_code = f"// 生成测试失败: {str(e)}"
 
-                        if test_code:
-                            count += 1
-                            logger.info(f"成功生成测试 {count}: {snippet['name']}")
+                            if test_code:
+                                count += 1
+                                logger.info(f"成功生成测试 {count}: {snippet['name']}")
 
-                            # 将结果转换为JSON字符串，添加更多信息
+                                # 计算完成进度
+                                completion_progress = 10 + ((i + 1) / len(snippets)) * 80
+
+                                # 将结果转换为JSON字符串
+                                yield json.dumps({
+                                    "name": snippet["name"],
+                                    "type": snippet["type"],
+                                    "test_code": test_code,
+                                    "success": True,
+                                    "message": f"成功生成测试: {snippet['name']}",
+                                    "progress": int(completion_progress),
+                                    "completed": count,
+                                    "total": len(snippets)
+                                }) + "\n"
+                            else:
+                                logger.warning(f"为 {snippet['name']} 生成测试失败")
+
+                            # 添加短暂延迟
+                            await asyncio.sleep(0.1)
+
+                        except Exception as snippet_error:
+                            logger.error(f"为 {snippet['name']} 生成测试时出错: {str(snippet_error)}", exc_info=True)
                             yield json.dumps({
-                                "name": snippet["name"],
-                                "type": snippet["type"],
-                                "test_code": test_code,
-                                "success": True,
-                                "message": f"成功生成测试: {snippet['name']}"
+                                "status": "error",
+                                "message": f"为 {snippet['name']} 生成测试时出错: {str(snippet_error)}"
                             }) + "\n"
-                        else:
-                            logger.warning(f"为 {snippet['name']} 生成测试失败")
 
-                        # 添加短暂延迟，确保客户端能够处理
-                        await asyncio.sleep(0.1)
-
-                    except Exception as snippet_error:
-                        logger.error(f"为 {snippet['name']} 生成测试时出错: {str(snippet_error)}", exc_info=True)
+                    # 发送完成消息
+                    if count == 0:
                         yield json.dumps({
-                            "status": "error",
-                            "message": f"为 {snippet['name']} 生成测试时出错: {str(snippet_error)}"
+                            "status": "warning",
+                            "message": "没有找到可以生成测试的函数或方法",
+                            "progress": 100
+                        }) + "\n"
+                    else:
+                        yield json.dumps({
+                            "status": "completed",
+                            "message": f"成功生成 {count} 个测试用例",
+                            "test_count": count,
+                            "success": True,
+                            "progress": 100
                         }) + "\n"
 
-                # 如果没有生成任何测试
-                if count == 0:
-                    logger.warning("No tests were generated")
+                except Exception as e:
+                    logger.error(f"Error in stream generator: {str(e)}", exc_info=True)
                     yield json.dumps({
-                        "status": "warning",
-                        "message": "没有找到可以生成测试的函数或方法"
-                    }) + "\n"
-                else:
-                    # 发送完成消息
-                    yield json.dumps({
-                        "status": "completed",
-                        "message": f"成功生成 {count} 个测试用例",
-                        "test_count": count,
-                        "success": True
+                        "error": str(e),
+                        "status": "error"
                     }) + "\n"
 
-            except Exception as e:
-                logger.error(f"Error in stream generator: {str(e)}", exc_info=True)
-                yield json.dumps({
-                    "error": str(e),
-                    "status": "error"
-                }) + "\n"
+            return stream_generator()
+
+        # 使用队列执行任务
+        async def execute_stream():
+            stream_generator = await execute_with_queue(stream_task, user_id=user_id)
+            async for chunk in stream_generator:
+                yield chunk
 
         return StreamingResponse(
-            stream_generator(),
+            execute_stream(),
             media_type="application/x-ndjson"
         )
     except Exception as e:
@@ -679,6 +690,60 @@ async def get_models():
 async def get_languages():
     """获取支持的编程语言列表"""
     return {"languages": ParserFactory.get_supported_languages()}
+
+@router.get("/queue/status")
+async def get_queue_status():
+    """获取任务队列状态"""
+    try:
+        from services.simple_queue import get_queue_status
+        status = get_queue_status()
+        return {
+            "pending_tasks": 0,  # 简化队列没有等待队列
+            "running_tasks": status["running_tasks"],
+            "ai_tasks_running": status["running_tasks"],  # 简化处理
+            "max_concurrent": status["max_concurrent"],
+            "max_ai_tasks": status["max_concurrent"],
+            "active_streams": status["running_tasks"],
+            "stats": {
+                "total_completed": 0,
+                "total_failed": 0,
+                "avg_duration": 0
+            },
+            "stream_details": status["tasks"]
+        }
+    except Exception as e:
+        logger.error(f"Error getting queue status: {e}")
+        return {"error": str(e)}
+
+@router.get("/queue/task/{task_id}")
+async def get_task_status(task_id: str, user_id: str = Header(default="anonymous")):
+    """获取特定任务状态"""
+    try:
+        from services.simple_queue import get_simple_queue
+        queue = get_simple_queue()
+        status = queue.get_task_status(task_id)
+
+        if not status:
+            return {"error": "Task not found"}
+
+        # 验证用户权限
+        if status.get("user_id") != user_id:
+            return {"error": "Access denied"}
+
+        return status
+    except Exception as e:
+        logger.error(f"Error getting task status: {e}")
+        return {"error": str(e)}
+
+@router.delete("/queue/task/{task_id}")
+async def cancel_task(task_id: str, user_id: str = Header(default="anonymous")):
+    """取消任务"""
+    try:
+        # 简化队列不支持取消，直接返回成功
+        return {"message": "Task cancellation not supported in simplified queue"}
+    except Exception as e:
+        logger.error(f"Error cancelling task: {e}")
+        return {"error": str(e)}
 
 @router.post("/git/gitlab/clone")
 async def clone_gitlab_repo(request: GitLabCloneRequest):

@@ -1,8 +1,28 @@
 from typing import List
-from app.models.schemas import CodeSnippet, TestResult
-from app.services.parser_factory import ParserFactory
-from app.services.runnable_test_generator import generate_runnable_test, generate_test_file_name
-from app.utils.logger import logger
+
+# 根据运行位置动态调整导入路径
+try:
+    from app.models.schemas import CodeSnippet, TestResult
+    from app.services.parser_factory import ParserFactory
+    from app.services.ai_service import generate_test_with_ai
+    from app.utils.logger import logger
+except ModuleNotFoundError:
+    from models.schemas import CodeSnippet, TestResult
+    from services.parser_factory import ParserFactory
+    from services.ai_service import generate_test_with_ai
+    from utils.logger import logger
+
+def _get_test_file_extension(language: str) -> str:
+    """获取测试文件扩展名"""
+    extensions = {
+        'python': 'py',
+        'java': 'java',
+        'javascript': 'js',
+        'go': 'go',
+        'cpp': 'cpp',
+        'csharp': 'cs'
+    }
+    return extensions.get(language.lower(), 'txt')
 
 def parse_code(code: str, language: str, file_path: str = None) -> List[CodeSnippet]:
     """
@@ -45,12 +65,12 @@ def generate_tests(code: str, language: str, model: str, file_path: str = None) 
     results = []
     for snippet in snippets:
         try:
-            # 使用可运行测试生成器
-            logger.info(f"Generating runnable test for {snippet.name}")
-            test_code = generate_runnable_test(snippet, model)
+            # 使用AI服务生成测试
+            logger.info(f"Generating test for {snippet.name}")
+            test_code = generate_test_with_ai(snippet, None, model)
 
             # 生成测试文件名
-            test_file_name = generate_test_file_name(snippet)
+            test_file_name = f"test_{snippet.name.lower()}.{_get_test_file_extension(language)}"
             logger.info(f"Generated test file name: {test_file_name}")
 
             # 添加测试结果
@@ -98,12 +118,12 @@ async def generate_tests_stream(code: str, language: str, model: str, file_path:
     # 生成测试
     for snippet in snippets:
         try:
-            # 使用可运行测试生成器
-            logger.info(f"Generating runnable test for {snippet.name}")
-            test_code = generate_runnable_test(snippet, model)
+            # 使用AI服务生成测试
+            logger.info(f"Generating test for {snippet.name}")
+            test_code = generate_test_with_ai(snippet, None, model)
 
             # 生成测试文件名
-            test_file_name = generate_test_file_name(snippet)
+            test_file_name = f"test_{snippet.name.lower()}.{_get_test_file_extension(language)}"
             logger.info(f"Generated test file name: {test_file_name}")
 
             # 添加测试结果
