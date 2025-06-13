@@ -17,15 +17,13 @@ import { getRepositories, getDirectories, cloneGitLabRepo } from '../services/ap
 const { Option } = Select;
 
 const GitSourceSelector = ({ onCodeFetched, loading, setLoading }) => {
-  // 状态管理
   const [gitPlatform, setGitPlatform] = useState('github');
-  const [gitMode, setGitMode] = useState('token'); // 'token' 或 'url'
+  const [gitMode, setGitMode] = useState('token');
   const [gitToken, setGitToken] = useState('');
   const [useCache, setUseCache] = useState(true);
   const [cacheStats, setCacheStats] = useState(null);
   const [gitlabUrl, setGitlabUrl] = useState('');
-  const [githubUrl, setGithubUrl] = useState(''); // GitHub仓库URL
-
+  const [githubUrl, setGithubUrl] = useState('');
   const [githubServerUrl, setGithubServerUrl] = useState('https://github.com');
   const [gitlabServerUrl, setGitlabServerUrl] = useState('https://gitlab.com');
   const [repositories, setRepositories] = useState([]);
@@ -65,7 +63,6 @@ const GitSourceSelector = ({ onCodeFetched, loading, setLoading }) => {
     message.error(errorMessage, 3);
   };
 
-  // 更新缓存统计信息
   const updateCacheStats = async () => {
     try {
       const stats = FileSystemCache.getStatus();
@@ -75,7 +72,6 @@ const GitSourceSelector = ({ onCodeFetched, loading, setLoading }) => {
     }
   };
 
-  // 从localStorage加载认证信息
   useEffect(() => {
     const savedToken = localStorage.getItem('git_token');
     const savedPlatform = localStorage.getItem('git_platform');
@@ -85,7 +81,6 @@ const GitSourceSelector = ({ onCodeFetched, loading, setLoading }) => {
     const savedGithubServerUrl = localStorage.getItem('github_server_url');
     const savedGitlabServerUrl = localStorage.getItem('gitlab_server_url');
 
-    // 初始化缓存状态
     const statsInterval = setInterval(updateCacheStats, 30000);
     updateCacheStats();
 
@@ -105,7 +100,6 @@ const GitSourceSelector = ({ onCodeFetched, loading, setLoading }) => {
       }
     }
 
-    // 加载服务器地址配置
     if (savedGithubServerUrl) {
       setGithubServerUrl(savedGithubServerUrl);
     }
@@ -119,24 +113,21 @@ const GitSourceSelector = ({ onCodeFetched, loading, setLoading }) => {
     };
   }, [useCache]);
 
-  // 加载代码仓库
-const handleLoadRepositories = async () => {
-  clearErrors();
+  const handleLoadRepositories = async () => {
+    clearErrors();
 
-  // 令牌模式需要验证令牌
-  if (gitMode === 'token' && !gitToken) {
-    handleError('请输入访问令牌！', 'token');
-    return;
-  }
-
-  // 验证URL模式下的必要输入
-  if (gitMode === 'url') {
-    const repoUrl = gitPlatform === 'github' ? githubUrl : gitlabUrl;
-    if (!repoUrl) {
-      handleError(`请输入${gitPlatform === 'github' ? 'GitHub' : 'GitLab'}仓库地址！`, 'token');
+    if (gitMode === 'token' && !gitToken) {
+      handleError('请输入访问令牌！', 'token');
       return;
     }
-  }
+
+    if (gitMode === 'url') {
+      const repoUrl = gitPlatform === 'github' ? githubUrl : gitlabUrl;
+      if (!repoUrl) {
+        handleError(`请输入${gitPlatform === 'github' ? 'GitHub' : 'GitLab'}仓库地址！`, 'token');
+        return;
+      }
+    }
 
   setLoading(true);
   setLoadingType('loading');
@@ -151,14 +142,11 @@ const handleLoadRepositories = async () => {
       return;
     }
 
-    // 保存认证信息
     if (gitMode === 'token') {
       localStorage.setItem('git_token', gitToken);
     }
     localStorage.setItem('git_platform', gitPlatform);
     localStorage.setItem('git_mode', gitMode);
-
-    // 保存服务器地址配置
     localStorage.setItem('github_server_url', githubServerUrl);
     localStorage.setItem('gitlab_server_url', gitlabServerUrl);
 
@@ -173,7 +161,6 @@ const handleLoadRepositories = async () => {
     updateProgress(20);
 
     if (gitMode === 'token') {
-      // 令牌模式：获取仓库列表
       setLoadingMessage('正在获取仓库列表...');
 
       if (gitPlatform === 'github') {
@@ -188,14 +175,12 @@ const handleLoadRepositories = async () => {
         setDirectories([]);
         setSelectedPath('');
 
-
         if (repos.length === 0) {
           setWarning('未找到仓库。请确保您有权限访问仓库。');
         } else {
           setInfo(`成功加载 ${repos.length} 个仓库`);
         }
       } else {
-        // GitLab令牌模式
         const repos = await getRepositories(gitToken, 'gitlab', gitlabServerUrl);
 
         if (useCache) {
@@ -207,7 +192,6 @@ const handleLoadRepositories = async () => {
         setDirectories([]);
         setSelectedPath('');
 
-
         if (repos.length === 0) {
           setWarning('未找到仓库。请确保您有权限访问仓库。');
         } else {
@@ -215,12 +199,10 @@ const handleLoadRepositories = async () => {
         }
       }
     } else {
-      // URL模式：直接克隆仓库（不需要令牌）
       const repoUrl = gitPlatform === 'github' ? githubUrl : gitlabUrl;
       setLoadingMessage(`正在克隆${gitPlatform === 'github' ? 'GitHub' : 'GitLab'}仓库...`);
       updateProgress(30);
 
-      // URL模式下不传递令牌，使用空字符串或null
       const result = await cloneGitLabRepo(repoUrl, '');
       if (result.success) {
         const repoInfo = {
@@ -242,15 +224,13 @@ const handleLoadRepositories = async () => {
     setProgress(undefined);
     setLoadingMessage('');
   }
-};
+  };
 
-  // 处理仓库选择
   const handleRepoChange = async (value) => {
     clearErrors();
     setSelectedRepo(value);
     setDirectories([]);
     setSelectedPath('');
-
 
     if (!value) return;
 
@@ -273,7 +253,6 @@ const handleLoadRepositories = async () => {
       }
       
       if (!dirs) {
-        // URL模式下不需要令牌
         const token = gitMode === 'token' ? gitToken : '';
         const serverUrl = gitPlatform === 'github' ? githubServerUrl : gitlabServerUrl;
         dirs = await getDirectories(value, token, '', gitPlatform, serverUrl);
@@ -297,14 +276,13 @@ const handleLoadRepositories = async () => {
     }
   };
 
-  // 构建目录树数据
   const buildTreeData = (dirs) => {
     return dirs.map(dir => ({
       title: dir.name,
       key: dir.path,
       isLeaf: dir.type === 'file',
       children: dir.type === 'dir' ? [] : null,
-      icon: dir.type === 'dir' 
+      icon: dir.type === 'dir'
         ? <FolderOutlined style={{ color: '#faad14' }} />
         : getFileIcon(dir.name)
     }));
@@ -320,7 +298,6 @@ const handleLoadRepositories = async () => {
     return <FileOutlined />;
   };
 
-  // 更新目录树数据
   const updateTreeData = (list, key, children) => {
     const updatedList = list.map(node => {
       if (node.key === key) {

@@ -1,5 +1,3 @@
-
-
 // 简化的缓存管理器
 class SimpleCacheManager {
   constructor(maxSize = 100 * 1024 * 1024) {

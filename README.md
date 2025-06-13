@@ -207,12 +207,16 @@ AIunittest/
 │   └── public/                # 静态资源
 ├── docs/                      # 文档
 │   └── AI_CONFIG_GUIDE.md     # AI配置指南
-├── logs/                      # 日志目录
-│   └── app.log               # 应用日志
-├── docker-compose.yml         # Docker编排配置
-├── start_services.bat         # Windows启动脚本
-├── start_services.sh          # Linux/Mac启动脚本
-└── README.md                  # 本文件
+├── deployment/               # 负载均衡部署配置
+│   ├── nginx/               # Nginx负载均衡配置
+│   ├── redis/               # Redis缓存配置
+│   ├── postgres/            # PostgreSQL数据库配置
+│   ├── monitoring/          # 监控配置 (Prometheus/Grafana)
+│   ├── load-balanced-docker-compose.yml # 负载均衡部署
+│   ├── deploy.sh/.bat       # 自动化部署脚本
+│   └── DEPLOYMENT_GUIDE.md  # 详细部署指南
+├── logs/                    # 日志目录 (运行时生成)
+└── README.md                # 项目说明 (本文件)
 ```
 
 ## 🔒 安全特性

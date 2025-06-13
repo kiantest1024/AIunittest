@@ -6,6 +6,7 @@
 import asyncio
 import time
 import uuid
+import os
 from typing import Dict, Optional
 import logging
 
@@ -14,11 +15,16 @@ logger = logging.getLogger(__name__)
 class SimpleTaskQueue:
     """简化的任务队列，用于控制并发"""
     
-    def __init__(self, max_concurrent: int = 3):
+    def __init__(self, max_concurrent: int = None):
+        # 从环境变量获取最大并发数，默认为3
+        if max_concurrent is None:
+            max_concurrent = int(os.getenv('MAX_CONCURRENT_TASKS', '3'))
+
         self.max_concurrent = max_concurrent
         self.running_tasks: Dict[str, dict] = {}
         self.semaphore = asyncio.Semaphore(max_concurrent)
         self.lock = asyncio.Lock()
+        self.instance_id = os.getenv('INSTANCE_ID', 'default')
     
     async def execute_task(self, task_func, *args, **kwargs):
         """执行任务，控制并发数量"""
@@ -35,7 +41,7 @@ class SimpleTaskQueue:
                 }
             
             try:
-                logger.info(f"Starting task {task_id}, concurrent tasks: {len(self.running_tasks)}")
+                logger.info(f"[{self.instance_id}] Starting task {task_id}, concurrent tasks: {len(self.running_tasks)}")
                 
                 # 执行任务
                 result = await task_func(*args, **kwargs)
@@ -85,7 +91,9 @@ def get_simple_queue() -> SimpleTaskQueue:
     """获取全局队列实例"""
     global _simple_queue
     if _simple_queue is None:
-        _simple_queue = SimpleTaskQueue(max_concurrent=3)
+        # 从环境变量获取最大并发数
+        max_concurrent = int(os.getenv('MAX_CONCURRENT_TASKS', '3'))
+        _simple_queue = SimpleTaskQueue(max_concurrent=max_concurrent)
     return _simple_queue
 
 async def execute_with_queue(task_func, *args, **kwargs):

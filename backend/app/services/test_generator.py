@@ -1,16 +1,9 @@
 from typing import List
 
-# 根据运行位置动态调整导入路径
-try:
-    from app.models.schemas import CodeSnippet, TestResult
-    from app.services.parser_factory import ParserFactory
-    from app.services.ai_service import generate_test_with_ai
-    from app.utils.logger import logger
-except ModuleNotFoundError:
-    from models.schemas import CodeSnippet, TestResult
-    from services.parser_factory import ParserFactory
-    from services.ai_service import generate_test_with_ai
-    from utils.logger import logger
+from app.models.schemas import CodeSnippet, TestResult
+from app.services.parser_factory import ParserFactory
+from app.services.ai_service import generate_test_with_ai
+from app.utils.logger import logger
 
 def _get_test_file_extension(language: str) -> str:
     """获取测试文件扩展名"""
@@ -83,8 +76,6 @@ def generate_tests(code: str, language: str, model: str, file_path: str = None) 
             ))
         except Exception as e:
             logger.error(f"Error generating test for {snippet.name}: {e}")
-            print(f"Error generating test for {snippet.name}: {e}")
-            # 出错时仍然添加一个结果，但使用错误消息
             test_code = f"# Error generating test: {str(e)}\n\n# 请手动编写测试"
             results.append(TestResult(
                 name=snippet.name,
@@ -136,8 +127,6 @@ async def generate_tests_stream(code: str, language: str, model: str, file_path:
             )
         except Exception as e:
             logger.error(f"Error generating test for {snippet.name}: {e}")
-            print(f"Error generating test for {snippet.name}: {e}")
-            # 出错时仍然添加一个结果，但使用错误消息
             test_code = f"# Error generating test: {str(e)}\n\n# 请手动编写测试"
             yield TestResult(
                 name=snippet.name,

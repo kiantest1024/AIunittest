@@ -21,19 +21,9 @@ const LANGUAGE_EXTENSIONS = {
   csharp: '.cs'
 };
 
-/**
- * 测试生成器组件
- *
- * @returns {JSX.Element} 测试生成器组件
- */
 const TestGenerator = () => {
-  // 使用Context管理状态
   const { state, dispatch } = useAppContext();
   const { code, language, model, generatedTests, loading } = state;
-
-
-
-  // 本地状态
   const [activeTabKey, setActiveTabKey] = useState('code');
   const [gitModalVisible, setGitModalVisible] = useState(false);
   const [languages, setLanguages] = useState([]);
@@ -41,7 +31,6 @@ const TestGenerator = () => {
 
   const [streamProgress, setStreamProgress] = useState(0);
   const [isStreaming, setIsStreaming] = useState(false);
-  // 添加生成进度状态
   const [generationProgress, setGenerationProgress] = useState(0);
   const [totalSnippets, setTotalSnippets] = useState(0);
   const [currentSnippet, setCurrentSnippet] = useState('');
@@ -51,18 +40,13 @@ const TestGenerator = () => {
     token: '',
     repo: '',
     path: '',
-    provider: 'github' // 添加 provider 字段
+    provider: 'github'
   });
-
-  // 全屏进度显示状态
   const [fullScreenProgress, setFullScreenProgress] = useState(false);
   const [backgroundGeneration, setBackgroundGeneration] = useState(false);
+  const [currentTaskId, setCurrentTaskId] = useState(null);
+  const [cancellingTask, setCancellingTask] = useState(false);
 
-  // 任务管理状态
-  const [currentTaskId, setCurrentTaskId] = useState(null); // 当前任务ID
-  const [cancellingTask, setCancellingTask] = useState(false); // 取消任务状态
-
-  // 加载支持的语言和模型
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -74,7 +58,6 @@ const TestGenerator = () => {
         setLanguages(languagesData);
         setModels(modelsData.models);
 
-        // 如果当前模型不在模型列表中，或者有默认模型配置，则设置默认模型
         if (modelsData.default_model &&
             (!model || !modelsData.models.includes(model) || model !== modelsData.default_model)) {
           dispatch({ type: ActionTypes.SET_MODEL, payload: modelsData.default_model });
@@ -88,7 +71,6 @@ const TestGenerator = () => {
     fetchData();
   }, [model, dispatch]);
 
-  // 计时器效果
   useEffect(() => {
     let timer;
     if (generationStartTime && loading) {
@@ -107,26 +89,21 @@ const TestGenerator = () => {
     };
   }, [generationStartTime, loading]);
 
-  // 处理语言变更
   const handleLanguageChange = useCallback((value) => {
     dispatch({ type: ActionTypes.SET_LANGUAGE, payload: value });
     setActiveTabKey('code');
   }, [dispatch]);
 
-  // 处理模型变更
   const handleModelChange = useCallback((value) => {
     dispatch({ type: ActionTypes.SET_MODEL, payload: value });
   }, [dispatch]);
 
-  // 处理代码变更
   const handleCodeChange = useCallback((value) => {
     dispatch({ type: ActionTypes.SET_CODE, payload: value });
   }, [dispatch]);
 
-  // 处理文件上传
   const handleFileUpload = useCallback(async (file) => {
     try {
-      // 检查文件类型
       const fileExt = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
       let fileLanguage = null;
 
@@ -142,7 +119,6 @@ const TestGenerator = () => {
         return false;
       }
 
-      // 上传文件
       const formData = new FormData();
       formData.append('file', file);
 
@@ -161,15 +137,13 @@ const TestGenerator = () => {
         dispatch({ type: ActionTypes.SET_LOADING, payload: false });
       }
 
-      return false; // 阻止自动上传
+      return false;
     } catch (error) {
       console.error('Error handling file upload:', error);
       message.error('文件上传处理失败', 3);
       return false;
     }
   }, [dispatch]);
-
-  // 处理从Git获取代码
   const handleCodeFetched = useCallback(async (platform, path, token, repo, serverUrl = '') => {
     dispatch({ type: ActionTypes.SET_LOADING, payload: true });
 
@@ -180,14 +154,11 @@ const TestGenerator = () => {
         throw new Error('Invalid response format: missing content');
       }
 
-      // 设置代码内容
       dispatch({ type: ActionTypes.SET_CODE, payload: response.content });
 
-      // 设置语言
       if (response.language) {
         dispatch({ type: ActionTypes.SET_LANGUAGE, payload: response.language });
       } else {
-        // 尝试从文件扩展名推断语言
         const fileExt = path.split('.').pop().toLowerCase();
         let detectedLanguage = null;
 
@@ -202,7 +173,6 @@ const TestGenerator = () => {
         }
       }
 
-      // 保存Git信息，用于后续上传
       const dirPath = path.includes('/') ? path.substring(0, path.lastIndexOf('/')) : '';
       setGitInfo({
         platform,
@@ -222,23 +192,18 @@ const TestGenerator = () => {
     }
   }, [dispatch, setActiveTabKey]);
 
-  // 流式生成测试
   const handleStreamGenerateTests = useCallback(async () => {
     if (!code.trim()) {
       message.error('请先输入或上传代码！', 3);
       return;
     }
 
-    // 重置状态
-
     setStreamProgress(0);
     setIsStreaming(true);
-    setGenerationProgress(5); // 立即设置初始进度
+    setGenerationProgress(5);
     setTotalSnippets(0);
     setCurrentSnippet('正在准备生成单元测试用例...');
     setGenerationStartTime(new Date());
-
-    // 显示全屏进度
     setFullScreenProgress(true);
 
     dispatch({ type: ActionTypes.SET_LOADING, payload: true });
@@ -247,36 +212,29 @@ const TestGenerator = () => {
     try {
       message.info('正在生成单元测试用例，这可能需要几分钟时间...', 3);
 
-      // 估算代码中的函数/方法数量
       const functionMatches = code.match(/\b(function|def|class|method|func|public\s+\w+|private\s+\w+|protected\s+\w+)\b/g);
       const estimatedSnippets = functionMatches ? functionMatches.length : 1;
       setTotalSnippets(estimatedSnippets);
       setCurrentSnippet('正在解析代码...');
       setGenerationProgress(5);
 
-      // 创建一个临时数组来存储流式生成的测试
       let tempTests = [];
 
-      // 调用流式API
       try {
         await generateTestsStream(code, language, model, (result) => {
           try {
-
             if (!result) {
               console.warn('Received empty result from stream');
               return;
             }
 
-            // 处理错误消息
             if (result.error) {
               console.error('Error in test generation stream:', result.error);
               message.error('生成单元测试用例时出错: ' + result.error, 3);
               return;
             }
 
-            // 处理状态消息
             if (result.status) {
-              // 更新进度
               if (result.progress !== undefined) {
                 setGenerationProgress(result.progress);
               }
@@ -322,56 +280,42 @@ const TestGenerator = () => {
                 return;
               }
 
-              // 其他状态消息
               return;
             }
 
-            // 这里已经在上面处理了状态消息，不需要重复处理
-
-            // 验证结果包含必要的字段
             if (!result.name || !result.test_code) {
               console.warn('Received incomplete test result:', result);
               return;
             }
 
-            // 如果有成功标志，记录它
             if (result.success) {
               message.success(result.message || `生成单元测试用例: ${result.name}`, 3);
             }
 
-            // 添加新的测试到临时数组
             const newTest = {
               name: result.name,
-              type: result.type || 'function',  // 默认为函数类型
+              type: result.type || 'function',
               test_code: result.test_code,
               original_snippet: {
                 name: result.name,
                 type: result.type || 'function',
-                code: ''  // 我们没有原始代码片段
+                code: ''
               }
             };
 
-            // 检查是否已经存在相同名称的测试
             const existingIndex = tempTests.findIndex(test => test.name === result.name);
             if (existingIndex >= 0) {
-              // 更新现有测试
               tempTests[existingIndex] = newTest;
             } else {
-              // 添加新测试
               tempTests = [...tempTests, newTest];
             }
 
-            // 立即更新全局状态，让新测试立即显示
-
-            // 使用setTimeout确保状态更新不被React批量处理延迟
             setTimeout(() => {
               dispatch({ type: ActionTypes.SET_GENERATED_TESTS, payload: [...tempTests] });
             }, 0);
 
-            // 更新进度
             setStreamProgress(tempTests.length);
 
-            // 使用后端提供的进度信息，如果没有则使用估算
             if (result.progress !== undefined) {
               setGenerationProgress(result.progress);
             } else {
@@ -379,21 +323,18 @@ const TestGenerator = () => {
               setGenerationProgress(progressPercent);
             }
 
-            // 使用后端提供的进度信息更新当前状态
             if (result.completed !== undefined && result.total !== undefined) {
               setCurrentSnippet(`已生成单元测试用例: ${result.name} (${result.completed}/${result.total})`);
             } else {
               setCurrentSnippet(`已生成单元测试用例: ${result.name} (${tempTests.length}/${estimatedSnippets})`);
             }
 
-            // 如果这是第一个测试，自动切换到测试标签页
             if (tempTests.length === 1) {
               setTimeout(() => {
                 setActiveTabKey('test-0');
               }, 100);
             }
 
-            // 显示成功消息（避免重复显示）
             if (!result.success) {
               message.success(`已生成单元测试用例: ${result.name}`, 3);
             }
@@ -401,7 +342,6 @@ const TestGenerator = () => {
             console.error('Error processing test result:', e);
           }
         }, (taskId) => {
-          // 任务ID回调
           setCurrentTaskId(taskId);
         });
       } catch (streamError) {
@@ -409,9 +349,6 @@ const TestGenerator = () => {
         message.error('流式生成单元测试用例失败: ' + streamError.message, 3);
       }
 
-      // 确保最终状态更新
-
-      // 最终状态已经在每个测试生成时更新了，这里只需要显示完成消息
       if (tempTests.length > 0) {
         message.success(`单元测试用例生成成功！共生成 ${tempTests.length} 个测试用例`, 3);
       } else {
@@ -423,47 +360,30 @@ const TestGenerator = () => {
       const errorMsg = error.response?.data?.detail || error.message;
       message.error('生成测试失败: ' + errorMsg, 3);
 
-      // 检查是否是API密钥错误
       if (errorMsg.includes('API key') || errorMsg.includes('Authentication') || errorMsg.includes('auth header')) {
         message.warning('请确保您已在后端设置了有效的API密钥。请查看.env文件或环境变量。', 10);
       }
     } finally {
       setIsStreaming(false);
       setGenerationProgress(100);
-
-      // 关闭全屏进度
       setFullScreenProgress(false);
 
-      // 使用当前的generatedTests状态而不是streamingTests
       const currentTests = state.generatedTests || [];
       setCurrentSnippet(currentTests.length > 0 ? '生成完成' : '未找到可测试的代码');
       dispatch({ type: ActionTypes.SET_LOADING, payload: false });
-
-      // 确保最终状态正确
     }
   }, [code, language, model, dispatch, setActiveTabKey, generatedTests]);
-
-
-
-  // 生成测试 (使用流式生成替代直接生成)
   const handleGenerateTests = useCallback(async () => {
-    // 使用流式生成测试，提供实时进度
     await handleStreamGenerateTests();
   }, [handleStreamGenerateTests]);
 
-
-
-  // 打开Git保存模态框
   const handleOpenGitModal = () => {
     setGitModalVisible(true);
   };
 
-  // 关闭Git保存模态框
   const handleCloseGitModal = () => {
     setGitModalVisible(false);
   };
-
-  // 取消任务
   const handleCancelTask = useCallback(async () => {
     if (!currentTaskId) {
       console.warn('No current task ID to cancel');
@@ -474,7 +394,6 @@ const TestGenerator = () => {
     try {
       await cancelTask(currentTaskId);
 
-      // 重置状态
       setIsStreaming(false);
       setFullScreenProgress(false);
       setCurrentTaskId(null);
@@ -489,13 +408,10 @@ const TestGenerator = () => {
     }
   }, [currentTaskId, dispatch]);
 
-  // 保存到本地
   const handleSaveToLocal = (testCode, testName) => {
-    // 创建Blob对象
     const blob = new Blob([testCode], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
 
-    // 创建下载链接
     const a = document.createElement('a');
     a.href = url;
     a.download = `test_${testName}${LANGUAGE_EXTENSIONS[language]}`;
