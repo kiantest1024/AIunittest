@@ -1,6 +1,5 @@
 import logging
 import sys
-import os
 from pathlib import Path
 
 def setup_logger():

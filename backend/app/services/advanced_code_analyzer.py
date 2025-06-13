@@ -13,7 +13,6 @@ import json
 from app.models.schemas import CodeSnippet
 from app.utils.logger import logger
 
-
 @dataclass
 class MethodInfo:
     """方法信息"""
@@ -26,7 +25,6 @@ class MethodInfo:
     complexity: int
     annotations: List[str]
     javadoc: Optional[str] = None
-
 
 @dataclass
 class ClassInfo:
@@ -42,7 +40,6 @@ class ClassInfo:
     is_interface: bool = False
     is_abstract: bool = False
 
-
 @dataclass
 class ProjectContext:
     """项目上下文信息"""
@@ -52,7 +49,6 @@ class ProjectContext:
     dto_entities: List[str] = field(default_factory=list)
     test_frameworks: List[str] = field(default_factory=list)
     project_patterns: Dict[str, Any] = field(default_factory=dict)
-
 
 class AdvancedCodeAnalyzer:
     """高级代码分析器"""

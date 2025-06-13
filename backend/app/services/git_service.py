@@ -499,19 +499,16 @@ class GitHubService(BaseGitService):
             logger.error(f"Error creating pull request: {e}")
             raise
 
-
 # 包装函数，用于向后兼容
 def list_repositories(token: str) -> List[GitRepository]:
     """包装函数：列出GitHub仓库"""
     service = GitHubService(token)
     return service.list_repositories()
 
-
 def list_directories(repo_full_name: str, token: str, path: str = "") -> List[GitDirectory]:
     """包装函数：列出GitHub目录"""
     service = GitHubService(token)
     return service.list_directories(repo_full_name, path)
-
 
 def save_to_git(tests: List[TestResult], language: str, repo_full_name: str,
                 base_path: str, token: str, branch: str = "main") -> List[str]:

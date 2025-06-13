@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import FileSystemCache from '../services/FileSystemCache';
-import { Card, Radio, Input, Button, Select, Spin, Tree, message, Tooltip, List, Tag, Divider, Switch, Collapse } from 'antd';
+import { Card, Radio, Input, Button, Select, Tree, message, Tooltip, List, Switch, Divider } from 'antd';
 
 import MessageDisplay from './MessageDisplay';
 import LoadingIndicator from './LoadingIndicator';
-import GitServerConfig from './GitServerConfig';
 import {
   QuestionCircleOutlined,
   GithubOutlined,
   GitlabOutlined,
   FileOutlined,
   FolderOutlined,
-  CheckCircleOutlined,
-  FileTextOutlined,
-  SettingOutlined
+  FileTextOutlined
 } from '@ant-design/icons';
 import { getRepositories, getDirectories, cloneGitLabRepo } from '../services/api';
 
@@ -29,15 +26,13 @@ const GitSourceSelector = ({ onCodeFetched, loading, setLoading }) => {
   const [gitlabUrl, setGitlabUrl] = useState('');
   const [githubUrl, setGithubUrl] = useState(''); // GitHub仓库URL
 
-  // 服务器配置状态
-  const [serverConfigVisible, setServerConfigVisible] = useState(false);
   const [githubServerUrl, setGithubServerUrl] = useState('https://github.com');
   const [gitlabServerUrl, setGitlabServerUrl] = useState('https://gitlab.com');
   const [repositories, setRepositories] = useState([]);
   const [selectedRepo, setSelectedRepo] = useState(null);
   const [directories, setDirectories] = useState([]);
   const [selectedPath, setSelectedPath] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null);
+
   const [tokenError, setTokenError] = useState('');
   const [loadedFiles, setLoadedFiles] = useState([]);
   const [activeRepo, setActiveRepo] = useState(null);
@@ -122,7 +117,7 @@ const GitSourceSelector = ({ onCodeFetched, loading, setLoading }) => {
       clearInterval(statsInterval);
       localStorage.setItem('use_cache', useCache.toString());
     };
-  }, []);
+  }, [useCache]);
 
   // 加载代码仓库
 const handleLoadRepositories = async () => {
@@ -192,7 +187,7 @@ const handleLoadRepositories = async () => {
         setSelectedRepo(null);
         setDirectories([]);
         setSelectedPath('');
-        setSelectedFile(null);
+
 
         if (repos.length === 0) {
           setWarning('未找到仓库。请确保您有权限访问仓库。');
@@ -211,7 +206,7 @@ const handleLoadRepositories = async () => {
         setSelectedRepo(null);
         setDirectories([]);
         setSelectedPath('');
-        setSelectedFile(null);
+
 
         if (repos.length === 0) {
           setWarning('未找到仓库。请确保您有权限访问仓库。');
@@ -255,7 +250,7 @@ const handleLoadRepositories = async () => {
     setSelectedRepo(value);
     setDirectories([]);
     setSelectedPath('');
-    setSelectedFile(null);
+
 
     if (!value) return;
 
@@ -272,8 +267,7 @@ const handleLoadRepositories = async () => {
     try {
       updateProgress(30);
       let dirs;
-      const cacheKey = `dirs_${gitPlatform}_${value}`;
-      
+
       if (useCache) {
         dirs = FileSystemCache.getDirectory(gitPlatform, value, '');
       }
@@ -371,7 +365,7 @@ const handleLoadRepositories = async () => {
           };
 
           updateProgress(30);
-          setSelectedFile(newFile);
+
 
           setLoadedFiles(prevFiles => {
             const fileExists = prevFiles.some(f =>
@@ -468,39 +462,42 @@ const handleLoadRepositories = async () => {
   };
 
   return (
-    <Card title={
-      <div>
-        <span style={{ marginRight: 16 }}>从代码仓库获取代码</span>
-        <Radio.Group
-          value={gitPlatform}
-          onChange={(e) => {
-            setLoadingType('switch');
-            setLoadingMessage('切换平台中...');
-            setGitPlatform(e.target.value);
-            setRepositories([]);
-            setSelectedRepo(null);
-            setDirectories([]);
-            setSelectedPath('');
-            setSelectedFile(null);
-            setError('');
-            setWarning('');
-            setInfo('');
-            setProgress(undefined);
-            setTimeout(() => setLoadingType('default'), 500);
-          }}
-          style={{ marginLeft: 8 }}
-        >
-          <Radio.Button value="github" style={{ minWidth: '100px', textAlign: 'center' }}>
-            <GithubOutlined style={{ marginRight: '6px' }} />
-            GitHub
-          </Radio.Button>
-          <Radio.Button value="gitlab" style={{ minWidth: '100px', textAlign: 'center' }}>
-            <GitlabOutlined style={{ marginRight: '6px' }} />
-            GitLab
-          </Radio.Button>
-        </Radio.Group>
-      </div>
-    }>
+    <Card
+      title="代码获取方式"
+      extra={
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{ fontSize: '14px', color: '#666' }}>选择平台:</span>
+          <Radio.Group
+            value={gitPlatform}
+            onChange={(e) => {
+              setLoadingType('switch');
+              setLoadingMessage('切换平台中...');
+              setGitPlatform(e.target.value);
+              setRepositories([]);
+              setSelectedRepo(null);
+              setDirectories([]);
+              setSelectedPath('');
+
+              setError('');
+              setWarning('');
+              setInfo('');
+              setProgress(undefined);
+              setTimeout(() => setLoadingType('default'), 500);
+            }}
+            size="small"
+          >
+            <Radio.Button value="github" style={{ minWidth: '90px', textAlign: 'center' }}>
+              <GithubOutlined style={{ marginRight: '4px' }} />
+              GitHub
+            </Radio.Button>
+            <Radio.Button value="gitlab" style={{ minWidth: '90px', textAlign: 'center' }}>
+              <GitlabOutlined style={{ marginRight: '4px' }} />
+              GitLab
+            </Radio.Button>
+          </Radio.Group>
+        </div>
+      }
+    >
       <MessageDisplay error={error} warning={warning} info={info} onErrorClear={() => setError('')} />
 
       {/* 访问模式选择 */}
@@ -516,7 +513,7 @@ const handleLoadRepositories = async () => {
             setSelectedRepo(null);
             setDirectories([]);
             setSelectedPath('');
-            setSelectedFile(null);
+
             setError('');
             setWarning('');
             setInfo('');
@@ -697,8 +694,6 @@ const handleLoadRepositories = async () => {
               />
             </div>
           )}
-
-
 
           <Button
             onClick={handleLoadRepositories}

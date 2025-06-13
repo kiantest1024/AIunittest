@@ -1,4 +1,4 @@
-import { getFileContent } from './api';
+
 
 // 简化的缓存管理器
 class SimpleCacheManager {
@@ -257,9 +257,9 @@ class FileSystemCache {
     }
   }
 
-
 }
 
 // 导出类和单例实例
 export { FileSystemCache };
-export default new FileSystemCache();
+const fileSystemCache = new FileSystemCache();
+export default fileSystemCache;

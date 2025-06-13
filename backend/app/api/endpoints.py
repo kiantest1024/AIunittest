@@ -14,7 +14,7 @@ from app.models.schemas import (
 from app.services.test_generator import generate_tests
 from app.services.git_service import list_directories, save_to_git
 from app.services.parser_factory import ParserFactory
-from app.config import settings, AI_MODELS
+from app.config import settings, AI_MODELS, ai_config_manager, get_ai_models
 from app.utils.logger import logger
 
 router = APIRouter()
@@ -109,8 +109,9 @@ async def generate_test(request: GenerateTestRequest):
         logger.warning(f"Unsupported language: {request.language}")
         raise ValueError(f"Unsupported language: {request.language}")
 
-    # 检查模型是否支持
-    if request.model not in AI_MODELS:
+    # 检查模型是否支持（动态获取最新配置）
+    current_models = get_ai_models()
+    if request.model not in current_models:
         logger.warning(f"Unsupported model: {request.model}")
         raise ValueError(f"Unsupported model: {request.model}")
 
@@ -136,8 +137,9 @@ async def generate_test_direct(request: GenerateTestRequest):
             logger.warning(f"Unsupported language: {request.language}")
             return {"error": f"Unsupported language: {request.language}"}
 
-        # 检查模型是否支持
-        if request.model not in AI_MODELS:
+        # 检查模型是否支持（动态获取最新配置）
+        current_models = get_ai_models()
+        if request.model not in current_models:
             logger.warning(f"Unsupported model: {request.model}")
             return {"error": f"Unsupported model: {request.model}"}
 
@@ -258,8 +260,6 @@ async def generate_test_direct(request: GenerateTestRequest):
             "tests": []
         }
 
-
-
 @router.post("/generate-test-stream")
 async def generate_test_stream(request: GenerateTestRequest, user_id: str = Header(default="anonymous")):
     """流式生成测试代码（使用队列系统）"""
@@ -273,8 +273,9 @@ async def generate_test_stream(request: GenerateTestRequest, user_id: str = Head
                 media_type="application/x-ndjson"
             )
 
-        # 检查模型是否支持
-        if request.model not in AI_MODELS:
+        # 检查模型是否支持（动态获取最新配置）
+        current_models = get_ai_models()
+        if request.model not in current_models:
             logger.warning(f"Unsupported model: {request.model}")
             return StreamingResponse(
                 [json.dumps({"error": f"Unsupported model: {request.model}"}) + "\n"],
@@ -302,7 +303,7 @@ async def generate_test_stream(request: GenerateTestRequest, user_id: str = Head
             logger.info(f"Using file path from Git: {file_path}")
 
         # 定义流式生成任务
-        async def stream_task(**kwargs):
+        async def stream_task():
             async def stream_generator():
                 try:
                     # 发送初始消息
@@ -684,7 +685,12 @@ async def save_tests_to_git(request: GitSaveRequest):
 @router.get("/models")
 async def get_models():
     """获取支持的AI模型列表"""
-    return {"models": list(AI_MODELS.keys())}
+    # 动态获取最新的模型配置
+    current_models = get_ai_models()
+    return {
+        "models": list(current_models.keys()),
+        "default_model": ai_config_manager.default_model
+    }
 
 @router.get("/languages")
 async def get_languages():
@@ -740,6 +746,7 @@ async def cancel_task(task_id: str, user_id: str = Header(default="anonymous")):
     """取消任务"""
     try:
         # 简化队列不支持取消，直接返回成功
+        logger.info(f"Task cancellation requested by user {user_id} for task {task_id}")
         return {"message": "Task cancellation not supported in simplified queue"}
     except Exception as e:
         logger.error(f"Error cancelling task: {e}")
@@ -965,7 +972,6 @@ async def get_file_content(
                 }
 
                 logger.info(f"File content retrieved successfully from GitHub: {path}")
-                logger.debug(f"Content preview: {content[:100]}...")
 
                 return result
             else:
@@ -996,7 +1002,6 @@ async def get_file_content(
                 }
 
                 logger.info(f"File content retrieved successfully from GitLab: {path}")
-                logger.debug(f"Content preview: {file_content_str[:100]}...")
 
                 return result
 
@@ -1067,3 +1072,148 @@ async def clone_repo_universal(platform: str, repo_url: str, token: str, path: s
     except Exception as e:
         logger.error(f"Error cloning {platform} repository: {e}")
         raise ValueError(f"Failed to clone repository: {str(e)}")
+
+# AI配置管理API接口
+@router.get("/ai-config/models")
+async def get_ai_models_api():
+    """获取所有AI模型配置"""
+    try:
+        models = ai_config_manager.get_all_models()
+        return {
+            "success": True,
+            "models": models,
+            "default_model": ai_config_manager.default_model
+        }
+    except Exception as e:
+        logger.error(f"Error getting AI models: {e}")
+        return {"success": False, "error": str(e)}
+
+@router.post("/ai-config/verify-password")
+async def verify_ai_config_password(request: dict):
+    """验证AI配置管理密码"""
+    try:
+        password = request.get("password", "")
+        is_valid = ai_config_manager.verify_password(password)
+        return {"success": True, "valid": is_valid}
+    except Exception as e:
+        logger.error(f"Error verifying password: {e}")
+        return {"success": False, "error": str(e)}
+
+@router.post("/ai-config/change-password")
+async def change_ai_config_password(request: dict):
+    """修改AI配置管理密码"""
+    try:
+        old_password = request.get("old_password", "")
+        new_password = request.get("new_password", "")
+
+        if not ai_config_manager.verify_password(old_password):
+            return {"success": False, "error": "原密码错误"}
+
+        success = ai_config_manager.change_password(old_password, new_password)
+        if success:
+            return {"success": True, "message": "密码修改成功"}
+        else:
+            return {"success": False, "error": "密码修改失败"}
+    except Exception as e:
+        logger.error(f"Error changing password: {e}")
+        return {"success": False, "error": str(e)}
+
+@router.post("/ai-config/add-model")
+async def add_ai_model(request: dict):
+    """添加自定义AI模型"""
+    try:
+        password = request.get("password", "")
+        if not ai_config_manager.verify_password(password):
+            return {"success": False, "error": "密码错误，无权限执行此操作"}
+
+        model_name = request.get("model_name", "")
+        model_config = request.get("model_config", {})
+
+        if not model_name or not model_config:
+            return {"success": False, "error": "模型名称和配置不能为空"}
+
+        # 添加自定义标识
+        model_config["is_system"] = False
+
+        success = ai_config_manager.add_custom_model(model_name, model_config)
+        if success:
+            # 更新全局AI_MODELS变量
+            global AI_MODELS
+            AI_MODELS = get_ai_models()
+            return {"success": True, "message": f"模型 {model_name} 添加成功"}
+        else:
+            return {"success": False, "error": "添加模型失败"}
+    except Exception as e:
+        logger.error(f"Error adding AI model: {e}")
+        return {"success": False, "error": str(e)}
+
+@router.post("/ai-config/update-model")
+async def update_ai_model(request: dict):
+    """更新AI模型配置"""
+    try:
+        password = request.get("password", "")
+        if not ai_config_manager.verify_password(password):
+            return {"success": False, "error": "密码错误，无权限执行此操作"}
+
+        model_name = request.get("model_name", "")
+        model_config = request.get("model_config", {})
+
+        if not model_name or not model_config:
+            return {"success": False, "error": "模型名称和配置不能为空"}
+
+        success = ai_config_manager.update_model(model_name, model_config)
+        if success:
+            # 更新全局AI_MODELS变量
+            global AI_MODELS
+            AI_MODELS = get_ai_models()
+            return {"success": True, "message": f"模型 {model_name} 更新成功"}
+        else:
+            return {"success": False, "error": "更新模型失败"}
+    except Exception as e:
+        logger.error(f"Error updating AI model: {e}")
+        return {"success": False, "error": str(e)}
+
+@router.post("/ai-config/delete-model")
+async def delete_ai_model(request: dict):
+    """删除自定义AI模型"""
+    try:
+        password = request.get("password", "")
+        if not ai_config_manager.verify_password(password):
+            return {"success": False, "error": "密码错误，无权限执行此操作"}
+
+        model_name = request.get("model_name", "")
+        if not model_name:
+            return {"success": False, "error": "模型名称不能为空"}
+
+        success = ai_config_manager.delete_custom_model(model_name)
+        if success:
+            # 更新全局AI_MODELS变量
+            global AI_MODELS
+            AI_MODELS = get_ai_models()
+            return {"success": True, "message": f"模型 {model_name} 删除成功"}
+        else:
+            return {"success": False, "error": "删除模型失败或模型不存在"}
+    except Exception as e:
+        logger.error(f"Error deleting AI model: {e}")
+        return {"success": False, "error": str(e)}
+
+@router.post("/ai-config/set-default-model")
+async def set_default_ai_model(request: dict):
+    """设置默认AI模型"""
+    try:
+        password = request.get("password", "")
+        if not ai_config_manager.verify_password(password):
+            return {"success": False, "error": "密码错误，无权限执行此操作"}
+
+        model_name = request.get("model_name", "")
+        if not model_name:
+            return {"success": False, "error": "模型名称不能为空"}
+
+        success = ai_config_manager.set_default_model(model_name)
+        if success:
+            return {"success": True, "message": f"默认模型设置为 {model_name}"}
+        else:
+            return {"success": False, "error": "设置默认模型失败或模型不存在"}
+    except Exception as e:
+        logger.error(f"Error setting default AI model: {e}")
+        return {"success": False, "error": str(e)}

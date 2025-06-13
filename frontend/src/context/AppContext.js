@@ -34,25 +34,18 @@ function appReducer(state, action) {
     case ActionTypes.SET_MODEL:
       return { ...state, model: action.payload };
     case ActionTypes.SET_GENERATED_TESTS:
-      console.log('Reducer: Setting generatedTests to:', action.payload);
-      console.log('Payload type:', typeof action.payload);
       console.log('Is array:', Array.isArray(action.payload));
-      console.log('Length:', action.payload ? action.payload.length : 0);
-
       // 确保 payload 是数组
       let tests = [];
       if (Array.isArray(action.payload)) {
         tests = [...action.payload]; // 创建一个新数组
-        console.log('Created new array with tests:', tests);
       } else if (action.payload && typeof action.payload === 'object') {
         // 尝试从对象中提取测试
         if (action.payload.tests && Array.isArray(action.payload.tests)) {
           tests = [...action.payload.tests];
-          console.log('Extracted tests from object:', tests);
         }
       }
 
-      console.log('Final tests array:', tests);
       return { ...state, generatedTests: tests };
     case ActionTypes.SET_LOADING:
       return { ...state, loading: action.payload };

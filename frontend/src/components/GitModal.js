@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Input, Button, Select, Spin, Tree, message, Tooltip, Radio } from 'antd';
 import {
   QuestionCircleOutlined,
-  FolderOpenOutlined,
   FolderOutlined,
   FileOutlined,
   LoadingOutlined
@@ -156,8 +155,6 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
           handleSelectRepository(repoData);
         } else {
           const cloneResponse = await cloneGitLabRepo(repoUrl, gitToken, gitlabServerUrl);
-          console.log('GitLab clone response:', cloneResponse);
-          console.log('GitLab clone response data:', cloneResponse.data);
 
           // 检查响应结构
           if (!cloneResponse || !cloneResponse.data) {
@@ -171,13 +168,10 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
 
           // 构建fallback的full_name
           const fallbackFullName = repoUrl.split('/').slice(-2).join('/').replace('.git', '');
-          console.log('Fallback full_name from URL:', fallbackFullName);
 
           if (responseData.repo_info) {
             // 使用服务器返回的完整仓库信息
             repoInfo = { ...responseData.repo_info };
-            console.log('Using server repo_info:', repoInfo);
-
             // 验证服务器返回的full_name
             if (!repoInfo.full_name || repoInfo.full_name.trim() === '') {
               console.warn('Server repo_info has empty full_name, using fallback');
@@ -190,7 +184,6 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
               full_name: fallbackFullName,
               clone_path: responseData.clone_path
             };
-            console.log('Using fallback repo_info:', repoInfo);
           }
 
           // 最终验证full_name字段
@@ -203,8 +196,6 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
           if (!repoInfo.name || repoInfo.name.trim() === '') {
             repoInfo.name = repoInfo.full_name.split('/').pop() || 'Repository';
           }
-
-          console.log('Final repo_info for directory loading:', repoInfo);
           setRepositories([repoInfo]);
           message.success(`Successfully cloned GitLab repository: ${repoInfo.name || 'Repository'}`, 3);
           handleSelectRepository(repoInfo);
@@ -222,8 +213,6 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
 
   // 选择仓库
   const handleSelectRepository = async (repo) => {
-    console.log('handleSelectRepository called with repo:', repo);
-
     // 验证repo对象
     if (!repo) {
       message.error('Repository information is missing', 3);
@@ -246,13 +235,6 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
         return;
       }
     }
-
-    console.log('Final repo object for directory loading:', {
-      name: repo.name,
-      full_name: repo.full_name,
-      clone_path: repo.clone_path
-    });
-
     setSelectedRepo(repo);
     setDirectories([]);
     setSelectedPath('');
@@ -260,14 +242,6 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
 
     try {
       const serverUrl = gitPlatform === 'github' ? githubServerUrl : gitlabServerUrl;
-      console.log('Calling getDirectories with:', {
-        repo: repo.full_name,
-        token: gitToken ? 'present' : 'missing',
-        path: '',
-        platform: gitPlatform,
-        serverUrl: serverUrl
-      });
-
       const dirs = await getDirectories(repo.full_name, gitToken, '', gitPlatform, serverUrl);
 
       const treeData = dirs.map(item => ({
@@ -281,8 +255,6 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
           : <FolderOutlined />,
         rawData: item
       }));
-
-      console.log('Initial repository load:', repo.full_name, 'Found items:', treeData.length);
       setDirectories(treeData);
     } catch (error) {
       console.error('Error loading directories:', error);
@@ -338,10 +310,8 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
       }));
 
       // 更新目录树数据
-      console.log('Loading directory:', key, 'Found items:', treeNodes.length);
       setDirectories(prevDirectories => {
         const newDirectories = updateTreeData(prevDirectories, key, treeNodes);
-        console.log('Updated directories:', newDirectories);
         return newDirectories;
       });
 
@@ -372,7 +342,6 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
 
           // 强制加载子内容（即使已经有内容也重新加载以确保最新）
           try {
-            console.log('Auto-loading directory:', path);
             await handleLoadDirectory(info.node);
           } catch (error) {
             console.error('Auto-load directory failed:', error);
@@ -403,16 +372,6 @@ const GitModal = ({ visible, onCancel, onSave, tests, language, loading, setLoad
       message.error(`${gitPlatform === 'github' ? 'GitHub' : 'GitLab'} Personal Access Token is required for saving tests. Please enter your token above.`, 3);
       return;
     }
-
-    console.log('Save to Git - Debug Info:');
-    console.log('- Platform:', gitPlatform);
-    console.log('- Repository:', selectedRepo.full_name);
-    console.log('- Path:', selectedPath);
-    console.log('- Token present:', gitToken ? 'Yes' : 'No');
-    console.log('- Token length:', gitToken ? gitToken.length : 0);
-    console.log('- Server URL:', gitPlatform === 'github' ? githubServerUrl : gitlabServerUrl);
-    console.log('- Tests count:', tests.length);
-
     setLoading(true);
     message.loading({ content: 'Saving tests...', key: 'saveGit', duration: 3 });
 

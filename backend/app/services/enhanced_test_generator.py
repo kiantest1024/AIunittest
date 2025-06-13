@@ -12,7 +12,6 @@ from app.services.smart_test_framework_selector import SmartTestFrameworkSelecto
 from app.services.ai_factory import AIServiceFactory
 from app.utils.logger import logger
 
-
 @dataclass
 class TestCase:
     """测试用例"""
@@ -22,7 +21,6 @@ class TestCase:
     execution: str
     assertion: str
     category: str  # happy_path, boundary, exception, etc.
-
 
 @dataclass
 class EnhancedTestResult:
@@ -34,7 +32,6 @@ class EnhancedTestResult:
     test_cases: List[TestCase]
     helper_methods: List[str]
     estimated_coverage: float
-
 
 class EnhancedTestGenerator:
     """增强的测试生成器"""
@@ -507,7 +504,6 @@ class {class_info.name}Test {{
         )
         
         return generate_test_with_ai(snippet, model_name)
-
 
 class TestCodeValidator:
     """测试代码验证器"""

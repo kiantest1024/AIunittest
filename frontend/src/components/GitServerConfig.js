@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Input, Button, Select, message, Space, Tooltip } from 'antd';
+import { Modal, Form, Input, Select, Space, Tooltip } from 'antd';
 import { InfoCircleOutlined, GithubOutlined, GitlabOutlined } from '@ant-design/icons';
 
 const { Option } = Select;

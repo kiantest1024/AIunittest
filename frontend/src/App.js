@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Layout, ConfigProvider, Row, Col } from 'antd';
 import TestGenerator from './components/TestGenerator';
 import Header from './components/Header';
+import ErrorBoundary from './components/ErrorBoundary';
 import { AppProvider } from './context/AppContext';
 import './App.css';
 
@@ -74,29 +75,32 @@ const HeroSection = () => (
  */
 function App() {
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: '#4ade80',
-          borderRadius: 12,
-        },
-      }}
-    >
-      <AppProvider>
-        <Router>
-          <Layout className="layout">
-            <Header />
+    <ErrorBoundary>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: '#4ade80',
+            borderRadius: 12,
+          },
+        }}
+      >
+        <AppProvider>
+          <Router>
+            <Layout className="layout">
+              <Header />
 
-            {/* Hero区域 */}
-            <HeroSection />
+              {/* Hero区域 */}
+              <HeroSection />
 
-            <Content style={{ padding: '0', marginTop: 0 }}>
-              <div className="site-layout-content">
-                <Routes>
-                  <Route path="/" element={<TestGenerator />} />
-                </Routes>
-              </div>
-            </Content>
+              <Content style={{ padding: '0', marginTop: 0 }}>
+                <div className="site-layout-content">
+                  <ErrorBoundary>
+                    <Routes>
+                      <Route path="/" element={<TestGenerator />} />
+                    </Routes>
+                  </ErrorBoundary>
+                </div>
+              </Content>
 
             <Footer style={{
               textAlign: 'center',
@@ -111,6 +115,7 @@ function App() {
         </Router>
       </AppProvider>
     </ConfigProvider>
+    </ErrorBoundary>
   );
 }
 

@@ -1,5 +1,8 @@
 import os
-from typing import List
+import hashlib
+import json
+from typing import List, Dict, Any
+from pathlib import Path
 
 # 尝试从 pydantic_settings 导入 BaseSettings（Pydantic v2）
 try:
@@ -76,72 +79,204 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-# AI模型配置
-AI_MODELS = {
-    "chatgpt4nano": {
-        "provider": "openai",
-        "api_key": settings.OPENAI_API_KEY,
-        "api_base": "https://api.openai.com/v1",
-        "model": "GPT-4.1 nano",
-        "temperature": 0.7,
-        "max_tokens": 2000,
-        "timeout": 30,
-    },
-    "chatgpt4.1mini": {
-        "provider": "openai",
-        "api_key": settings.OPENAI_API_KEY,
-        "api_base": "https://api.openai.com/v1",
-        "model": "GPT-4.1 mini",
-        "temperature": 0.7,
-        "max_tokens": 4000,
-        "timeout": 60,
-    },
-    "google_gemini": {
-        "provider": "google",
-        "api_key": settings.GOOGLE_API_KEY,
-        "api_base": "https://generativelanguage.googleapis.com/v1beta",
-        "model": "gemini-pro",
-        "temperature": 0.7,
-        "max_tokens": 2048,
-        "timeout": 30,
-    },
-    "anthropic_claude": {
-        "provider": "anthropic",
-        "api_key": settings.ANTHROPIC_API_KEY,
-        "api_base": "https://api.anthropic.com/v1",
-        "model": "claude-3-opus-20240229",
-        "temperature": 0.7,
-        "max_tokens": 4000,
-        "timeout": 60,
-    },
-    "xai_grok": {
-        "provider": "grok",
-        "api_key": settings.GROK_API_KEY,
-        "api_base": "https://api.grok.ai/v1",
-        "model": "grok-1",
-        "temperature": 0.7,
-        "max_tokens": 4000,
-        "timeout": 60,
-    },
-    "deepseek-V3": {
-        "provider": "deepseek",
-        "api_key": "sk-ace4ddbf5f454abda682b0c57df0d313",  # 您确认的有效 API 密钥
-        "api_base": "https://api.deepseek.com/v1",
-        "model": "deepseek-chat",  # 使用 deepseek-chat 模型
-        "temperature": 0.7,
-        "max_tokens": 4000,
-        "timeout": 300,
-    },
-    "deepseek-R1": {
-        "provider": "deepseek",
-        "api_key": "sk-ace4ddbf5f454abda682b0c57df0d313",  # 您确认的有效 API 密钥
-        "api_base": "https://api.deepseek.com/v1",
-        "model": "deepseek-reasoner",  # 使用 deepseek-reasoner 模型
-        "temperature": 0.7,
-        "max_tokens": 8000,  # 增加最大token数
-        "timeout": 1200,  # 增加超时时间到20分钟
-    }
-}
+# AI配置管理器
+class AIConfigManager:
+    """AI配置管理器，支持动态配置和密码保护"""
+
+    def __init__(self):
+        self.config_file = Path(__file__).parent / "ai_config.json"
+        self.admin_password_hash = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"  # "password"的SHA256
+        self._load_config()
+
+    def _load_config(self):
+        """加载AI配置"""
+        if self.config_file.exists():
+            try:
+                with open(self.config_file, 'r', encoding='utf-8') as f:
+                    config_data = json.load(f)
+                    self.custom_models = config_data.get('custom_models', {})
+                    self.system_models = config_data.get('system_models', {})
+                    self.default_model = config_data.get('default_model', 'deepseek-V3')
+                    # 更新管理员密码哈希（如果配置文件中有的话）
+                    if 'admin_password_hash' in config_data:
+                        self.admin_password_hash = config_data['admin_password_hash']
+            except Exception as e:
+                print(f"Error loading AI config: {e}")
+                self._create_default_config()
+        else:
+            self._create_default_config()
+
+    def _create_default_config(self):
+        """创建默认配置"""
+        self.custom_models = {}
+        self.system_models = self._get_default_system_models()
+        self.default_model = 'deepseek-V3'
+        self._save_config()
+
+    def _save_config(self):
+        """保存配置到文件"""
+        config_data = {
+            'custom_models': self.custom_models,
+            'system_models': self.system_models,
+            'default_model': self.default_model,
+            'admin_password_hash': self.admin_password_hash,
+            'last_updated': str(Path(__file__).stat().st_mtime)
+        }
+        try:
+            with open(self.config_file, 'w', encoding='utf-8') as f:
+                json.dump(config_data, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"Error saving AI config: {e}")
+
+    def verify_password(self, password: str) -> bool:
+        """验证管理员密码"""
+        password_hash = hashlib.sha256(password.encode()).hexdigest()
+        return password_hash == self.admin_password_hash
+
+    def change_password(self, old_password: str, new_password: str) -> bool:
+        """修改管理员密码"""
+        if not self.verify_password(old_password):
+            return False
+        self.admin_password_hash = hashlib.sha256(new_password.encode()).hexdigest()
+        self._save_config()
+        return True
+
+    def get_all_models(self) -> Dict[str, Any]:
+        """获取所有可用模型"""
+        all_models = {}
+        all_models.update(self.system_models)
+        all_models.update(self.custom_models)
+        return all_models
+
+    def add_custom_model(self, model_name: str, model_config: Dict[str, Any]) -> bool:
+        """添加自定义模型"""
+        try:
+            self.custom_models[model_name] = model_config
+            self._save_config()
+            return True
+        except Exception as e:
+            print(f"Error adding custom model: {e}")
+            return False
+
+    def update_model(self, model_name: str, model_config: Dict[str, Any]) -> bool:
+        """更新模型配置"""
+        try:
+            if model_name in self.system_models:
+                self.system_models[model_name] = model_config
+            else:
+                self.custom_models[model_name] = model_config
+            self._save_config()
+            return True
+        except Exception as e:
+            print(f"Error updating model: {e}")
+            return False
+
+    def delete_custom_model(self, model_name: str) -> bool:
+        """删除自定义模型"""
+        try:
+            if model_name in self.custom_models:
+                del self.custom_models[model_name]
+                self._save_config()
+                return True
+            return False
+        except Exception as e:
+            print(f"Error deleting custom model: {e}")
+            return False
+
+    def set_default_model(self, model_name: str) -> bool:
+        """设置默认模型"""
+        all_models = self.get_all_models()
+        if model_name in all_models:
+            self.default_model = model_name
+            self._save_config()
+            return True
+        return False
+
+    def _get_default_system_models(self) -> Dict[str, Any]:
+        """获取默认系统模型配置"""
+        return {
+            "chatgpt4nano": {
+                "provider": "openai",
+                "api_key": settings.OPENAI_API_KEY,
+                "api_base": "https://api.openai.com/v1",
+                "model": "GPT-4.1 nano",
+                "temperature": 0.7,
+                "max_tokens": 2000,
+                "timeout": 30,
+                "is_system": True
+            },
+            "chatgpt4.1mini": {
+                "provider": "openai",
+                "api_key": settings.OPENAI_API_KEY,
+                "api_base": "https://api.openai.com/v1",
+                "model": "GPT-4.1 mini",
+                "temperature": 0.7,
+                "max_tokens": 4000,
+                "timeout": 60,
+                "is_system": True
+            },
+            "google_gemini": {
+                "provider": "google",
+                "api_key": settings.GOOGLE_API_KEY,
+                "api_base": "https://generativelanguage.googleapis.com/v1beta",
+                "model": "gemini-pro",
+                "temperature": 0.7,
+                "max_tokens": 2048,
+                "timeout": 30,
+                "is_system": True
+            },
+            "anthropic_claude": {
+                "provider": "anthropic",
+                "api_key": settings.ANTHROPIC_API_KEY,
+                "api_base": "https://api.anthropic.com/v1",
+                "model": "claude-3-opus-20240229",
+                "temperature": 0.7,
+                "max_tokens": 4000,
+                "timeout": 60,
+                "is_system": True
+            },
+            "xai_grok": {
+                "provider": "grok",
+                "api_key": settings.GROK_API_KEY,
+                "api_base": "https://api.grok.ai/v1",
+                "model": "grok-1",
+                "temperature": 0.7,
+                "max_tokens": 4000,
+                "timeout": 60,
+                "is_system": True
+            },
+            "deepseek-V3": {
+                "provider": "deepseek",
+                "api_key": settings.DEEPSEEK_API_KEY,
+                "api_base": "https://api.deepseek.com/v1",
+                "model": "deepseek-chat",
+                "temperature": 0.7,
+                "max_tokens": 4000,
+                "timeout": 300,
+                "is_system": True
+            },
+            "deepseek-R1": {
+                "provider": "deepseek",
+                "api_key": settings.DEEPSEEK_API_KEY,
+                "api_base": "https://api.deepseek.com/v1",
+                "model": "deepseek-reasoner",
+                "temperature": 0.7,
+                "max_tokens": 8000,
+                "timeout": 1200,
+                "is_system": True
+            }
+        }
+
+# 创建全局AI配置管理器实例
+ai_config_manager = AIConfigManager()
+
+# AI模型配置（动态获取）
+def get_ai_models() -> Dict[str, Any]:
+    """获取当前AI模型配置"""
+    return ai_config_manager.get_all_models()
+
+# 为了向后兼容，保留AI_MODELS变量
+AI_MODELS = get_ai_models()
 
 # 语言配置
 LANGUAGE_CONFIG = {
@@ -328,7 +463,6 @@ import (
 - 内存泄漏检测使用Valgrind指令
 - 模板测试需要类型参数化
 - 包含覆盖率生成指令：gcc --coverage
-
 
 请生成完整的测试代码，包括必要的头文件和测试用例。
 测试应该全面覆盖代码的功能，包括正常情况和边缘情况。

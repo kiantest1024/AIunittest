@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Progress, Badge, Tooltip, Button, Space, Typography, Divider, Drawer } from 'antd';
+import { Progress, Badge, Tooltip, Button, Space, Typography, Divider, Drawer } from 'antd';
 import {
   ClockCircleOutlined,
   PlayCircleOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
   StopOutlined,
-  ReloadOutlined,
-  MenuOutlined,
-  CloseOutlined
+  ReloadOutlined
 } from '@ant-design/icons';
 import './QueueStatus.css';
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 const QueueStatus = ({ visible = true, refreshInterval = 2000 }) => {
   const [queueStatus, setQueueStatus] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [collapsed, setCollapsed] = useState(true); // 默认收起
   const [drawerVisible, setDrawerVisible] = useState(false);
 
   // 获取队列状态

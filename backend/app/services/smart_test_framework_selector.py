@@ -9,7 +9,6 @@ from enum import Enum
 from app.services.advanced_code_analyzer import ClassInfo, MethodInfo, ProjectContext
 from app.utils.logger import logger
 
-
 class TestFramework(Enum):
     """测试框架枚举"""
     JUNIT5 = "junit5"
@@ -19,7 +18,6 @@ class TestFramework(Enum):
     SPRING_TEST = "spring-test"
     TESTCONTAINERS = "testcontainers"
     WIREMOCK = "wiremock"
-
 
 @dataclass
 class TestStrategy:
@@ -31,7 +29,6 @@ class TestStrategy:
     imports: List[str]
     annotations: List[str]
 
-
 @dataclass
 class MockStrategy:
     """Mock策略"""
@@ -39,7 +36,6 @@ class MockStrategy:
     mock_type: str  # 'field', 'parameter', 'static'
     mock_annotations: List[str]
     setup_code: str
-
 
 class SmartTestFrameworkSelector:
     """智能测试框架选择器"""

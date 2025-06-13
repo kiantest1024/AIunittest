@@ -1,8 +1,8 @@
-from typing import Dict, Any, Callable, Optional
+from typing import Dict, Any, Callable
 import requests
 from functools import wraps
 from abc import ABC, abstractmethod
-from app.config import AI_MODELS
+from app.config import get_ai_models
 from app.utils.logger import logger
 
 # 错误处理装饰器
@@ -372,10 +372,12 @@ class AIServiceFactory:
         Raises:
             ValueError: 如果模型不存在或提供商不支持
         """
-        if model_name not in AI_MODELS:
+        # 动态获取最新的AI模型配置
+        ai_models = get_ai_models()
+        if model_name not in ai_models:
             raise ValueError(f"Unknown model: {model_name}")
 
-        model_config = AI_MODELS[model_name]
+        model_config = ai_models[model_name]
         provider = model_config["provider"]
 
         if provider == "openai":

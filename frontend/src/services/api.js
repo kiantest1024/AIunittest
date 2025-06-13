@@ -41,10 +41,6 @@ api.interceptors.request.use(
 
     // 记录请求详情
     console.log(`Request: ${config.method.toUpperCase()} ${config.url}`);
-    console.log('Request params:', config.params);
-    console.log('Request data:', config.data);
-    console.log('Request headers:', config.headers);
-
     return config;
   },
   (error) => {
@@ -69,7 +65,6 @@ api.interceptors.response.use(
   (error) => {
     // 如果是取消请求，不显示错误
     if (axios.isCancel(error)) {
-      console.log('Request canceled:', error.message);
       return Promise.reject(error);
     }
 
@@ -103,9 +98,6 @@ api.interceptors.response.use(
 
 // 生成测试
 export const generateTests = async (code, language, model) => {
-  console.log(`Generating tests for ${language} code using model ${model}`);
-  console.log(`Code length: ${code.length} characters`);
-
   // 为大型代码文件设置更长的超时时间
   const timeout = code.length > 10000 ? 600000 : 300000; // 10分钟或5分钟
 
@@ -120,15 +112,11 @@ export const generateTests = async (code, language, model) => {
 
 // 直接生成测试（非流式）
 export const generateTestsDirect = async (code, language, model) => {
-  console.log(`Directly generating tests for ${language} code using model ${model}`);
-  console.log(`Code length: ${code.length} characters`);
-
   // 为大型代码文件和特定模型设置更长的超时时间
   let timeout = code.length > 10000 ? 600000 : 300000; // 10分钟或5分钟
 
   // 为 DeepSeek-R1 模型设置更长的超时时间
   if (model === 'deepseek-R1') {
-    console.log('Using extended timeout for DeepSeek-R1 model');
     timeout = 1200000; // 20分钟
   }
 
@@ -141,7 +129,6 @@ export const generateTestsDirect = async (code, language, model) => {
       timeout: timeout // 覆盖默认超时设置
     });
 
-    console.log('Direct test generation response:', response);
     // 由于响应拦截器已经返回了 response.data，这里直接返回 response
     return response;
   } catch (error) {
@@ -152,20 +139,8 @@ export const generateTestsDirect = async (code, language, model) => {
 
 // 流式生成测试 - 使用EventSource进行服务器发送事件
 export const generateTestsStream = async (code, language, model, onProgress, onTaskId = null) => {
-  console.log(`Streaming tests for ${language} code using model ${model}`);
-  console.log(`Code length: ${code.length} characters`);
-
   return new Promise((resolve, reject) => {
     try {
-      console.log('Starting streaming request...');
-
-      // 创建请求参数
-      const params = new URLSearchParams({
-        code: code,
-        language: language,
-        model: model
-      });
-
       // 使用XMLHttpRequest进行流式处理，这是最可靠的方法
       const xhr = new XMLHttpRequest();
       xhr.open('POST', '/api/generate-test-stream', true);
@@ -176,16 +151,12 @@ export const generateTestsStream = async (code, language, model, onProgress, onT
       let processedLines = new Set();
 
       xhr.onprogress = function() {
-        console.log('XHR progress event triggered');
-
         // 获取新的响应文本
         const responseText = xhr.responseText;
         const newText = responseText.substring(processedLength);
         processedLength = responseText.length;
 
         if (newText) {
-          console.log('New text received:', newText);
-
           // 按行分割新文本
           const lines = newText.split('\n');
 
@@ -200,18 +171,13 @@ export const generateTestsStream = async (code, language, model, onProgress, onT
             processedLines.add(trimmedLine);
 
             try {
-              console.log('Processing line:', trimmedLine);
               const result = JSON.parse(trimmedLine);
-              console.log('Parsed result:', result);
-
               // 如果收到任务ID，通知调用者
               if (result.task_id && onTaskId && typeof onTaskId === 'function') {
-                console.log('Received task ID:', result.task_id);
                 onTaskId(result.task_id);
               }
 
               if (onProgress && typeof onProgress === 'function') {
-                console.log('Calling onProgress with result');
                 onProgress(result);
               }
             } catch (e) {
@@ -222,9 +188,7 @@ export const generateTestsStream = async (code, language, model, onProgress, onT
       };
 
       xhr.onload = function() {
-        console.log('XHR load event - request completed');
         if (xhr.status === 200) {
-          console.log('Stream completed successfully');
           resolve({ status: 'completed' });
         } else {
           console.error('XHR failed with status:', xhr.status);
@@ -244,8 +208,6 @@ export const generateTestsStream = async (code, language, model, onProgress, onT
 
       // 设置30分钟超时
       xhr.timeout = 1800000;
-
-      console.log('Sending XHR request...');
       xhr.send(JSON.stringify({
         code,
         language,
@@ -271,17 +233,12 @@ export const uploadFile = async (formData) => {
 // 获取GitHub仓库列表
 export const getRepositories = async (token, platform = 'github', serverUrl = '') => {
   try {
-    console.log(`Fetching ${platform} repositories with token:`, token ? 'token provided' : 'no token');
-    console.log(`Using server URL:`, serverUrl || 'default');
-
     const params = { token, platform };
     if (serverUrl && serverUrl.trim()) {
       params.server_url = serverUrl.trim();
     }
 
     const response = await api.get('/git/repositories', { params });
-    console.log('Repositories response:', response);
-
     // 确保返回的是仓库数组
     if (response && response.repositories && Array.isArray(response.repositories)) {
       return response.repositories;
@@ -298,9 +255,6 @@ export const getRepositories = async (token, platform = 'github', serverUrl = ''
 // 获取GitHub目录列表
 export const getDirectories = async (repo, token, path = '', platform = 'github', serverUrl = '') => {
   try {
-    console.log(`Fetching directories: repo=${repo}, path=${path}, platform=${platform}`);
-    console.log(`Using server URL:`, serverUrl || 'default');
-
     // 确保参数有效
     if (!repo) {
       throw new Error('Repository name is required');
@@ -321,9 +275,6 @@ export const getDirectories = async (repo, token, path = '', platform = 'github'
       params,
       timeout: 30000, // 30秒超时
     });
-
-    console.log('Directories response:', response);
-    console.log('Response data type:', typeof response);
     console.log('Response data:', JSON.stringify(response, null, 2));
 
     // 确保返回的是目录数组
@@ -343,7 +294,6 @@ export const getDirectories = async (repo, token, path = '', platform = 'github'
 // 保存测试到GitHub
 export const saveToGit = async (tests, language, repo, path, token, platform = 'github', serverUrl = '') => {
   try {
-    console.log(`Saving to ${platform}: repo=${repo}, path=${path}, language=${language}, tests=${tests.length}, server=${serverUrl || 'default'}`);
 
     // 确保参数有效
     if (!repo) {
@@ -377,9 +327,6 @@ export const saveToGit = async (tests, language, repo, path, token, platform = '
     const response = await api.post('/git/save', requestData, {
       timeout: 60000, // 60秒超时
     });
-
-    console.log('Save to Git response:', response);
-    console.log('Response data type:', typeof response);
     console.log('Response data:', JSON.stringify(response, null, 2));
 
     return response;
@@ -399,7 +346,10 @@ export const getLanguages = async () => {
 // 获取支持的模型列表
 export const getModels = async () => {
   const response = await api.get('/models');
-  return response.models;
+  return {
+    models: response.models,
+    default_model: response.default_model
+  };
 };
 
 // 获取队列状态
@@ -431,15 +381,12 @@ export const cancelTask = async (taskId) => {
 // 获取GitHub文件内容
 export const getFileContent = async (repo, path, token, platform = 'github', serverUrl = '') => {
   try {
-    console.log(`Fetching file content: repo=${repo}, path=${path}, platform=${platform}, server=${serverUrl || 'default'}`);
-
     const params = { repo, path, token, platform };
     if (serverUrl && serverUrl.trim()) {
       params.server_url = serverUrl.trim();
     }
 
     const response = await api.get('/git/file-content', { params });
-    console.log('File content response:', response);
     return response;
   } catch (error) {
     console.error(`Error fetching ${platform} file content:`, error);
@@ -450,8 +397,6 @@ export const getFileContent = async (repo, path, token, platform = 'github', ser
 // 克隆 Git 仓库
 export const cloneRepo = async (repoUrl, token, platform = 'github', serverUrl = '') => {
   try {
-    console.log(`Cloning ${platform} repository:`, repoUrl, `server: ${serverUrl || 'default'}`);
-
     const requestData = {
       repo_url: repoUrl,  // 统一使用repo_url字段名
       token,
@@ -466,7 +411,6 @@ export const cloneRepo = async (repoUrl, token, platform = 'github', serverUrl =
     const response = await api.post(`/git/${platform}/clone`, requestData, {
       timeout: 300000, // 5分钟超时
     });
-    console.log('Clone response:', response);
     return response;
   } catch (error) {
     console.error(`Error cloning ${platform} repository:`, error);
@@ -483,7 +427,6 @@ export const cloneGitLabRepo = async (repoUrl, token, serverUrl = '') => {
 // 克隆 GitHub 仓库
 export const cloneGitHubRepo = async (repoUrl, token, path = '') => {
   try {
-    console.log('Cloning GitHub repository:', repoUrl);
     const response = await api.post('/git/github/clone', {
       repo_url: repoUrl,
       token,
@@ -491,13 +434,65 @@ export const cloneGitHubRepo = async (repoUrl, token, path = '') => {
     }, {
       timeout: 300000, // 5分钟超时
     });
-    console.log('GitHub clone response:', response);
     return response;
   } catch (error) {
     console.error('Error cloning GitHub repository:', error);
     console.error('Error details:', error.response?.data || error.message);
     throw error;
   }
+};
+
+// AI配置管理API
+export const getAIModels = async () => {
+  const response = await api.get('/ai-config/models');
+  return response;
+};
+
+export const verifyAIPassword = async (password) => {
+  const response = await api.post('/ai-config/verify-password', { password });
+  return response;
+};
+
+export const changeAIPassword = async (oldPassword, newPassword) => {
+  const response = await api.post('/ai-config/change-password', {
+    old_password: oldPassword,
+    new_password: newPassword
+  });
+  return response;
+};
+
+export const addAIModel = async (password, modelName, modelConfig) => {
+  const response = await api.post('/ai-config/add-model', {
+    password,
+    model_name: modelName,
+    model_config: modelConfig
+  });
+  return response;
+};
+
+export const updateAIModel = async (password, modelName, modelConfig) => {
+  const response = await api.post('/ai-config/update-model', {
+    password,
+    model_name: modelName,
+    model_config: modelConfig
+  });
+  return response;
+};
+
+export const deleteAIModel = async (password, modelName) => {
+  const response = await api.post('/ai-config/delete-model', {
+    password,
+    model_name: modelName
+  });
+  return response;
+};
+
+export const setDefaultAIModel = async (password, modelName) => {
+  const response = await api.post('/ai-config/set-default-model', {
+    password,
+    model_name: modelName
+  });
+  return response;
 };
 
 export default api;

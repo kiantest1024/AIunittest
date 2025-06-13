@@ -1,0 +1,78 @@
+{
+  "custom_models": {},
+  "system_models": {
+    "chatgpt4nano": {
+      "provider": "openai",
+      "api_key": "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",
+      "api_base": "https://api.openai.com/v1",
+      "model": "GPT-4.1 nano",
+      "temperature": 0.7,
+      "max_tokens": 2000,
+      "timeout": 30,
+      "is_system": true
+    },
+    "chatgpt4.1mini": {
+      "provider": "openai",
+      "api_key": "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",
+      "api_base": "https://api.openai.com/v1",
+      "model": "GPT-4.1 mini",
+      "temperature": 0.7,
+      "max_tokens": 4000,
+      "timeout": 60,
+      "is_system": true
+    },
+    "google_gemini": {
+      "provider": "google",
+      "api_key": "AIzaSyC4FA2WJ82kygh_toL2oogCzu3E3Z9oeHg",
+      "api_base": "https://generativelanguage.googleapis.com/v1beta",
+      "model": "gemini-pro",
+      "temperature": 0.7,
+      "max_tokens": 2048,
+      "timeout": 30,
+      "is_system": true
+    },
+    "anthropic_claude": {
+      "provider": "anthropic",
+      "api_key": "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",
+      "api_base": "https://api.anthropic.com/v1",
+      "model": "claude-3-opus-20240229",
+      "temperature": 0.7,
+      "max_tokens": 4000,
+      "timeout": 60,
+      "is_system": true
+    },
+    "xai_grok": {
+      "provider": "grok",
+      "api_key": "xai-edkTE3IqtyicSu2coTSEDCXQ6oIV8lZCoh5KKryiWrh1YHixbNSDXe9ErrRH6mi0ePLxNRfvEh7X5EFT",
+      "api_base": "https://api.grok.ai/v1",
+      "model": "grok-1",
+      "temperature": 0.7,
+      "max_tokens": 4000,
+      "timeout": 60,
+      "is_system": true
+    },
+    "deepseek-V3": {
+      "provider": "deepseek",
+      "api_key": "sk-ace4ddbf5f454abda682b0c57df0d313",
+      "api_base": "https://api.deepseek.com/v1",
+      "model": "deepseek-chat",
+      "temperature": 0.7,
+      "max_tokens": 4000,
+      "timeout": 300,
+      "is_system": true
+    },
+    "deepseek-R1": {
+      "provider": "deepseek",
+      "api_key": "sk-ace4ddbf5f454abda682b0c57df0d313",
+      "api_base": "https://api.deepseek.com/v1",
+      "model": "deepseek-reasoner",
+      "temperature": 0.7,
+      "max_tokens": 8000,
+      "timeout": 1200,
+      "is_system": true
+    }
+  },
+  "default_model": "deepseek-V3",
+  "admin_password_hash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+  "last_updated": "1749781282.146718"
+}
