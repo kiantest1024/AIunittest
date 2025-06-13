@@ -36,11 +36,8 @@ async def lifespan(app_instance: FastAPI):
 
     # 初始化任务队列
     try:
-        try:
-            from app.services.task_queue import get_task_queue
-        except ModuleNotFoundError:
-            from services.task_queue import get_task_queue
-        task_queue = get_task_queue()
+        from app.services.simple_queue import get_simple_queue
+        get_simple_queue()  # 初始化全局队列实例
         logger.info("Task queue initialized successfully")
     except Exception as e:
         logger.error(f"Failed to initialize task queue: {e}")
@@ -52,11 +49,7 @@ async def lifespan(app_instance: FastAPI):
 
     # 清理任务队列
     try:
-        try:
-            from app.services.task_queue import shutdown_task_queue
-        except ModuleNotFoundError:
-            from services.task_queue import shutdown_task_queue
-        shutdown_task_queue()
+        # simple_queue 不需要特殊的关闭操作
         logger.info("Task queue shutdown successfully")
     except Exception as e:
         logger.error(f"Error shutting down task queue: {e}")

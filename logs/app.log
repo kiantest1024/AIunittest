@@ -5,3 +5,26 @@
 2025-06-13 14:37:07,940 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
 2025-06-13 14:37:07,940 - ai_test_generator - INFO - App instance: AI单元测试生成工具
 2025-06-13 14:37:07,941 - ai_test_generator - ERROR - Failed to initialize task queue: No module named 'services.task_queue'
+2025-06-13 14:43:48,575 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-06-13 14:43:48,576 - ai_test_generator - ERROR - Error shutting down task queue: No module named 'services.task_queue'
+2025-06-13 14:43:49,620 - ai_test_generator - INFO - Serving frontend from: D:\Personal\Script\GE\AIunittest\frontend\build
+2025-06-13 14:43:49,701 - ai_test_generator - INFO - Serving frontend from: D:\Personal\Script\GE\AIunittest\frontend\build
+2025-06-13 14:43:49,702 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-06-13 14:43:49,702 - ai_test_generator - INFO - App instance: AI单元测试生成工具
+2025-06-13 14:43:49,702 - ai_test_generator - INFO - Task queue initialized successfully
+2025-06-13 14:43:59,525 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-06-13 14:43:59,526 - ai_test_generator - ERROR - Error shutting down task queue: No module named 'services.task_queue'
+2025-06-13 14:44:00,477 - ai_test_generator - INFO - Serving frontend from: D:\Personal\Script\GE\AIunittest\frontend\build
+2025-06-13 14:44:00,555 - ai_test_generator - INFO - Serving frontend from: D:\Personal\Script\GE\AIunittest\frontend\build
+2025-06-13 14:44:00,556 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-06-13 14:44:00,556 - ai_test_generator - INFO - App instance: AI单元测试生成工具
+2025-06-13 14:44:00,556 - ai_test_generator - INFO - Task queue initialized successfully
+2025-06-13 14:44:09,834 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-06-13 14:44:09,835 - ai_test_generator - INFO - Task queue shutdown successfully
+2025-06-13 14:44:10,806 - ai_test_generator - INFO - Serving frontend from: D:\Personal\Script\GE\AIunittest\frontend\build
+2025-06-13 14:44:10,877 - ai_test_generator - INFO - Serving frontend from: D:\Personal\Script\GE\AIunittest\frontend\build
+2025-06-13 14:44:10,878 - ai_test_generator - INFO - Starting AI单元测试生成工具 v1.0.0
+2025-06-13 14:44:10,878 - ai_test_generator - INFO - App instance: AI单元测试生成工具
+2025-06-13 14:44:10,879 - ai_test_generator - INFO - Task queue initialized successfully
+2025-06-13 14:44:55,310 - ai_test_generator - INFO - Shutting down AI单元测试生成工具
+2025-06-13 14:44:55,311 - ai_test_generator - INFO - Task queue shutdown successfully
