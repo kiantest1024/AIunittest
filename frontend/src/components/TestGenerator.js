@@ -372,7 +372,7 @@ const TestGenerator = () => {
       setCurrentSnippet(currentTests.length > 0 ? '生成完成' : '未找到可测试的代码');
       dispatch({ type: ActionTypes.SET_LOADING, payload: false });
     }
-  }, [code, language, model, dispatch, setActiveTabKey, generatedTests]);
+  }, [code, language, model, dispatch, setActiveTabKey, state.generatedTests]);
   const handleGenerateTests = useCallback(async () => {
     await handleStreamGenerateTests();
   }, [handleStreamGenerateTests]);
